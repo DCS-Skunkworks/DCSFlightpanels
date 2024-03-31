@@ -2,6 +2,7 @@
 //  added by Capt Zeen
 //
 
+using System.Threading.Tasks;
 using NonVisuals.BindingClasses.BIP;
 
 namespace NonVisuals.Radios
@@ -85,7 +86,8 @@ namespace NonVisuals.Radios
         private DCSBIOSOutput _ilsDcsbiosOutputChannel;
         private volatile uint _ilsCockpitChannel = 1;
         private const string ILS_CHANNEL_COMMAND = "COM_ILS_CHANNEL_SW ";
-        private Thread _ilsSyncThread;
+        private Task _ilsSyncTask;
+        private CancellationTokenSource _ilsSyncTaskTokenSource = new();
         private long _ilsThreadNowSynching;
         private long _ilsDialWaitingForFeedback;
         private readonly object _lockShowFrequenciesOnPanelObject = new();
@@ -104,7 +106,7 @@ namespace NonVisuals.Radios
             {
                 if (disposing)
                 {
-                    _shutdownILSThread = true;
+                    _ilsSyncTaskTokenSource.Cancel();
                     BIOSEventHandler.DetachDataListener(this);
                 }
 
@@ -301,95 +303,89 @@ namespace NonVisuals.Radios
 
         private void SendILSToDCSBIOS()
         {
-            if (IlsNowSyncing())
+            if (_ilsSyncTask?.Status == TaskStatus.Running)
             {
                 return;
             }
 
             SaveCockpitFrequencyIls();
 
-            _shutdownILSThread = true;
-            Thread.Sleep(Constants.ThreadShutDownWaitTime);
-            _shutdownILSThread = false;
-            _ilsSyncThread = new Thread(() => ILSSyncThreadMethod(_ilsChannelStandby));
-            _ilsSyncThread.Start();
+            _ilsSyncTaskTokenSource = new();
+            _ilsSyncTask = Task.Run(() => SyncILSAsync(_ilsChannelStandby, _ilsSyncTaskTokenSource.Token));
         }
 
-        private volatile bool _shutdownILSThread;
-        private void ILSSyncThreadMethod(uint standbyPosition)
+        private async Task SyncILSAsync(uint standbyPosition, CancellationToken cancellationToken)
         {
             try
             {
-                try
+                Interlocked.Exchange(ref _ilsThreadNowSynching, 1);
+
+                long dialTimeout = DateTime.Now.Ticks;
+                long dialOkTime = 0;
+                int dialSendCount = 0;
+
+                do
                 {
-                    Interlocked.Exchange(ref _ilsThreadNowSynching, 1);
-
-                    long dialTimeout = DateTime.Now.Ticks;
-                    long dialOkTime = 0;
-                    int dialSendCount = 0;
-
-                    do
+                    if (IsTimedOut(ref dialTimeout))
                     {
-                        if (IsTimedOut(ref dialTimeout))
-                        {
-                            ResetWaitingForFeedBack(ref _ilsDialWaitingForFeedback); // Let's do an ugly reset
-                        }
+                        ResetWaitingForFeedBack(ref _ilsDialWaitingForFeedback); // Let's do an ugly reset
+                    }
 
-                        if (Interlocked.Read(ref _ilsDialWaitingForFeedback) == 0)
+                    if (Interlocked.Read(ref _ilsDialWaitingForFeedback) == 0)
+                    {
+                        var command = string.Empty;
+
+                        lock (_lockIlsDialsObject)
                         {
-                            lock (_lockIlsDialsObject)
+                            if (_ilsCockpitChannel < standbyPosition)
                             {
-                                if (_ilsCockpitChannel < standbyPosition)
-                                {
-                                    dialOkTime = DateTime.Now.Ticks;
-                                    const string str = ILS_CHANNEL_COMMAND + DCSBIOS_INCREASE_COMMAND;
-                                    await DCSBIOS.SendAsync(str);
-                                    dialSendCount++;
-                                    Interlocked.Exchange(ref _ilsDialWaitingForFeedback, 1);
-                                }
-                                else if (_ilsCockpitChannel > standbyPosition)
-                                {
-                                    dialOkTime = DateTime.Now.Ticks;
-                                    const string str = ILS_CHANNEL_COMMAND + DCSBIOS_DECREASE_COMMAND;
-                                    await DCSBIOS.SendAsync(str);
-                                    dialSendCount++;
-                                    Interlocked.Exchange(ref _ilsDialWaitingForFeedback, 1);
-                                }
-
-                                Reset(ref dialTimeout);
+                                dialOkTime = DateTime.Now.Ticks;
+                                command = ILS_CHANNEL_COMMAND + DCSBIOS_INCREASE_COMMAND;
+                            }
+                            else if (_ilsCockpitChannel > standbyPosition)
+                            {
+                                dialOkTime = DateTime.Now.Ticks;
+                                command = ILS_CHANNEL_COMMAND + DCSBIOS_DECREASE_COMMAND;
                             }
                         }
-                        else
+
+                        if (!string.IsNullOrEmpty(command))
                         {
-                            dialOkTime = DateTime.Now.Ticks;
+                            await DCSBIOS.SendAsync(command);
+                            dialSendCount++;
+                            Interlocked.Exchange(ref _ilsDialWaitingForFeedback, 1);
                         }
-
-                        if (dialSendCount > 12)
-                        {
-                            // "Race" condition detected?
-                            dialSendCount = 0;
-
-                            Thread.Sleep(5000);
-                        }
-
-                        Thread.Sleep(SynchSleepTime); // Should be enough to get an update cycle from DCS-BIOS
+                        Reset(ref dialTimeout);
                     }
-                    while (IsTooShort(dialOkTime) && !_shutdownILSThread);
+                    else
+                    {
+                        dialOkTime = DateTime.Now.Ticks;
+                    }
 
-                    SwapCockpitStandbyFrequencyIls();
-                    ShowFrequenciesOnPanel();
+                    if (dialSendCount > 12)
+                    {
+                        // "Race" condition detected?
+                        dialSendCount = 0;
+
+                        Thread.Sleep(5000);
+                    }
+
+                    Thread.Sleep(SynchSleepTime); // Should be enough to get an update cycle from DCS-BIOS
+
+                    if (cancellationToken.IsCancellationRequested) break;
+
                 }
-                catch (ThreadAbortException)
-                {
-                }
-                catch (Exception ex)
-                {
-                    Common.ShowErrorMessageBox(ex);
-                }
+                while (IsTooShort(dialOkTime));
+
+                SwapCockpitStandbyFrequencyIls();
+                ShowFrequenciesOnPanel();
             }
-            finally
+            catch (ThreadAbortException)
             {
-                Interlocked.Exchange(ref _ilsThreadNowSynching, 0);
+            }
+            catch (Exception ex)
+            {
+                Common.ShowErrorMessageBox(ex);
             }
 
             Interlocked.Increment(ref _doUpdatePanelLCD);
@@ -958,237 +954,235 @@ namespace NonVisuals.Radios
             // 00X/Y - 129X/Y
         }
 
-        protected override void PZ69KnobChangedAsync(IEnumerable<object> hashSet)
+        protected override async Task PZ69KnobChangedAsync(IEnumerable<object> hashSet)
         {
-            lock (LockLCDUpdateObject)
+            Interlocked.Increment(ref _doUpdatePanelLCD);
+            foreach (var radioPanelKnobObject in hashSet)
             {
-                Interlocked.Increment(ref _doUpdatePanelLCD);
-                foreach (var radioPanelKnobObject in hashSet)
+                var radioPanelKnob = (RadioPanelKnobFA18C)radioPanelKnobObject;
+
+                switch (radioPanelKnob.RadioPanelPZ69Knob)
                 {
-                    var radioPanelKnob = (RadioPanelKnobFA18C)radioPanelKnobObject;
-
-                    switch (radioPanelKnob.RadioPanelPZ69Knob)
-                    {
-                        case RadioPanelPZ69KnobsFA18C.UPPER_COMM1:
+                    case RadioPanelPZ69KnobsFA18C.UPPER_COMM1:
+                        {
+                            if (radioPanelKnob.IsOn)
                             {
-                                if (radioPanelKnob.IsOn)
+                                _currentUpperRadioMode = CurrentFA18CRadioMode.COMM1;
+                            }
+                            break;
+                        }
+
+                    case RadioPanelPZ69KnobsFA18C.UPPER_COMM2:
+                        {
+                            if (radioPanelKnob.IsOn)
+                            {
+                                _currentUpperRadioMode = CurrentFA18CRadioMode.COMM2;
+                            }
+                            break;
+                        }
+
+                    case RadioPanelPZ69KnobsFA18C.UPPER_VHFFM:
+                        {
+                            if (radioPanelKnob.IsOn)
+                            {
+                                _currentUpperRadioMode = CurrentFA18CRadioMode.VHFFM;
+                            }
+                            break;
+                        }
+
+                    case RadioPanelPZ69KnobsFA18C.UPPER_ILS:
+                        {
+                            if (radioPanelKnob.IsOn)
+                            {
+                                _currentUpperRadioMode = CurrentFA18CRadioMode.ILS;
+                            }
+                            break;
+                        }
+
+                    case RadioPanelPZ69KnobsFA18C.UPPER_TACAN:
+                        {
+                            if (radioPanelKnob.IsOn)
+                            {
+                                _currentUpperRadioMode = CurrentFA18CRadioMode.TACAN;
+                            }
+                            break;
+                        }
+
+                    case RadioPanelPZ69KnobsFA18C.UPPER_DME:
+                        {
+                            break;
+                        }
+
+                    case RadioPanelPZ69KnobsFA18C.UPPER_XPDR:
+                        {
+                            break;
+                        }
+
+                    case RadioPanelPZ69KnobsFA18C.LOWER_COMM1:
+                        {
+                            if (radioPanelKnob.IsOn)
+                            {
+                                _currentLowerRadioMode = CurrentFA18CRadioMode.COMM1;
+                            }
+                            break;
+                        }
+
+                    case RadioPanelPZ69KnobsFA18C.LOWER_COMM2:
+                        {
+                            if (radioPanelKnob.IsOn)
+                            {
+                                _currentLowerRadioMode = CurrentFA18CRadioMode.COMM2;
+                            }
+                            break;
+                        }
+
+                    case RadioPanelPZ69KnobsFA18C.LOWER_VHFFM:
+                        {
+                            if (radioPanelKnob.IsOn)
+                            {
+                                _currentLowerRadioMode = CurrentFA18CRadioMode.VHFFM;
+                            }
+                            break;
+                        }
+
+                    case RadioPanelPZ69KnobsFA18C.LOWER_ILS:
+                        {
+                            if (radioPanelKnob.IsOn)
+                            {
+                                _currentLowerRadioMode = CurrentFA18CRadioMode.ILS;
+                            }
+                            break;
+                        }
+
+                    case RadioPanelPZ69KnobsFA18C.LOWER_TACAN:
+                        {
+                            if (radioPanelKnob.IsOn)
+                            {
+                                _currentLowerRadioMode = CurrentFA18CRadioMode.TACAN;
+                            }
+                            break;
+                        }
+
+                    case RadioPanelPZ69KnobsFA18C.LOWER_DME:
+                        {
+                            break;
+                        }
+
+                    case RadioPanelPZ69KnobsFA18C.LOWER_XPDR:
+                        {
+                            break;
+                        }
+
+                    case RadioPanelPZ69KnobsFA18C.UPPER_LARGE_FREQ_WHEEL_INC:
+                        {
+                            break;
+                        }
+
+                    case RadioPanelPZ69KnobsFA18C.UPPER_LARGE_FREQ_WHEEL_DEC:
+                        {
+                            break;
+                        }
+
+                    case RadioPanelPZ69KnobsFA18C.UPPER_SMALL_FREQ_WHEEL_INC:
+                        {
+                            break;
+                        }
+
+                    case RadioPanelPZ69KnobsFA18C.UPPER_SMALL_FREQ_WHEEL_DEC:
+                        {
+                            break;
+                        }
+
+                    case RadioPanelPZ69KnobsFA18C.LOWER_LARGE_FREQ_WHEEL_INC:
+                        {
+                            break;
+                        }
+
+                    case RadioPanelPZ69KnobsFA18C.LOWER_LARGE_FREQ_WHEEL_DEC:
+                        {
+                            break;
+                        }
+
+                    case RadioPanelPZ69KnobsFA18C.LOWER_SMALL_FREQ_WHEEL_INC:
+                        {
+                            break;
+                        }
+
+                    case RadioPanelPZ69KnobsFA18C.LOWER_SMALL_FREQ_WHEEL_DEC:
+                        {
+                            break;
+                        }
+
+                    case RadioPanelPZ69KnobsFA18C.UPPER_FREQ_SWITCH:
+                        {
+                            _upperButtonPressed = radioPanelKnob.IsOn;
+
+                            if (_currentUpperRadioMode == CurrentFA18CRadioMode.COMM1)
+                            {
+                                await DCSBIOS.SendAsync(_upperButtonPressed ? COMM1_PULL_PRESS : COMM1_PULL_RELEASE);
+                            }
+
+                            if (_currentUpperRadioMode == CurrentFA18CRadioMode.COMM2)
+                            {
+                                await DCSBIOS.SendAsync(_upperButtonPressed ? COMM2_PULL_PRESS : COMM2_PULL_RELEASE);
+                            }
+
+                            if (!radioPanelKnob.IsOn)
+                            {
+                                if (!_upperButtonPressedAndDialRotated)
                                 {
-                                    _currentUpperRadioMode = CurrentFA18CRadioMode.COMM1;
-                                }
-                                break;
-                            }
-
-                        case RadioPanelPZ69KnobsFA18C.UPPER_COMM2:
-                            {
-                                if (radioPanelKnob.IsOn)
-                                {
-                                    _currentUpperRadioMode = CurrentFA18CRadioMode.COMM2;
-                                }
-                                break;
-                            }
-
-                        case RadioPanelPZ69KnobsFA18C.UPPER_VHFFM:
-                            {
-                                if (radioPanelKnob.IsOn)
-                                {
-                                    _currentUpperRadioMode = CurrentFA18CRadioMode.VHFFM;
-                                }
-                                break;
-                            }
-
-                        case RadioPanelPZ69KnobsFA18C.UPPER_ILS:
-                            {
-                                if (radioPanelKnob.IsOn)
-                                {
-                                    _currentUpperRadioMode = CurrentFA18CRadioMode.ILS;
-                                }
-                                break;
-                            }
-
-                        case RadioPanelPZ69KnobsFA18C.UPPER_TACAN:
-                            {
-                                if (radioPanelKnob.IsOn)
-                                {
-                                    _currentUpperRadioMode = CurrentFA18CRadioMode.TACAN;
-                                }
-                                break;
-                            }
-
-                        case RadioPanelPZ69KnobsFA18C.UPPER_DME:
-                            {
-                                break;
-                            }
-
-                        case RadioPanelPZ69KnobsFA18C.UPPER_XPDR:
-                            {
-                                break;
-                            }
-
-                        case RadioPanelPZ69KnobsFA18C.LOWER_COMM1:
-                            {
-                                if (radioPanelKnob.IsOn)
-                                {
-                                    _currentLowerRadioMode = CurrentFA18CRadioMode.COMM1;
-                                }
-                                break;
-                            }
-
-                        case RadioPanelPZ69KnobsFA18C.LOWER_COMM2:
-                            {
-                                if (radioPanelKnob.IsOn)
-                                {
-                                    _currentLowerRadioMode = CurrentFA18CRadioMode.COMM2;
-                                }
-                                break;
-                            }
-
-                        case RadioPanelPZ69KnobsFA18C.LOWER_VHFFM:
-                            {
-                                if (radioPanelKnob.IsOn)
-                                {
-                                    _currentLowerRadioMode = CurrentFA18CRadioMode.VHFFM;
-                                }
-                                break;
-                            }
-
-                        case RadioPanelPZ69KnobsFA18C.LOWER_ILS:
-                            {
-                                if (radioPanelKnob.IsOn)
-                                {
-                                    _currentLowerRadioMode = CurrentFA18CRadioMode.ILS;
-                                }
-                                break;
-                            }
-
-                        case RadioPanelPZ69KnobsFA18C.LOWER_TACAN:
-                            {
-                                if (radioPanelKnob.IsOn)
-                                {
-                                    _currentLowerRadioMode = CurrentFA18CRadioMode.TACAN;
-                                }
-                                break;
-                            }
-
-                        case RadioPanelPZ69KnobsFA18C.LOWER_DME:
-                            {
-                                break;
-                            }
-
-                        case RadioPanelPZ69KnobsFA18C.LOWER_XPDR:
-                            {
-                                break;
-                            }
-
-                        case RadioPanelPZ69KnobsFA18C.UPPER_LARGE_FREQ_WHEEL_INC:
-                            {
-                                break;
-                            }
-
-                        case RadioPanelPZ69KnobsFA18C.UPPER_LARGE_FREQ_WHEEL_DEC:
-                            {
-                                break;
-                            }
-
-                        case RadioPanelPZ69KnobsFA18C.UPPER_SMALL_FREQ_WHEEL_INC:
-                            {
-                                break;
-                            }
-
-                        case RadioPanelPZ69KnobsFA18C.UPPER_SMALL_FREQ_WHEEL_DEC:
-                            {
-                                break;
-                            }
-
-                        case RadioPanelPZ69KnobsFA18C.LOWER_LARGE_FREQ_WHEEL_INC:
-                            {
-                                break;
-                            }
-
-                        case RadioPanelPZ69KnobsFA18C.LOWER_LARGE_FREQ_WHEEL_DEC:
-                            {
-                                break;
-                            }
-
-                        case RadioPanelPZ69KnobsFA18C.LOWER_SMALL_FREQ_WHEEL_INC:
-                            {
-                                break;
-                            }
-
-                        case RadioPanelPZ69KnobsFA18C.LOWER_SMALL_FREQ_WHEEL_DEC:
-                            {
-                                break;
-                            }
-
-                        case RadioPanelPZ69KnobsFA18C.UPPER_FREQ_SWITCH:
-                            {
-                                _upperButtonPressed = radioPanelKnob.IsOn;
-
-                                if (_currentUpperRadioMode == CurrentFA18CRadioMode.COMM1)
-                                {
-                                    await DCSBIOS.SendAsync(_upperButtonPressed ? COMM1_PULL_PRESS : COMM1_PULL_RELEASE);
-                                }
-
-                                if (_currentUpperRadioMode == CurrentFA18CRadioMode.COMM2)
-                                {
-                                    await DCSBIOS.SendAsync(_upperButtonPressed ? COMM2_PULL_PRESS : COMM2_PULL_RELEASE);
-                                }
-
-                                if (!radioPanelKnob.IsOn)
-                                {
-                                    if (!_upperButtonPressedAndDialRotated)
-                                    {
-                                        // Do not sync if user has pressed the button to configure the radio
-                                        // Do when user releases button
-                                        SendFrequencyToDCSBIOS(RadioPanelPZ69KnobsFA18C.UPPER_FREQ_SWITCH);
-                                    }
-
-                                    _upperButtonPressedAndDialRotated = false;
-                                }
-                                break;
-                            }
-
-                        case RadioPanelPZ69KnobsFA18C.LOWER_FREQ_SWITCH:
-                            {
-                                _lowerButtonPressed = radioPanelKnob.IsOn;
-
-                                if (_currentLowerRadioMode == CurrentFA18CRadioMode.COMM1)
-                                {
-                                    await DCSBIOS.SendAsync(_lowerButtonPressed ? COMM1_PULL_PRESS : COMM1_PULL_RELEASE);
+                                    // Do not sync if user has pressed the button to configure the radio
+                                    // Do when user releases button
+                                    SendFrequencyToDCSBIOS(RadioPanelPZ69KnobsFA18C.UPPER_FREQ_SWITCH);
                                 }
 
-                                if (_currentLowerRadioMode == CurrentFA18CRadioMode.COMM2)
-                                {
-                                    await DCSBIOS.SendAsync(_lowerButtonPressed ? COMM2_PULL_PRESS : COMM2_PULL_RELEASE);
-                                }
-
-                                if (!radioPanelKnob.IsOn)
-                                {
-                                    if (!_lowerButtonPressedAndDialRotated)
-                                    {
-                                        // Do not sync if user has pressed the button to configure the radio
-                                        // Do when user releases button
-                                        SendFrequencyToDCSBIOS(RadioPanelPZ69KnobsFA18C.LOWER_FREQ_SWITCH);
-                                    }
-
-                                    _lowerButtonPressedAndDialRotated = false;
-                                }
-                                break;
+                                _upperButtonPressedAndDialRotated = false;
                             }
-                    }
+                            break;
+                        }
 
-                    if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
-                    {
-                        PluginManager.DoEvent(
-                            DCSAircraft.SelectedAircraft.Description,
-                            HIDInstance,
-                            PluginGamingPanelEnum.PZ69RadioPanel_PreProg_FA18C,
-                            (int)radioPanelKnob.RadioPanelPZ69Knob,
-                            radioPanelKnob.IsOn,
-                            null);
-                    }
+                    case RadioPanelPZ69KnobsFA18C.LOWER_FREQ_SWITCH:
+                        {
+                            _lowerButtonPressed = radioPanelKnob.IsOn;
+
+                            if (_currentLowerRadioMode == CurrentFA18CRadioMode.COMM1)
+                            {
+                                await DCSBIOS.SendAsync(_lowerButtonPressed ? COMM1_PULL_PRESS : COMM1_PULL_RELEASE);
+                            }
+
+                            if (_currentLowerRadioMode == CurrentFA18CRadioMode.COMM2)
+                            {
+                                await DCSBIOS.SendAsync(_lowerButtonPressed ? COMM2_PULL_PRESS : COMM2_PULL_RELEASE);
+                            }
+
+                            if (!radioPanelKnob.IsOn)
+                            {
+                                if (!_lowerButtonPressedAndDialRotated)
+                                {
+                                    // Do not sync if user has pressed the button to configure the radio
+                                    // Do when user releases button
+                                    SendFrequencyToDCSBIOS(RadioPanelPZ69KnobsFA18C.LOWER_FREQ_SWITCH);
+                                }
+
+                                _lowerButtonPressedAndDialRotated = false;
+                            }
+                            break;
+                        }
                 }
-                AdjustFrequency(hashSet);
+
+                if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
+                {
+                    PluginManager.DoEvent(
+                        DCSAircraft.SelectedAircraft.Description,
+                        HIDInstance,
+                        PluginGamingPanelEnum.PZ69RadioPanel_PreProg_FA18C,
+                        (int)radioPanelKnob.RadioPanelPZ69Knob,
+                        radioPanelKnob.IsOn,
+                        null);
+                }
             }
+
+            AdjustFrequencyAsync(hashSet);
         }
 
         public override void ClearSettings(bool setIsDirty = false)
@@ -1216,11 +1210,6 @@ namespace NonVisuals.Radios
         private void SwapCockpitStandbyFrequencyIls()
         {
             _ilsChannelStandby = _ilsSavedCockpitChannel;
-        }
-
-        private bool IlsNowSyncing()
-        {
-            return Interlocked.Read(ref _ilsThreadNowSynching) > 0;
         }
 
         public override void RemoveSwitchFromList(object controlList, PanelSwitchOnOff panelSwitchOnOff)
