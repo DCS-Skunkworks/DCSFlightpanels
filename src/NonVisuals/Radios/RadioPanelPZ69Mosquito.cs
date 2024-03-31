@@ -1,27 +1,24 @@
-﻿using ClassLibraryCommon;
+﻿using System.Threading.Tasks;
+using ClassLibraryCommon;
 using NonVisuals.BindingClasses.BIP;
+using System;
+using System.Collections.Generic;
+using System.Threading;
+
+using DCS_BIOS;
+using DCS_BIOS.EventArgs;
+
+using MEF;
+using NonVisuals.Plugin;
+using NonVisuals.Radios.Knobs;
+using NonVisuals.Panels.Saitek;
+using NonVisuals.HID;
+using NonVisuals.Helpers;
+using DCS_BIOS.Serialized;
+using DCS_BIOS.ControlLocator;
 
 namespace NonVisuals.Radios
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Threading;
-
-    using DCS_BIOS;
-    using DCS_BIOS.EventArgs;
-
-    using MEF;
-    using Plugin;
-    using Knobs;
-    using Panels.Saitek;
-    using HID;
-    using Helpers;
-    using DCS_BIOS.Serialized;
-    using DCS_BIOS.ControlLocator;
-
-
-
-
     /// <summary>
     /// Pre-programmed radio panel for the Mosquito. 
     /// </summary>
@@ -204,126 +201,125 @@ namespace NonVisuals.Radios
             }
         }
 
-        protected override void PZ69KnobChangedAsync(IEnumerable<object> hashSet)
+        protected override async Task PZ69KnobChangedAsync(IEnumerable<object> hashSet)
         {
             try
             {
                 Interlocked.Increment(ref _doUpdatePanelLCD);
-                lock (LockLCDUpdateObject)
+
+                foreach (var radioPanelKnobObject in hashSet)
                 {
-                    foreach (var radioPanelKnobObject in hashSet)
+                    var radioPanelKnob = (RadioPanelKnobMosquito)radioPanelKnobObject;
+
+                    switch (radioPanelKnob.RadioPanelPZ69Knob)
                     {
-                        var radioPanelKnob = (RadioPanelKnobMosquito)radioPanelKnobObject;
-
-                        switch (radioPanelKnob.RadioPanelPZ69Knob)
-                        {
-                            case RadioPanelKnobsMosquito.UPPER_VHF:
+                        case RadioPanelKnobsMosquito.UPPER_VHF:
+                            {
+                                if (radioPanelKnob.IsOn)
                                 {
-                                    if (radioPanelKnob.IsOn)
-                                    {
-                                        SetUpperRadioMode(CurrentMosquitoRadioMode.VHF);
-                                    }
-                                    break;
+                                    SetUpperRadioMode(CurrentMosquitoRadioMode.VHF);
                                 }
+                                break;
+                            }
 
-                            case RadioPanelKnobsMosquito.UPPER_NO_USE0:
-                            case RadioPanelKnobsMosquito.UPPER_NO_USE1:
-                            case RadioPanelKnobsMosquito.UPPER_NO_USE2:
-                            case RadioPanelKnobsMosquito.UPPER_NO_USE3:
-                            case RadioPanelKnobsMosquito.UPPER_NO_USE4:
-                            case RadioPanelKnobsMosquito.UPPER_NO_USE5:
+                        case RadioPanelKnobsMosquito.UPPER_NO_USE0:
+                        case RadioPanelKnobsMosquito.UPPER_NO_USE1:
+                        case RadioPanelKnobsMosquito.UPPER_NO_USE2:
+                        case RadioPanelKnobsMosquito.UPPER_NO_USE3:
+                        case RadioPanelKnobsMosquito.UPPER_NO_USE4:
+                        case RadioPanelKnobsMosquito.UPPER_NO_USE5:
+                            {
+                                if (radioPanelKnob.IsOn)
                                 {
-                                    if (radioPanelKnob.IsOn)
-                                    {
-                                        SetUpperRadioMode(CurrentMosquitoRadioMode.NO_USE);
-                                    }
-                                    break;
+                                    SetUpperRadioMode(CurrentMosquitoRadioMode.NO_USE);
                                 }
+                                break;
+                            }
 
-                            case RadioPanelKnobsMosquito.LOWER_VHF:
+                        case RadioPanelKnobsMosquito.LOWER_VHF:
+                            {
+                                if (radioPanelKnob.IsOn)
                                 {
-                                    if (radioPanelKnob.IsOn)
-                                    {
-                                        SetLowerRadioMode(CurrentMosquitoRadioMode.VHF);
-                                    }
-                                    break;
+                                    SetLowerRadioMode(CurrentMosquitoRadioMode.VHF);
                                 }
+                                break;
+                            }
 
-                            case RadioPanelKnobsMosquito.LOWER_NO_USE0:
-                            case RadioPanelKnobsMosquito.LOWER_NO_USE1:
-                            case RadioPanelKnobsMosquito.LOWER_NO_USE2:
-                            case RadioPanelKnobsMosquito.LOWER_NO_USE3:
-                            case RadioPanelKnobsMosquito.LOWER_NO_USE4:
-                            case RadioPanelKnobsMosquito.LOWER_NO_USE5:
+                        case RadioPanelKnobsMosquito.LOWER_NO_USE0:
+                        case RadioPanelKnobsMosquito.LOWER_NO_USE1:
+                        case RadioPanelKnobsMosquito.LOWER_NO_USE2:
+                        case RadioPanelKnobsMosquito.LOWER_NO_USE3:
+                        case RadioPanelKnobsMosquito.LOWER_NO_USE4:
+                        case RadioPanelKnobsMosquito.LOWER_NO_USE5:
+                            {
+                                if (radioPanelKnob.IsOn)
                                 {
-                                    if (radioPanelKnob.IsOn)
-                                    {
-                                        SetLowerRadioMode(CurrentMosquitoRadioMode.NO_USE);
-                                    }
-                                    break;
+                                    SetLowerRadioMode(CurrentMosquitoRadioMode.NO_USE);
                                 }
+                                break;
+                            }
 
-                            case RadioPanelKnobsMosquito.UPPER_LARGE_FREQ_WHEEL_INC:
-                            case RadioPanelKnobsMosquito.UPPER_LARGE_FREQ_WHEEL_DEC:
-                            case RadioPanelKnobsMosquito.UPPER_SMALL_FREQ_WHEEL_INC:
-                            case RadioPanelKnobsMosquito.UPPER_SMALL_FREQ_WHEEL_DEC:
-                            case RadioPanelKnobsMosquito.LOWER_LARGE_FREQ_WHEEL_INC:
-                            case RadioPanelKnobsMosquito.LOWER_LARGE_FREQ_WHEEL_DEC:
-                            case RadioPanelKnobsMosquito.LOWER_SMALL_FREQ_WHEEL_INC:
-                            case RadioPanelKnobsMosquito.LOWER_SMALL_FREQ_WHEEL_DEC:
-                                {
-                                    // Ignore
-                                    break;
-                                }
+                        case RadioPanelKnobsMosquito.UPPER_LARGE_FREQ_WHEEL_INC:
+                        case RadioPanelKnobsMosquito.UPPER_LARGE_FREQ_WHEEL_DEC:
+                        case RadioPanelKnobsMosquito.UPPER_SMALL_FREQ_WHEEL_INC:
+                        case RadioPanelKnobsMosquito.UPPER_SMALL_FREQ_WHEEL_DEC:
+                        case RadioPanelKnobsMosquito.LOWER_LARGE_FREQ_WHEEL_INC:
+                        case RadioPanelKnobsMosquito.LOWER_LARGE_FREQ_WHEEL_DEC:
+                        case RadioPanelKnobsMosquito.LOWER_SMALL_FREQ_WHEEL_INC:
+                        case RadioPanelKnobsMosquito.LOWER_SMALL_FREQ_WHEEL_DEC:
+                            {
+                                // Ignore
+                                break;
+                            }
 
-                            case RadioPanelKnobsMosquito.UPPER_FREQ_SWITCH:
+                        case RadioPanelKnobsMosquito.UPPER_FREQ_SWITCH:
+                            {
+                                if (_currentUpperRadioMode == CurrentMosquitoRadioMode.VHF)
                                 {
-                                    if (_currentUpperRadioMode == CurrentMosquitoRadioMode.VHF)
+                                    _upperButtonPressed = radioPanelKnob.IsOn;
+                                    if (!radioPanelKnob.IsOn)
                                     {
-                                        _upperButtonPressed = radioPanelKnob.IsOn;
-                                        if (!radioPanelKnob.IsOn)
+                                        if (!_upperButtonPressedAndDialRotated)
                                         {
-                                            if (!_upperButtonPressedAndDialRotated)
-                                            {
-                                                // Do not sync if user has pressed the button to configure the radio
-                                                // Do when user releases button
-                                                await DCSBIOS.SendAsync(VHF1_RADIO_LIGHT_SWITCH_COMMAND);
-                                            }
-
-                                            _upperButtonPressedAndDialRotated = false;
+                                            // Do not sync if user has pressed the button to configure the radio
+                                            // Do when user releases button
+                                            await DCSBIOS.SendAsync(VHF1_RADIO_LIGHT_SWITCH_COMMAND);
                                         }
-                                    }
-                                    break;
-                                }
 
-                            case RadioPanelKnobsMosquito.LOWER_FREQ_SWITCH:
+                                        _upperButtonPressedAndDialRotated = false;
+                                    }
+                                }
+                                break;
+                            }
+
+                        case RadioPanelKnobsMosquito.LOWER_FREQ_SWITCH:
+                            {
+                                if (_currentLowerRadioMode == CurrentMosquitoRadioMode.VHF)
                                 {
-                                    if (_currentLowerRadioMode == CurrentMosquitoRadioMode.VHF)
+                                    _lowerButtonPressed = radioPanelKnob.IsOn;
+                                    if (!radioPanelKnob.IsOn)
                                     {
-                                        _lowerButtonPressed = radioPanelKnob.IsOn;
-                                        if (!radioPanelKnob.IsOn)
+                                        if (!_lowerButtonPressedAndDialRotated)
                                         {
-                                            if (!_lowerButtonPressedAndDialRotated)
-                                            {
-                                                // Do not sync if user has pressed the button to configure the radio
-                                                // Do when user releases button
-                                                await DCSBIOS.SendAsync(VHF1_RADIO_LIGHT_SWITCH_COMMAND);
-                                            }
-
-                                            _lowerButtonPressedAndDialRotated = false;
+                                            // Do not sync if user has pressed the button to configure the radio
+                                            // Do when user releases button
+                                            await DCSBIOS.SendAsync(VHF1_RADIO_LIGHT_SWITCH_COMMAND);
                                         }
-                                    }
-                                    break;
-                                }
-                        }
 
-                        if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
-                        {
-                            PluginManager.DoEvent(DCSAircraft.SelectedAircraft.Description, HIDInstance, PluginGamingPanelEnum.PZ69RadioPanel_PreProg_Mosquito, (int)radioPanelKnob.RadioPanelPZ69Knob, radioPanelKnob.IsOn, null);
-                        }
+                                        _lowerButtonPressedAndDialRotated = false;
+                                    }
+                                }
+                                break;
+                            }
                     }
-                    AdjustFrequency(hashSet);
+
+                    if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
+                    {
+                        PluginManager.DoEvent(DCSAircraft.SelectedAircraft.Description, HIDInstance, PluginGamingPanelEnum.PZ69RadioPanel_PreProg_Mosquito, (int)radioPanelKnob.RadioPanelPZ69Knob, radioPanelKnob.IsOn, null);
+                    }
                 }
+
+                await AdjustFrequencyAsync(hashSet);
             }
             catch (Exception ex)
             {
@@ -350,13 +346,13 @@ namespace NonVisuals.Radios
                         {
                             case RadioPanelKnobsMosquito.UPPER_LARGE_FREQ_WHEEL_INC:
                                 {
-                                    _vhfDialChangeSkipper.ClickAsync(GetHFRadioModeStringCommand(true));
+                                    await _vhfDialChangeSkipper.ClickAsync(GetHFRadioModeStringCommand(true));
                                     break;
                                 }
 
                             case RadioPanelKnobsMosquito.UPPER_LARGE_FREQ_WHEEL_DEC:
                                 {
-                                    _vhfDialChangeSkipper.ClickAsync(GetHFRadioModeStringCommand(false));
+                                    await _vhfDialChangeSkipper.ClickAsync(GetHFRadioModeStringCommand(false));
                                     break;
                                 }
 
@@ -373,7 +369,7 @@ namespace NonVisuals.Radios
                                                 }
                                                 else if (!_vhfDialChangeSkipper.ShouldSkip())
                                                 {
-                                                    SendIncVHFPresetCommand();
+                                                    await SendIncVHFPresetCommandAsync();
                                                 }
                                                 break;
                                             }
@@ -394,7 +390,7 @@ namespace NonVisuals.Radios
                                                 }
                                                 else if (!_vhfDialChangeSkipper.ShouldSkip())
                                                 {
-                                                    SendDecVHFPresetCommand();
+                                                    await SendDecVHFPresetCommandAsync();
                                                 }
                                                 break;
                                             }
@@ -405,14 +401,14 @@ namespace NonVisuals.Radios
                             case RadioPanelKnobsMosquito.LOWER_LARGE_FREQ_WHEEL_INC:
                                 {
                                     // MODE
-                                    _vhfDialChangeSkipper.ClickAsync(GetHFRadioModeStringCommand(true));
+                                    await _vhfDialChangeSkipper.ClickAsync(GetHFRadioModeStringCommand(true));
                                     break;
                                 }
 
                             case RadioPanelKnobsMosquito.LOWER_LARGE_FREQ_WHEEL_DEC:
                                 {
                                     // MODE
-                                    _vhfDialChangeSkipper.ClickAsync(GetHFRadioModeStringCommand(false));
+                                    await _vhfDialChangeSkipper.ClickAsync(GetHFRadioModeStringCommand(false));
                                     break;
                                 }
 
@@ -429,7 +425,7 @@ namespace NonVisuals.Radios
                                                 }
                                                 else if (!_vhfDialChangeSkipper.ShouldSkip())
                                                 {
-                                                    SendIncVHFPresetCommand();
+                                                    await SendIncVHFPresetCommandAsync();
                                                 }
                                                 break;
                                             }
@@ -450,7 +446,7 @@ namespace NonVisuals.Radios
                                                 }
                                                 else if (!_vhfDialChangeSkipper.ShouldSkip())
                                                 {
-                                                    SendDecVHFPresetCommand();
+                                                    await SendDecVHFPresetCommandAsync();
                                                 }
                                                 break;
                                             }
@@ -574,34 +570,37 @@ namespace NonVisuals.Radios
             }
         }
 
-        private void SendIncVHFPresetCommand()
+        private async Task SendIncVHFPresetCommandAsync()
         {
             Interlocked.Increment(ref _doUpdatePanelLCD);
+
+            var command = string.Empty;
+            
             lock (_lockVhf1DialObject1)
             {
                 switch (_vhf1CockpitPresetActiveButton)
                 {
                     case 0:
                         {
-                            await DCSBIOS.SendAsync("RADIO_A 1\n");
+                            command = "RADIO_A 1\n";
                             break;
                         }
 
                     case 1:
                         {
-                            await DCSBIOS.SendAsync("RADIO_B 1\n");
+                            command = "RADIO_B 1\n";
                             break;
                         }
 
                     case 2:
                         {
-                            await DCSBIOS.SendAsync("RADIO_C 1\n");
+                            command = "RADIO_C 1\n";
                             break;
                         }
 
                     case 3:
                         {
-                            await DCSBIOS.SendAsync("RADIO_D 1\n");
+                            command = "RADIO_D 1\n";
                             break;
                         }
 
@@ -611,11 +610,19 @@ namespace NonVisuals.Radios
                         }
                 }
             }
+
+            if (!string.IsNullOrEmpty(command))
+            {
+                await DCSBIOS.SendAsync(command);
+            }
         }
 
-        private void SendDecVHFPresetCommand()
+        private async Task SendDecVHFPresetCommandAsync()
         {
             Interlocked.Increment(ref _doUpdatePanelLCD);
+
+            var command = string.Empty;
+
             lock (_lockVhf1DialObject1)
             {
                 switch (_vhf1CockpitPresetActiveButton)
@@ -627,28 +634,33 @@ namespace NonVisuals.Radios
 
                     case 1:
                         {
-                            await DCSBIOS.SendAsync("RADIO_OFF 1\n");
+                            command = "RADIO_OFF 1\n";
                             break;
                         }
 
                     case 2:
                         {
-                            await DCSBIOS.SendAsync("RADIO_A 1\n");
+                            command = "RADIO_A 1\n";
                             break;
                         }
 
                     case 3:
                         {
-                            await DCSBIOS.SendAsync("RADIO_B 1\n");
+                            command = "RADIO_B 1\n";
                             break;
                         }
 
                     case 4:
                         {
-                            await DCSBIOS.SendAsync("RADIO_C 1\n");
+                            command = "RADIO_C 1\n";
                             break;
                         }
                 }
+            }
+
+            if (!string.IsNullOrEmpty(command))
+            {
+                await DCSBIOS.SendAsync(command);
             }
         }
 
