@@ -4,7 +4,6 @@ using StreamDeckSharp.Internals;
 using StreamDeckSharp.Tests.VerifyStuff;
 using System;
 using System.Threading.Tasks;
-using VerifyXunit;
 using Xunit;
 
 

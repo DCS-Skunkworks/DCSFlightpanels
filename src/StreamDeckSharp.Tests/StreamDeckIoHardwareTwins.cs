@@ -1,7 +1,6 @@
 using Newtonsoft.Json;
 using StreamDeckSharp.Internals;
 using System.Threading.Tasks;
-using VerifyXunit;
 using Xunit;
 using Newtonsoft.Json.Serialization;
 using System.Linq;

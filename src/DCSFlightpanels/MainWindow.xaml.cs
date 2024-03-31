@@ -39,6 +39,7 @@
     using NonVisuals.HID;
     using DCS_BIOS.Serialized;
     using DCS_BIOS.ControlLocator;
+    using System.Windows.Threading;
 
     public partial class MainWindow : IGamingPanelListener, IDcsBiosConnectionListener, ISettingsModifiedListener, IProfileHandlerListener, IDisposable, IHardwareConflictResolver, IPanelEventListener, IForwardPanelEventListener, IDCSBIOSStringListener
     {
@@ -316,6 +317,8 @@
                 return;
             }
 
+            ControlSpinningWheel.Visibility = Visibility.Visible;
+
             DCSBIOSControlLocator.DCSAircraft = _profileHandler.DCSAircraft;
 
             _dcsBios = new DCSBIOS(Settings.Default.DCSBiosIPFrom, 
@@ -323,6 +326,7 @@
                 int.Parse(Settings.Default.DCSBiosPortFrom), 
                 int.Parse(Settings.Default.DCSBiosPortTo), 
                 DcsBiosNotificationMode.Parse);
+
             if (!_dcsBios.HasLastException())
             {
                 ControlSpinningWheel.RotateGear(2000);
@@ -331,6 +335,8 @@
 
         private void StartupDCSBIOS()
         {
+            ControlSpinningWheel.Visibility = Visibility.Visible;
+
             if (_dcsBios.IsRunning)
             {
                 return;
@@ -714,7 +720,7 @@
                 }
                 finally
                 {
-                    Mouse.OverrideCursor = null;
+                    Mouse.OverrideCursor = Cursors.Arrow;
                 }
             }
             catch (Exception ex)
@@ -847,7 +853,7 @@
         {
             try
             {
-                Dispatcher?.BeginInvoke((Action)(() => ControlSpinningWheel.RotateGear()));
+                Dispatcher?.BeginInvoke(() => ControlSpinningWheel.RotateGear());
             }
             catch (Exception ex)
             {
