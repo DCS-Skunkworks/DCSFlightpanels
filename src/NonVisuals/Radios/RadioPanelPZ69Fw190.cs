@@ -387,7 +387,7 @@ namespace NonVisuals.Radios
                         PluginManager.DoEvent(DCSAircraft.SelectedAircraft.Description, HIDInstance, PluginGamingPanelEnum.PZ69RadioPanel_PreProg_FW190, (int)radioPanelKnob.RadioPanelPZ69Knob, radioPanelKnob.IsOn, null);
                     }
 
-                    AdjustFrequencyAsync(hashSet);
+                    await AdjustFrequencyAsync(hashSet);
                 }
             }
             catch (Exception ex)
@@ -419,13 +419,13 @@ namespace NonVisuals.Radios
                                         case CurrentFw190RadioMode.FUG16ZY:
                                             {
                                                 // Presets
-                                                _fug16ZyPresetDialSkipper.ClickAsync(FUG16_ZY_PRESET_COMMAND_INC);
+                                                await _fug16ZyPresetDialSkipper.ClickAsync(FUG16_ZY_PRESET_COMMAND_INC);
                                                 break;
                                             }
 
                                         case CurrentFw190RadioMode.IFF:
                                             {
-                                                _fug25AIFFDialSkipper.ClickAsync(FUG25_AIFF_COMMAND_INC);
+                                                await _fug25AIFFDialSkipper.ClickAsync(FUG25_AIFF_COMMAND_INC);
                                                 break;
                                             }
 
@@ -449,13 +449,13 @@ namespace NonVisuals.Radios
                                         case CurrentFw190RadioMode.FUG16ZY:
                                             {
                                                 // Presets
-                                                _fug16ZyPresetDialSkipper.ClickAsync(FUG16_ZY_PRESET_COMMAND_DEC);
+                                                await _fug16ZyPresetDialSkipper.ClickAsync(FUG16_ZY_PRESET_COMMAND_DEC);
                                                 break;
                                             }
 
                                         case CurrentFw190RadioMode.IFF:
                                             {
-                                                _fug25AIFFDialSkipper.ClickAsync(FUG25_AIFF_COMMAND_DEC);
+                                                await _fug25AIFFDialSkipper.ClickAsync(FUG25_AIFF_COMMAND_DEC);
                                                 break;
                                             }
 
@@ -539,13 +539,13 @@ namespace NonVisuals.Radios
                                         case CurrentFw190RadioMode.FUG16ZY:
                                             {
                                                 // Presets
-                                                _fug16ZyPresetDialSkipper.ClickAsync(FUG16_ZY_PRESET_COMMAND_INC);
+                                                await _fug16ZyPresetDialSkipper.ClickAsync(FUG16_ZY_PRESET_COMMAND_INC);
                                                 break;
                                             }
 
                                         case CurrentFw190RadioMode.IFF:
                                             {
-                                                _fug25AIFFDialSkipper.ClickAsync(FUG25_AIFF_COMMAND_INC);
+                                                await _fug25AIFFDialSkipper.ClickAsync(FUG25_AIFF_COMMAND_INC);
                                                 break;
                                             }
 
@@ -569,13 +569,13 @@ namespace NonVisuals.Radios
                                         case CurrentFw190RadioMode.FUG16ZY:
                                             {
                                                 // Presets
-                                                _fug16ZyPresetDialSkipper.ClickAsync(FUG16_ZY_PRESET_COMMAND_DEC);
+                                                await _fug16ZyPresetDialSkipper.ClickAsync(FUG16_ZY_PRESET_COMMAND_DEC);
                                                 break;
                                             }
 
                                         case CurrentFw190RadioMode.IFF:
                                             {
-                                                _fug25AIFFDialSkipper.ClickAsync(FUG25_AIFF_COMMAND_DEC);
+                                                await _fug25AIFFDialSkipper.ClickAsync(FUG25_AIFF_COMMAND_DEC);
                                                 break;
                                             }
 
@@ -686,11 +686,11 @@ namespace NonVisuals.Radios
                         case CurrentFw190RadioMode.FUG16ZY:
                             {
                                 // 1-4
-                                string modeDialPostionAsString;
+                                string modeDialPositionAsString;
                                 string fineTunePositionAsString;
                                 lock (_lockFug16ZyPresetDialObject1)
                                 {
-                                    modeDialPostionAsString = (_fug16ZyPresetCockpitDialPos + 1).ToString();
+                                    modeDialPositionAsString = (_fug16ZyPresetCockpitDialPos + 1).ToString();
                                 }
 
                                 lock (_lockFug16ZyFineTuneDialObject1)
@@ -699,7 +699,7 @@ namespace NonVisuals.Radios
                                     fineTunePositionAsString = (_fug16ZyFineTuneCockpitDialPos / 10).ToString();
                                 }
 
-                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(modeDialPostionAsString), PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(modeDialPositionAsString), PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, Convert.ToUInt32(fineTunePositionAsString), PZ69LCDPosition.UPPER_STBY_RIGHT);
                                 break;
                             }

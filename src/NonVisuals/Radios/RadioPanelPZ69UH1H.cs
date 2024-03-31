@@ -570,7 +570,7 @@ namespace NonVisuals.Radios
             }
         }
         */
-        private void SendFrequencyToDCSBIOS(RadioPanelPZ69KnobsUH1H knob)
+        private async Task SendFrequencyToDCSBIOSAsync(RadioPanelPZ69KnobsUH1H knob)
         {
             if (IgnoreSwitchButtonOnce() && (knob == RadioPanelPZ69KnobsUH1H.UPPER_FREQ_SWITCH || knob == RadioPanelPZ69KnobsUH1H.LOWER_FREQ_SWITCH))
             {
@@ -594,7 +594,7 @@ namespace NonVisuals.Radios
                         {
                             case CurrentUH1HRadioMode.INTERCOMM:
                                 {
-                                    SendUhfPresetChannelChangeToDCSBIOSAsync();
+                                    await SendUhfPresetChannelChangeToDCSBIOSAsync();
                                     break;
                                 }
 
@@ -637,7 +637,7 @@ namespace NonVisuals.Radios
                         {
                             case CurrentUH1HRadioMode.INTERCOMM:
                                 {
-                                    SendUhfPresetChannelChangeToDCSBIOSAsync();
+                                    await SendUhfPresetChannelChangeToDCSBIOSAsync();
                                     break;
                                 }
 
@@ -2672,7 +2672,7 @@ namespace NonVisuals.Radios
                             {
                                 if (radioPanelKnob.IsOn)
                                 {
-                                    SendFrequencyToDCSBIOS(RadioPanelPZ69KnobsUH1H.UPPER_FREQ_SWITCH);
+                                    await SendFrequencyToDCSBIOSAsync(RadioPanelPZ69KnobsUH1H.UPPER_FREQ_SWITCH);
                                 }
                             }
                             break;
@@ -2691,7 +2691,7 @@ namespace NonVisuals.Radios
                             {
                                 if (radioPanelKnob.IsOn)
                                 {
-                                    SendFrequencyToDCSBIOS(RadioPanelPZ69KnobsUH1H.LOWER_FREQ_SWITCH);
+                                    await SendFrequencyToDCSBIOSAsync(RadioPanelPZ69KnobsUH1H.LOWER_FREQ_SWITCH);
                                 }
                             }
                             break;

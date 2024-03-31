@@ -1414,7 +1414,7 @@ namespace NonVisuals.Radios
                     }
                 }
 
-                AdjustFrequencyAsync(hashSet);
+                await AdjustFrequencyAsync(hashSet);
             }
             catch (Exception ex)
             {

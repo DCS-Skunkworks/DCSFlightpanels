@@ -1,4 +1,5 @@
-﻿using NonVisuals.BindingClasses.BIP;
+﻿using System.Threading.Tasks;
+using NonVisuals.BindingClasses.BIP;
 using NonVisuals.Helpers;
 
 namespace NonVisuals.Radios
@@ -296,179 +297,178 @@ namespace NonVisuals.Radios
             }
         }
 
-        protected override void PZ69KnobChangedAsync(IEnumerable<object> hashSet)
+        protected override async Task PZ69KnobChangedAsync(IEnumerable<object> hashSet)
         {
             try
             {
                 Interlocked.Increment(ref _doUpdatePanelLCD);
-                lock (LockLCDUpdateObject)
+
+                foreach (var radioPanelKnobObject in hashSet)
                 {
-                    foreach (var radioPanelKnobObject in hashSet)
+                    var radioPanelKnob = (RadioPanelKnobYak52)radioPanelKnobObject;
+
+                    switch (radioPanelKnob.RadioPanelPZ69Knob)
                     {
-                        var radioPanelKnob = (RadioPanelKnobYak52)radioPanelKnobObject;
-
-                        switch (radioPanelKnob.RadioPanelPZ69Knob)
-                        {
-                            case RadioPanelPZ69KnobsYak52.UPPER_VHF:
+                        case RadioPanelPZ69KnobsYak52.UPPER_VHF:
+                            {
+                                if (radioPanelKnob.IsOn)
                                 {
-                                    if (radioPanelKnob.IsOn)
-                                    {
-                                        SetUpperRadioMode(CurrentYak52RadioMode.VHF);
-                                    }
-
-                                    break;
-                                }
-                            case RadioPanelPZ69KnobsYak52.UPPER_ADF_FRONT:
-                                {
-                                    if (radioPanelKnob.IsOn)
-                                    {
-                                        SetUpperRadioMode(CurrentYak52RadioMode.ADF_FRONT);
-                                    }
-
-                                    break;
-                                }
-                            case RadioPanelPZ69KnobsYak52.UPPER_ADF_REAR:
-                                {
-                                    if (radioPanelKnob.IsOn)
-                                    {
-                                        SetUpperRadioMode(CurrentYak52RadioMode.ADF_REAR);
-                                    }
-
-                                    break;
-                                }
-                            case RadioPanelPZ69KnobsYak52.UPPER_GMK:
-                                {
-                                    if (radioPanelKnob.IsOn)
-                                    {
-                                        SetUpperRadioMode(CurrentYak52RadioMode.GMK);
-                                    }
-
-                                    break;
-                                }
-                            case RadioPanelPZ69KnobsYak52.UPPER_NO_USE1:
-                            case RadioPanelPZ69KnobsYak52.UPPER_NO_USE2:
-                            case RadioPanelPZ69KnobsYak52.UPPER_NO_USE3:
-                                {
-                                    if (radioPanelKnob.IsOn)
-                                    {
-                                        SetUpperRadioMode(CurrentYak52RadioMode.NO_USE);
-                                    }
-                                    break;
+                                    SetUpperRadioMode(CurrentYak52RadioMode.VHF);
                                 }
 
-                            case RadioPanelPZ69KnobsYak52.LOWER_VHF:
+                                break;
+                            }
+                        case RadioPanelPZ69KnobsYak52.UPPER_ADF_FRONT:
+                            {
+                                if (radioPanelKnob.IsOn)
                                 {
-                                    if (radioPanelKnob.IsOn)
-                                    {
-                                        SetLowerRadioMode(CurrentYak52RadioMode.VHF);
-                                    }
-                                    break;
-                                }
-                            case RadioPanelPZ69KnobsYak52.LOWER_ADF_FRONT:
-                                {
-                                    if (radioPanelKnob.IsOn)
-                                    {
-                                        SetLowerRadioMode(CurrentYak52RadioMode.ADF_FRONT);
-                                    }
-                                    break;
-                                }
-                            case RadioPanelPZ69KnobsYak52.LOWER_ADF_REAR:
-                                {
-                                    if (radioPanelKnob.IsOn)
-                                    {
-                                        SetLowerRadioMode(CurrentYak52RadioMode.ADF_REAR);
-                                    }
-                                    break;
-                                }
-                            case RadioPanelPZ69KnobsYak52.LOWER_GMK:
-                                {
-                                    if (radioPanelKnob.IsOn)
-                                    {
-                                        SetLowerRadioMode(CurrentYak52RadioMode.GMK);
-                                    }
-
-                                    break;
-                                }
-                            case RadioPanelPZ69KnobsYak52.LOWER_NO_USE1:
-                            case RadioPanelPZ69KnobsYak52.LOWER_NO_USE2:
-                            case RadioPanelPZ69KnobsYak52.LOWER_NO_USE3:
-                                {
-                                    if (radioPanelKnob.IsOn)
-                                    {
-                                        SetLowerRadioMode(CurrentYak52RadioMode.NO_USE);
-                                    }
-                                    break;
+                                    SetUpperRadioMode(CurrentYak52RadioMode.ADF_FRONT);
                                 }
 
-                            case RadioPanelPZ69KnobsYak52.UPPER_LARGE_FREQ_WHEEL_INC:
-                            case RadioPanelPZ69KnobsYak52.UPPER_LARGE_FREQ_WHEEL_DEC:
-                            case RadioPanelPZ69KnobsYak52.UPPER_SMALL_FREQ_WHEEL_INC:
-                            case RadioPanelPZ69KnobsYak52.UPPER_SMALL_FREQ_WHEEL_DEC:
-                            case RadioPanelPZ69KnobsYak52.LOWER_LARGE_FREQ_WHEEL_INC:
-                            case RadioPanelPZ69KnobsYak52.LOWER_LARGE_FREQ_WHEEL_DEC:
-                            case RadioPanelPZ69KnobsYak52.LOWER_SMALL_FREQ_WHEEL_INC:
-                            case RadioPanelPZ69KnobsYak52.LOWER_SMALL_FREQ_WHEEL_DEC:
+                                break;
+                            }
+                        case RadioPanelPZ69KnobsYak52.UPPER_ADF_REAR:
+                            {
+                                if (radioPanelKnob.IsOn)
                                 {
-                                    // Ignore
-                                    break;
+                                    SetUpperRadioMode(CurrentYak52RadioMode.ADF_REAR);
                                 }
 
-                            case RadioPanelPZ69KnobsYak52.UPPER_FREQ_SWITCH:
+                                break;
+                            }
+                        case RadioPanelPZ69KnobsYak52.UPPER_GMK:
+                            {
+                                if (radioPanelKnob.IsOn)
                                 {
-                                    _upperButtonPressed = radioPanelKnob.IsOn;
+                                    SetUpperRadioMode(CurrentYak52RadioMode.GMK);
+                                }
 
-                                    if (_currentUpperRadioMode == CurrentYak52RadioMode.VHF)
+                                break;
+                            }
+                        case RadioPanelPZ69KnobsYak52.UPPER_NO_USE1:
+                        case RadioPanelPZ69KnobsYak52.UPPER_NO_USE2:
+                        case RadioPanelPZ69KnobsYak52.UPPER_NO_USE3:
+                            {
+                                if (radioPanelKnob.IsOn)
+                                {
+                                    SetUpperRadioMode(CurrentYak52RadioMode.NO_USE);
+                                }
+                                break;
+                            }
+
+                        case RadioPanelPZ69KnobsYak52.LOWER_VHF:
+                            {
+                                if (radioPanelKnob.IsOn)
+                                {
+                                    SetLowerRadioMode(CurrentYak52RadioMode.VHF);
+                                }
+                                break;
+                            }
+                        case RadioPanelPZ69KnobsYak52.LOWER_ADF_FRONT:
+                            {
+                                if (radioPanelKnob.IsOn)
+                                {
+                                    SetLowerRadioMode(CurrentYak52RadioMode.ADF_FRONT);
+                                }
+                                break;
+                            }
+                        case RadioPanelPZ69KnobsYak52.LOWER_ADF_REAR:
+                            {
+                                if (radioPanelKnob.IsOn)
+                                {
+                                    SetLowerRadioMode(CurrentYak52RadioMode.ADF_REAR);
+                                }
+                                break;
+                            }
+                        case RadioPanelPZ69KnobsYak52.LOWER_GMK:
+                            {
+                                if (radioPanelKnob.IsOn)
+                                {
+                                    SetLowerRadioMode(CurrentYak52RadioMode.GMK);
+                                }
+
+                                break;
+                            }
+                        case RadioPanelPZ69KnobsYak52.LOWER_NO_USE1:
+                        case RadioPanelPZ69KnobsYak52.LOWER_NO_USE2:
+                        case RadioPanelPZ69KnobsYak52.LOWER_NO_USE3:
+                            {
+                                if (radioPanelKnob.IsOn)
+                                {
+                                    SetLowerRadioMode(CurrentYak52RadioMode.NO_USE);
+                                }
+                                break;
+                            }
+
+                        case RadioPanelPZ69KnobsYak52.UPPER_LARGE_FREQ_WHEEL_INC:
+                        case RadioPanelPZ69KnobsYak52.UPPER_LARGE_FREQ_WHEEL_DEC:
+                        case RadioPanelPZ69KnobsYak52.UPPER_SMALL_FREQ_WHEEL_INC:
+                        case RadioPanelPZ69KnobsYak52.UPPER_SMALL_FREQ_WHEEL_DEC:
+                        case RadioPanelPZ69KnobsYak52.LOWER_LARGE_FREQ_WHEEL_INC:
+                        case RadioPanelPZ69KnobsYak52.LOWER_LARGE_FREQ_WHEEL_DEC:
+                        case RadioPanelPZ69KnobsYak52.LOWER_SMALL_FREQ_WHEEL_INC:
+                        case RadioPanelPZ69KnobsYak52.LOWER_SMALL_FREQ_WHEEL_DEC:
+                            {
+                                // Ignore
+                                break;
+                            }
+
+                        case RadioPanelPZ69KnobsYak52.UPPER_FREQ_SWITCH:
+                            {
+                                _upperButtonPressed = radioPanelKnob.IsOn;
+
+                                if (_currentUpperRadioMode == CurrentYak52RadioMode.VHF)
+                                {
+                                    if (!radioPanelKnob.IsOn)
                                     {
-                                        if (!radioPanelKnob.IsOn)
+                                        if (!_upperButtonPressedAndDialRotated)
                                         {
-                                            if (!_upperButtonPressedAndDialRotated)
-                                            {
-                                                // Do not sync if user has pressed the button to configure the radio
-                                                // Do when user releases button
-                                                await DCSBIOS.SendAsync(VHF_RADIO_SQUELCH_TOGGLE_COMMAND);
-                                            }
-
-                                            _upperButtonPressedAndDialRotated = false;
+                                            // Do not sync if user has pressed the button to configure the radio
+                                            // Do when user releases button
+                                            await DCSBIOS.SendAsync(VHF_RADIO_SQUELCH_TOGGLE_COMMAND);
                                         }
-                                    }
 
-                                    break;
+                                        _upperButtonPressedAndDialRotated = false;
+                                    }
                                 }
-                            case RadioPanelPZ69KnobsYak52.LOWER_FREQ_SWITCH:
+
+                                break;
+                            }
+                        case RadioPanelPZ69KnobsYak52.LOWER_FREQ_SWITCH:
+                            {
+                                _lowerButtonPressed = radioPanelKnob.IsOn;
+
+                                if (_currentLowerRadioMode == CurrentYak52RadioMode.VHF)
                                 {
-                                    _lowerButtonPressed = radioPanelKnob.IsOn;
-
-                                    if (_currentLowerRadioMode == CurrentYak52RadioMode.VHF)
+                                    if (!radioPanelKnob.IsOn)
                                     {
-                                        if (!radioPanelKnob.IsOn)
+                                        if (!_lowerButtonPressedAndDialRotated)
                                         {
-                                            if (!_lowerButtonPressedAndDialRotated)
-                                            {
-                                                // Do not sync if user has pressed the button to configure the radio
-                                                // Do when user releases button
-                                                await DCSBIOS.SendAsync(VHF_RADIO_SQUELCH_TOGGLE_COMMAND);
-                                            }
-
-                                            _lowerButtonPressedAndDialRotated = false;
+                                            // Do not sync if user has pressed the button to configure the radio
+                                            // Do when user releases button
+                                            await DCSBIOS.SendAsync(VHF_RADIO_SQUELCH_TOGGLE_COMMAND);
                                         }
-                                    }
-                                    break;
-                                }
-                        }
 
-                        if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
-                        {
-                            PluginManager.DoEvent(
-                                DCSAircraft.SelectedAircraft.Description,
-                                HIDInstance,
-                                PluginGamingPanelEnum.PZ69RadioPanel_PreProg_Yak52,
-                                (int)radioPanelKnob.RadioPanelPZ69Knob,
-                                radioPanelKnob.IsOn,
-                                null);
-                        }
+                                        _lowerButtonPressedAndDialRotated = false;
+                                    }
+                                }
+                                break;
+                            }
                     }
-                    AdjustFrequency(hashSet);
+
+                    if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
+                    {
+                        PluginManager.DoEvent(
+                            DCSAircraft.SelectedAircraft.Description,
+                            HIDInstance,
+                            PluginGamingPanelEnum.PZ69RadioPanel_PreProg_Yak52,
+                            (int)radioPanelKnob.RadioPanelPZ69Knob,
+                            radioPanelKnob.IsOn,
+                            null);
+                    }
                 }
+
+                await AdjustFrequencyAsync(hashSet);
             }
             catch (Exception ex)
             {
@@ -498,7 +498,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentYak52RadioMode.VHF:
                                             {
-                                                SendVHFMhzCommand(true);
+                                                await SendVHFMhzCommandAsync(true);
                                                 break;
                                             }
                                         case CurrentYak52RadioMode.ADF_FRONT:
@@ -530,7 +530,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentYak52RadioMode.VHF:
                                             {
-                                                SendVHFMhzCommand(false);
+                                                await SendVHFMhzCommandAsync(false);
                                                 break;
                                             }
                                         case CurrentYak52RadioMode.ADF_FRONT:
@@ -561,22 +561,22 @@ namespace NonVisuals.Radios
                                                 if (_upperButtonPressed)
                                                 {
                                                     _upperButtonPressedAndDialRotated = true;
-                                                    SendVHFVolumeCommand(true);
+                                                    await SendVHFVolumeCommandAsync(true);
                                                 }
                                                 else
                                                 {
-                                                    SendVHFKhzCommand(true);
+                                                    await SendVHFKhzCommandAsync(true);
                                                 }
                                                 break;
                                             }
                                         case CurrentYak52RadioMode.ADF_FRONT:
                                             {
-                                                _adfFrontClickSkipper.ClickAsync(ADF_FRONT_CHANNEL_INC);
+                                                await _adfFrontClickSkipper.ClickAsync(ADF_FRONT_CHANNEL_INC);
                                                 break;
                                             }
                                         case CurrentYak52RadioMode.ADF_REAR:
                                             {
-                                                _adfRearClickSkipper.ClickAsync(ADF_REAR_CHANNEL_INC);
+                                                await _adfRearClickSkipper.ClickAsync(ADF_REAR_CHANNEL_INC);
                                                 break;
                                             }
                                         case CurrentYak52RadioMode.GMK:
@@ -597,22 +597,22 @@ namespace NonVisuals.Radios
                                                 if (_upperButtonPressed)
                                                 {
                                                     _upperButtonPressedAndDialRotated = true;
-                                                    SendVHFVolumeCommand(false);
+                                                    await SendVHFVolumeCommandAsync(false);
                                                 }
                                                 else
                                                 {
-                                                    SendVHFKhzCommand(false);
+                                                    await SendVHFKhzCommandAsync(false);
                                                 }
                                                 break;
                                             }
                                         case CurrentYak52RadioMode.ADF_FRONT:
                                             {
-                                                _adfFrontClickSkipper.ClickAsync(ADF_FRONT_CHANNEL_DEC);
+                                                await _adfFrontClickSkipper.ClickAsync(ADF_FRONT_CHANNEL_DEC);
                                                 break;
                                             }
                                         case CurrentYak52RadioMode.ADF_REAR:
                                             {
-                                                _adfRearClickSkipper.ClickAsync(ADF_REAR_CHANNEL_DEC);
+                                                await _adfRearClickSkipper.ClickAsync(ADF_REAR_CHANNEL_DEC);
                                                 break;
                                             }
                                         case CurrentYak52RadioMode.GMK:
@@ -630,7 +630,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentYak52RadioMode.VHF:
                                             {
-                                                SendVHFMhzCommand(true);
+                                                await SendVHFMhzCommandAsync(true);
                                                 break;
                                             }
                                         case CurrentYak52RadioMode.ADF_FRONT:
@@ -658,7 +658,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentYak52RadioMode.VHF:
                                             {
-                                                SendVHFMhzCommand(false);
+                                                await SendVHFMhzCommandAsync(false);
                                                 break;
                                             }
                                         case CurrentYak52RadioMode.ADF_FRONT:
@@ -689,22 +689,22 @@ namespace NonVisuals.Radios
                                                 if (_lowerButtonPressed)
                                                 {
                                                     _lowerButtonPressedAndDialRotated = true;
-                                                    SendVHFVolumeCommand(true);
+                                                    await SendVHFVolumeCommandAsync(true);
                                                 }
                                                 else
                                                 {
-                                                    SendVHFKhzCommand(true);
+                                                    await SendVHFKhzCommandAsync(true);
                                                 }
                                                 break;
                                             }
                                         case CurrentYak52RadioMode.ADF_FRONT:
                                             {
-                                                _adfFrontClickSkipper.ClickAsync(ADF_FRONT_CHANNEL_INC);
+                                                await _adfFrontClickSkipper.ClickAsync(ADF_FRONT_CHANNEL_INC);
                                                 break;
                                             }
                                         case CurrentYak52RadioMode.ADF_REAR:
                                             {
-                                                _adfRearClickSkipper.ClickAsync(ADF_REAR_CHANNEL_INC);
+                                                await _adfRearClickSkipper.ClickAsync(ADF_REAR_CHANNEL_INC);
                                                 break;
                                             }
                                         case CurrentYak52RadioMode.GMK:
@@ -725,22 +725,22 @@ namespace NonVisuals.Radios
                                                 if (_lowerButtonPressed)
                                                 {
                                                     _lowerButtonPressedAndDialRotated = true;
-                                                    SendVHFVolumeCommand(false);
+                                                    await SendVHFVolumeCommandAsync(false);
                                                 }
                                                 else
                                                 {
-                                                    SendVHFKhzCommand(false);
+                                                    await SendVHFKhzCommandAsync(false);
                                                 }
                                                 break;
                                             }
                                         case CurrentYak52RadioMode.ADF_FRONT:
                                             {
-                                                _adfFrontClickSkipper.ClickAsync(ADF_FRONT_CHANNEL_DEC);
+                                                await _adfFrontClickSkipper.ClickAsync(ADF_FRONT_CHANNEL_DEC);
                                                 break;
                                             }
                                         case CurrentYak52RadioMode.ADF_REAR:
                                             {
-                                                _adfRearClickSkipper.ClickAsync(ADF_REAR_CHANNEL_DEC);
+                                                await _adfRearClickSkipper.ClickAsync(ADF_REAR_CHANNEL_DEC);
                                                 break;
                                             }
                                         case CurrentYak52RadioMode.GMK:
@@ -962,7 +962,7 @@ namespace NonVisuals.Radios
             }
         }
 
-        private void SendVHFMhzCommand(bool increase)
+        private async Task SendVHFMhzCommandAsync(bool increase)
         {
             var s = GetVHFRadioMhzDialStringCommand(increase);
             if (string.IsNullOrEmpty(s))
@@ -972,7 +972,7 @@ namespace NonVisuals.Radios
             await DCSBIOS.SendAsync(s);
         }
 
-        private void SendVHFKhzCommand(bool increase)
+        private async Task SendVHFKhzCommandAsync(bool increase)
         {
             var s = GetVHFRadioKhzDialStringCommand(increase);
             if (string.IsNullOrEmpty(s))
@@ -981,7 +981,8 @@ namespace NonVisuals.Radios
             }
             await DCSBIOS.SendAsync(s);
         }
-        private void SendVHFVolumeCommand(bool increase)
+
+        private async Task SendVHFVolumeCommandAsync(bool increase)
         {
             var s = GetVHFRadioVolumeDialStringCommand(increase);
             if (string.IsNullOrEmpty(s))
@@ -993,32 +994,17 @@ namespace NonVisuals.Radios
 
         private string GetVHFRadioMhzDialStringCommand(bool moveUp)
         {
-            if (moveUp)
-            {
-
-                return $"{VHF_RADIO_MHZ_DIAL} {_vhfRadioMhzDialChangeValue} \n";
-            }
-            return $"{VHF_RADIO_MHZ_DIAL} -{_vhfRadioMhzDialChangeValue} \n";
+            return moveUp ? $"{VHF_RADIO_MHZ_DIAL} {_vhfRadioMhzDialChangeValue} \n" : $"{VHF_RADIO_MHZ_DIAL} -{_vhfRadioMhzDialChangeValue} \n";
         }
 
         private string GetVHFRadioKhzDialStringCommand(bool moveUp)
         {
-            if (moveUp)
-            {
-
-                return $"{VHF_RADIO_KHZ_DIAL} {_vhfRadioKhzDialChangeValue}\n";
-            }
-            return $"{VHF_RADIO_KHZ_DIAL} -{_vhfRadioKhzDialChangeValue} \n";
+            return moveUp ? $"{VHF_RADIO_KHZ_DIAL} {_vhfRadioKhzDialChangeValue}\n" : $"{VHF_RADIO_KHZ_DIAL} -{_vhfRadioKhzDialChangeValue} \n";
         }
 
         private string GetVHFRadioVolumeDialStringCommand(bool moveUp)
         {
-            if (moveUp)
-            {
-
-                return $"{VHF_RADIO_VOLUME_DIAL} {_vhfRadioVolumeDialChangeValue} \n";
-            }
-            return $"{VHF_RADIO_VOLUME_DIAL} -{_vhfRadioVolumeDialChangeValue} \n";
+            return moveUp ? $"{VHF_RADIO_VOLUME_DIAL} {_vhfRadioVolumeDialChangeValue} \n" : $"{VHF_RADIO_VOLUME_DIAL} -{_vhfRadioVolumeDialChangeValue} \n";
         }
 
         private string GetGMKHeadingSelectorCommand(bool moveUp)

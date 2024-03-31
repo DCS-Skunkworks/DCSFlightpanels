@@ -655,13 +655,13 @@ namespace NonVisuals.Radios
 
                     case RadioPanelPZ69KnobsAV8BNA.UPPER_FREQ_SWITCH:
                         {
-                            SendFrequencyToDCSBIOSAsync(radioPanelKnob);
+                            await SendFrequencyToDCSBIOSAsync(radioPanelKnob);
                             break;
                         }
 
                     case RadioPanelPZ69KnobsAV8BNA.LOWER_FREQ_SWITCH:
                         {
-                            SendFrequencyToDCSBIOSAsync(radioPanelKnob);
+                            await SendFrequencyToDCSBIOSAsync(radioPanelKnob);
                             break;
                         }
                 }

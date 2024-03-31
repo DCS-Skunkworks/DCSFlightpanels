@@ -1182,7 +1182,7 @@ namespace NonVisuals.Radios
                 }
             }
 
-            AdjustFrequencyAsync(hashSet);
+            await AdjustFrequencyAsync(hashSet);
         }
 
         public override void ClearSettings(bool setIsDirty = false)
