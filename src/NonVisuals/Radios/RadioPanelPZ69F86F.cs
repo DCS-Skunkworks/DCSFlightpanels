@@ -1,4 +1,5 @@
-﻿using NonVisuals.BindingClasses.BIP;
+﻿using System.Threading.Tasks;
+using NonVisuals.BindingClasses.BIP;
 
 namespace NonVisuals.Radios
 {
@@ -248,7 +249,7 @@ namespace NonVisuals.Radios
             }
         }
 
-        private void SendFrequencyToDCSBIOS(RadioPanelPZ69KnobsF86F knob)
+        private async Task SendFrequencyToDCSBIOSAsync(RadioPanelPZ69KnobsF86F knob)
         {
             try
             {
@@ -341,175 +342,173 @@ namespace NonVisuals.Radios
             }
         }
 
-        protected override void PZ69KnobChangedAsync(IEnumerable<object> hashSet)
+        protected override async Task PZ69KnobChangedAsync(IEnumerable<object> hashSet)
         {
             try
             {
                 Interlocked.Increment(ref _doUpdatePanelLCD);
-                lock (LockLCDUpdateObject)
+
+                foreach (var radioPanelKnobObject in hashSet)
                 {
-                    foreach (var radioPanelKnobObject in hashSet)
+                    var radioPanelKnob = (RadioPanelKnobF86F)radioPanelKnobObject;
+
+                    switch (radioPanelKnob.RadioPanelPZ69Knob)
                     {
-                        var radioPanelKnob = (RadioPanelKnobF86F)radioPanelKnobObject;
+                        case RadioPanelPZ69KnobsF86F.UPPER_ARC27_PRESET:
+                            {
+                                if (radioPanelKnob.IsOn)
+                                {
+                                    SetUpperRadioMode(CurrentF86FRadioMode.ARC27_PRESET);
+                                }
+                                break;
+                            }
 
-                        switch (radioPanelKnob.RadioPanelPZ69Knob)
-                        {
-                            case RadioPanelPZ69KnobsF86F.UPPER_ARC27_PRESET:
+                        case RadioPanelPZ69KnobsF86F.UPPER_ARC27_VOL:
+                            {
+                                if (radioPanelKnob.IsOn)
+                                {
+                                    SetUpperRadioMode(CurrentF86FRadioMode.ARC27_VOL);
+                                }
+                                break;
+                            }
+
+                        case RadioPanelPZ69KnobsF86F.UPPER_ARN6:
+                            {
+                                if (radioPanelKnob.IsOn)
+                                {
+                                    SetUpperRadioMode(CurrentF86FRadioMode.ARN6);
+                                }
+                                break;
+                            }
+
+                        case RadioPanelPZ69KnobsF86F.UPPER_ARN6_MODES:
+                            {
+                                if (radioPanelKnob.IsOn)
+                                {
+                                    SetUpperRadioMode(CurrentF86FRadioMode.ARN6_MODES);
+                                }
+                                break;
+                            }
+
+                        case RadioPanelPZ69KnobsF86F.UPPER_ADF_APX6:
+                            {
+                                if (radioPanelKnob.IsOn)
+                                {
+                                    SetUpperRadioMode(CurrentF86FRadioMode.ADF_APX6);
+                                }
+                                break;
+                            }
+
+                        case RadioPanelPZ69KnobsF86F.UPPER_NO_USE1:
+                        case RadioPanelPZ69KnobsF86F.UPPER_NO_USE2:
+                            {
+                                if (radioPanelKnob.IsOn)
+                                {
+                                    SetUpperRadioMode(CurrentF86FRadioMode.NO_USE);
+                                }
+                                break;
+                            }
+
+                        case RadioPanelPZ69KnobsF86F.LOWER_ARC27_PRESET:
+                            {
+                                if (radioPanelKnob.IsOn)
+                                {
+                                    SetLowerRadioMode(CurrentF86FRadioMode.ARC27_PRESET);
+                                }
+                                break;
+                            }
+
+                        case RadioPanelPZ69KnobsF86F.LOWER_ARC27_VOL:
+                            {
+                                if (radioPanelKnob.IsOn)
+                                {
+                                    SetLowerRadioMode(CurrentF86FRadioMode.ARC27_VOL);
+                                }
+                                break;
+                            }
+
+                        case RadioPanelPZ69KnobsF86F.LOWER_ARN6:
+                            {
+                                if (radioPanelKnob.IsOn)
+                                {
+                                    SetLowerRadioMode(CurrentF86FRadioMode.ARN6);
+                                }
+                                break;
+                            }
+
+                        case RadioPanelPZ69KnobsF86F.LOWER_ARN6_MODES:
+                            {
+                                if (radioPanelKnob.IsOn)
+                                {
+                                    SetLowerRadioMode(CurrentF86FRadioMode.ARN6_MODES);
+                                }
+                                break;
+                            }
+
+                        case RadioPanelPZ69KnobsF86F.LOWER_ADF_APX6:
+                            {
+                                if (radioPanelKnob.IsOn)
+                                {
+                                    SetLowerRadioMode(CurrentF86FRadioMode.ADF_APX6);
+                                }
+                                break;
+                            }
+
+                        case RadioPanelPZ69KnobsF86F.LOWER_NO_USE1:
+                        case RadioPanelPZ69KnobsF86F.LOWER_NO_USE2:
+                            {
+                                if (radioPanelKnob.IsOn)
+                                {
+                                    SetLowerRadioMode(CurrentF86FRadioMode.NO_USE);
+                                }
+                                break;
+                            }
+
+                        case RadioPanelPZ69KnobsF86F.UPPER_LARGE_FREQ_WHEEL_INC:
+                        case RadioPanelPZ69KnobsF86F.UPPER_LARGE_FREQ_WHEEL_DEC:
+                        case RadioPanelPZ69KnobsF86F.UPPER_SMALL_FREQ_WHEEL_INC:
+                        case RadioPanelPZ69KnobsF86F.UPPER_SMALL_FREQ_WHEEL_DEC:
+                        case RadioPanelPZ69KnobsF86F.LOWER_LARGE_FREQ_WHEEL_INC:
+                        case RadioPanelPZ69KnobsF86F.LOWER_LARGE_FREQ_WHEEL_DEC:
+                        case RadioPanelPZ69KnobsF86F.LOWER_SMALL_FREQ_WHEEL_INC:
+                        case RadioPanelPZ69KnobsF86F.LOWER_SMALL_FREQ_WHEEL_DEC:
+                            {
+                                // Ignore
+                                break;
+                            }
+
+                        case RadioPanelPZ69KnobsF86F.UPPER_FREQ_SWITCH:
+                            {
+                                if (_currentUpperRadioMode == CurrentF86FRadioMode.ADF_APX6)
                                 {
                                     if (radioPanelKnob.IsOn)
                                     {
-                                        SetUpperRadioMode(CurrentF86FRadioMode.ARC27_PRESET);
+                                        await SendFrequencyToDCSBIOSAsync(RadioPanelPZ69KnobsF86F.UPPER_FREQ_SWITCH);
                                     }
-                                    break;
                                 }
+                                break;
+                            }
 
-                            case RadioPanelPZ69KnobsF86F.UPPER_ARC27_VOL:
+                        case RadioPanelPZ69KnobsF86F.LOWER_FREQ_SWITCH:
+                            {
+                                if (_currentLowerRadioMode == CurrentF86FRadioMode.ADF_APX6)
                                 {
                                     if (radioPanelKnob.IsOn)
                                     {
-                                        SetUpperRadioMode(CurrentF86FRadioMode.ARC27_VOL);
+                                        await SendFrequencyToDCSBIOSAsync(RadioPanelPZ69KnobsF86F.LOWER_FREQ_SWITCH);
                                     }
-                                    break;
                                 }
-
-                            case RadioPanelPZ69KnobsF86F.UPPER_ARN6:
-                                {
-                                    if (radioPanelKnob.IsOn)
-                                    {
-                                        SetUpperRadioMode(CurrentF86FRadioMode.ARN6);
-                                    }
-                                    break;
-                                }
-
-                            case RadioPanelPZ69KnobsF86F.UPPER_ARN6_MODES:
-                                {
-                                    if (radioPanelKnob.IsOn)
-                                    {
-                                        SetUpperRadioMode(CurrentF86FRadioMode.ARN6_MODES);
-                                    }
-                                    break;
-                                }
-
-                            case RadioPanelPZ69KnobsF86F.UPPER_ADF_APX6:
-                                {
-                                    if (radioPanelKnob.IsOn)
-                                    {
-                                        SetUpperRadioMode(CurrentF86FRadioMode.ADF_APX6);
-                                    }
-                                    break;
-                                }
-
-                            case RadioPanelPZ69KnobsF86F.UPPER_NO_USE1:
-                            case RadioPanelPZ69KnobsF86F.UPPER_NO_USE2:
-                                {
-                                    if (radioPanelKnob.IsOn)
-                                    {
-                                        SetUpperRadioMode(CurrentF86FRadioMode.NO_USE);
-                                    }
-                                    break;
-                                }
-
-                            case RadioPanelPZ69KnobsF86F.LOWER_ARC27_PRESET:
-                                {
-                                    if (radioPanelKnob.IsOn)
-                                    {
-                                        SetLowerRadioMode(CurrentF86FRadioMode.ARC27_PRESET);
-                                    }
-                                    break;
-                                }
-
-                            case RadioPanelPZ69KnobsF86F.LOWER_ARC27_VOL:
-                                {
-                                    if (radioPanelKnob.IsOn)
-                                    {
-                                        SetLowerRadioMode(CurrentF86FRadioMode.ARC27_VOL);
-                                    }
-                                    break;
-                                }
-
-                            case RadioPanelPZ69KnobsF86F.LOWER_ARN6:
-                                {
-                                    if (radioPanelKnob.IsOn)
-                                    {
-                                        SetLowerRadioMode(CurrentF86FRadioMode.ARN6);
-                                    }
-                                    break;
-                                }
-
-                            case RadioPanelPZ69KnobsF86F.LOWER_ARN6_MODES:
-                                {
-                                    if (radioPanelKnob.IsOn)
-                                    {
-                                        SetLowerRadioMode(CurrentF86FRadioMode.ARN6_MODES);
-                                    }
-                                    break;
-                                }
-
-                            case RadioPanelPZ69KnobsF86F.LOWER_ADF_APX6:
-                                {
-                                    if (radioPanelKnob.IsOn)
-                                    {
-                                        SetLowerRadioMode(CurrentF86FRadioMode.ADF_APX6);
-                                    }
-                                    break;
-                                }
-
-                            case RadioPanelPZ69KnobsF86F.LOWER_NO_USE1:
-                            case RadioPanelPZ69KnobsF86F.LOWER_NO_USE2:
-                                {
-                                    if (radioPanelKnob.IsOn)
-                                    {
-                                        SetLowerRadioMode(CurrentF86FRadioMode.NO_USE);
-                                    }
-                                    break;
-                                }
-
-                            case RadioPanelPZ69KnobsF86F.UPPER_LARGE_FREQ_WHEEL_INC:
-                            case RadioPanelPZ69KnobsF86F.UPPER_LARGE_FREQ_WHEEL_DEC:
-                            case RadioPanelPZ69KnobsF86F.UPPER_SMALL_FREQ_WHEEL_INC:
-                            case RadioPanelPZ69KnobsF86F.UPPER_SMALL_FREQ_WHEEL_DEC:
-                            case RadioPanelPZ69KnobsF86F.LOWER_LARGE_FREQ_WHEEL_INC:
-                            case RadioPanelPZ69KnobsF86F.LOWER_LARGE_FREQ_WHEEL_DEC:
-                            case RadioPanelPZ69KnobsF86F.LOWER_SMALL_FREQ_WHEEL_INC:
-                            case RadioPanelPZ69KnobsF86F.LOWER_SMALL_FREQ_WHEEL_DEC:
-                                {
-                                    // Ignore
-                                    break;
-                                }
-
-                            case RadioPanelPZ69KnobsF86F.UPPER_FREQ_SWITCH:
-                                {
-                                    if (_currentUpperRadioMode == CurrentF86FRadioMode.ADF_APX6)
-                                    {
-                                        if (radioPanelKnob.IsOn)
-                                        {
-                                            SendFrequencyToDCSBIOS(RadioPanelPZ69KnobsF86F.UPPER_FREQ_SWITCH);
-                                        }
-                                    }
-                                    break;
-                                }
-
-                            case RadioPanelPZ69KnobsF86F.LOWER_FREQ_SWITCH:
-                                {
-                                    if (_currentLowerRadioMode == CurrentF86FRadioMode.ADF_APX6)
-                                    {
-                                        if (radioPanelKnob.IsOn)
-                                        {
-                                            SendFrequencyToDCSBIOS(RadioPanelPZ69KnobsF86F.LOWER_FREQ_SWITCH);
-                                        }
-                                    }
-                                    break;
-                                }
-                        }
-
-                        if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
-                        {
-                            PluginManager.DoEvent(DCSAircraft.SelectedAircraft.Description, HIDInstance, PluginGamingPanelEnum.PZ69RadioPanel_PreProg_F86F, (int)radioPanelKnob.RadioPanelPZ69Knob, radioPanelKnob.IsOn, null);
-                        }
+                                break;
+                            }
                     }
 
-                    AdjustFrequency(hashSet);
+                    if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
+                    {
+                        PluginManager.DoEvent(DCSAircraft.SelectedAircraft.Description, HIDInstance, PluginGamingPanelEnum.PZ69RadioPanel_PreProg_F86F, (int)radioPanelKnob.RadioPanelPZ69Knob, radioPanelKnob.IsOn, null);
+                    }
                 }
+
+                await AdjustFrequencyAsync(hashSet);
             }
             catch (Exception ex)
             {
@@ -539,7 +538,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentF86FRadioMode.ARC27_PRESET:
                                             {
-                                                _arc27PresetDialSkipper.ClickAsync(ARC27_PRESET_COMMAND_INC);
+                                                await _arc27PresetDialSkipper.ClickAsync(ARC27_PRESET_COMMAND_INC);
                                                 break;
                                             }
 
@@ -552,13 +551,13 @@ namespace NonVisuals.Radios
 
                                         case CurrentF86FRadioMode.ARN6_MODES:
                                             {
-                                                _arn6ModeDialSkipper.ClickAsync(ARN6_MODE_COMMAND_INC);
+                                                await _arn6ModeDialSkipper.ClickAsync(ARN6_MODE_COMMAND_INC);
                                                 break;
                                             }
 
                                         case CurrentF86FRadioMode.ADF_APX6:
                                             {
-                                                _apx6ModeDialSkipper.ClickAsync(APX6_MODE_DIAL_COMMAND_INC);
+                                                await _apx6ModeDialSkipper.ClickAsync(APX6_MODE_DIAL_COMMAND_INC);
                                                 break;
                                             }
 
@@ -576,7 +575,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentF86FRadioMode.ARC27_PRESET:
                                             {
-                                                _arc27PresetDialSkipper.ClickAsync(ARC27_PRESET_COMMAND_DEC);
+                                                await _arc27PresetDialSkipper.ClickAsync(ARC27_PRESET_COMMAND_DEC);
                                                 break;
                                             }
 
@@ -589,13 +588,13 @@ namespace NonVisuals.Radios
 
                                         case CurrentF86FRadioMode.ARN6_MODES:
                                             {
-                                                _arn6ModeDialSkipper.ClickAsync(ARN6_MODE_COMMAND_DEC);
+                                                await _arn6ModeDialSkipper.ClickAsync(ARN6_MODE_COMMAND_DEC);
                                                 break;
                                             }
 
                                         case CurrentF86FRadioMode.ADF_APX6:
                                             {
-                                                _apx6ModeDialSkipper.ClickAsync(APX6_MODE_DIAL_COMMAND_DEC);
+                                                await _apx6ModeDialSkipper.ClickAsync(APX6_MODE_DIAL_COMMAND_DEC);
                                                 break;
                                             }
 
@@ -613,7 +612,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentF86FRadioMode.ARC27_PRESET:
                                             {
-                                                _arc27ModeDialSkipper.ClickAsync(ARC27_MODE_COMMAND_INC);
+                                                await _arc27ModeDialSkipper.ClickAsync(ARC27_MODE_COMMAND_INC);
                                                 break;
                                             }
 
@@ -625,13 +624,13 @@ namespace NonVisuals.Radios
 
                                         case CurrentF86FRadioMode.ARN6:
                                             {
-                                                _arn6BandDialSkipper.ClickAsync(ARN6_BAND_DIAL_COMMAND_INC);
+                                                await _arn6BandDialSkipper.ClickAsync(ARN6_BAND_DIAL_COMMAND_INC);
                                                 break;
                                             }
 
                                         case CurrentF86FRadioMode.ARN6_MODES:
                                             {
-                                                _arn6ModeDialSkipper.ClickAsync(ARN6_VOLUME_KNOB_COMMAND_INC);
+                                                await _arn6ModeDialSkipper.ClickAsync(ARN6_VOLUME_KNOB_COMMAND_INC);
                                                 break;
                                             }
 
@@ -650,7 +649,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentF86FRadioMode.ARC27_PRESET:
                                             {
-                                                _arc27ModeDialSkipper.ClickAsync(ARC27_MODE_COMMAND_DEC);
+                                                await _arc27ModeDialSkipper.ClickAsync(ARC27_MODE_COMMAND_DEC);
                                                 break;
                                             }
 
@@ -662,13 +661,13 @@ namespace NonVisuals.Radios
 
                                         case CurrentF86FRadioMode.ARN6:
                                             {
-                                                _arn6BandDialSkipper.ClickAsync(ARN6_BAND_DIAL_COMMAND_DEC);
+                                                await _arn6BandDialSkipper.ClickAsync(ARN6_BAND_DIAL_COMMAND_DEC);
                                                 break;
                                             }
 
                                         case CurrentF86FRadioMode.ARN6_MODES:
                                             {
-                                                _arn6ModeDialSkipper.ClickAsync(ARN6_VOLUME_KNOB_COMMAND_DEC);
+                                                await _arn6ModeDialSkipper.ClickAsync(ARN6_VOLUME_KNOB_COMMAND_DEC);
                                                 break;
                                             }
 
@@ -687,7 +686,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentF86FRadioMode.ARC27_PRESET:
                                             {
-                                                _arc27PresetDialSkipper.ClickAsync(ARC27_PRESET_COMMAND_INC);
+                                                await _arc27PresetDialSkipper.ClickAsync(ARC27_PRESET_COMMAND_INC);
                                                 break;
                                             }
 
@@ -700,13 +699,13 @@ namespace NonVisuals.Radios
 
                                         case CurrentF86FRadioMode.ARN6_MODES:
                                             {
-                                                _arn6ModeDialSkipper.ClickAsync(ARN6_MODE_COMMAND_INC);
+                                                await _arn6ModeDialSkipper.ClickAsync(ARN6_MODE_COMMAND_INC);
                                                 break;
                                             }
 
                                         case CurrentF86FRadioMode.ADF_APX6:
                                             {
-                                                _apx6ModeDialSkipper.ClickAsync(APX6_MODE_DIAL_COMMAND_INC);
+                                                await _apx6ModeDialSkipper.ClickAsync(APX6_MODE_DIAL_COMMAND_INC);
                                                 break;
                                             }
 
@@ -724,7 +723,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentF86FRadioMode.ARC27_PRESET:
                                             {
-                                                _arc27PresetDialSkipper.ClickAsync(ARC27_PRESET_COMMAND_DEC);
+                                                await _arc27PresetDialSkipper.ClickAsync(ARC27_PRESET_COMMAND_DEC);
                                                 break;
                                             }
 
@@ -737,13 +736,13 @@ namespace NonVisuals.Radios
 
                                         case CurrentF86FRadioMode.ARN6_MODES:
                                             {
-                                                _arn6ModeDialSkipper.ClickAsync(ARN6_MODE_COMMAND_DEC);
+                                                await _arn6ModeDialSkipper.ClickAsync(ARN6_MODE_COMMAND_DEC);
                                                 break;
                                             }
 
                                         case CurrentF86FRadioMode.ADF_APX6:
                                             {
-                                                _apx6ModeDialSkipper.ClickAsync(APX6_MODE_DIAL_COMMAND_DEC);
+                                                await _apx6ModeDialSkipper.ClickAsync(APX6_MODE_DIAL_COMMAND_DEC);
                                                 break;
                                             }
 
@@ -761,7 +760,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentF86FRadioMode.ARC27_PRESET:
                                             {
-                                                _arc27ModeDialSkipper.ClickAsync(ARC27_MODE_COMMAND_INC);
+                                                await _arc27ModeDialSkipper.ClickAsync(ARC27_MODE_COMMAND_INC);
                                                 break;
                                             }
 
@@ -773,13 +772,13 @@ namespace NonVisuals.Radios
 
                                         case CurrentF86FRadioMode.ARN6:
                                             {
-                                                _arn6BandDialSkipper.ClickAsync(ARN6_BAND_DIAL_COMMAND_INC);
+                                                await _arn6BandDialSkipper.ClickAsync(ARN6_BAND_DIAL_COMMAND_INC);
                                                 break;
                                             }
 
                                         case CurrentF86FRadioMode.ARN6_MODES:
                                             {
-                                                _arn6ModeDialSkipper.ClickAsync(ARN6_VOLUME_KNOB_COMMAND_INC);
+                                                await _arn6ModeDialSkipper.ClickAsync(ARN6_VOLUME_KNOB_COMMAND_INC);
                                                 break;
                                             }
 
@@ -798,7 +797,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentF86FRadioMode.ARC27_PRESET:
                                             {
-                                                _arc27ModeDialSkipper.ClickAsync(ARC27_MODE_COMMAND_DEC);
+                                                await _arc27ModeDialSkipper.ClickAsync(ARC27_MODE_COMMAND_DEC);
                                                 break;
                                             }
 
@@ -810,13 +809,13 @@ namespace NonVisuals.Radios
 
                                         case CurrentF86FRadioMode.ARN6:
                                             {
-                                                _arn6BandDialSkipper.ClickAsync(ARN6_BAND_DIAL_COMMAND_DEC);
+                                                await _arn6BandDialSkipper.ClickAsync(ARN6_BAND_DIAL_COMMAND_DEC);
                                                 break;
                                             }
 
                                         case CurrentF86FRadioMode.ARN6_MODES:
                                             {
-                                                _arn6ModeDialSkipper.ClickAsync(ARN6_VOLUME_KNOB_COMMAND_DEC);
+                                                await _arn6ModeDialSkipper.ClickAsync(ARN6_VOLUME_KNOB_COMMAND_DEC);
                                                 break;
                                             }
 
