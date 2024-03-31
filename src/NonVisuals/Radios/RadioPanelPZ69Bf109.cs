@@ -348,14 +348,14 @@ namespace NonVisuals.Radios
                                 {
                                     if (radioPanelKnob.IsOn)
                                     {
-                                        bool isPositionOne;
+                                        string command;
 
                                         lock (_lockHomingDialObject1)
                                         {
-                                            isPositionOne = _homingCockpitDialPos == 1;
+                                            command = _homingCockpitDialPos == 1 ? HOMING_COMMAND_DEC : HOMING_COMMAND_INC;
                                         }
 
-                                        await DCSBIOS.SendAsync(isPositionOne ? HOMING_COMMAND_DEC : HOMING_COMMAND_INC);
+                                        await DCSBIOS.SendAsync(command);
                                     }
                                 }
                                 break;
@@ -372,14 +372,14 @@ namespace NonVisuals.Radios
                                 {
                                     if (radioPanelKnob.IsOn)
                                     {
-                                        bool isPositionOne;
+                                        string command;
 
                                         lock (_lockHomingDialObject1)
                                         {
-                                            isPositionOne = _homingCockpitDialPos == 1;
+                                            command = _homingCockpitDialPos == 1 ? HOMING_COMMAND_DEC : HOMING_COMMAND_INC;
                                         }
 
-                                        await DCSBIOS.SendAsync(isPositionOne ? HOMING_COMMAND_DEC : HOMING_COMMAND_INC);
+                                        await DCSBIOS.SendAsync(command);
                                     }
                                 }
                                 break;

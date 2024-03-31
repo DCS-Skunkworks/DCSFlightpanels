@@ -1,4 +1,5 @@
-﻿using NonVisuals.BindingClasses.BIP;
+﻿using System.Threading.Tasks;
+using NonVisuals.BindingClasses.BIP;
 using NonVisuals.Helpers;
 
 namespace NonVisuals.Radios
@@ -229,158 +230,164 @@ namespace NonVisuals.Radios
             }
         }
 
-        protected override void PZ69KnobChangedAsync(IEnumerable<object> hashSet)
+        protected override async Task PZ69KnobChangedAsync(IEnumerable<object> hashSet)
         {
             try
             {
                 Interlocked.Increment(ref _doUpdatePanelLCD);
-                lock (LockLCDUpdateObject)
+
+                foreach (var radioPanelKnobObject in hashSet)
                 {
-                    foreach (var radioPanelKnobObject in hashSet)
+                    var radioPanelKnob = (RadioPanelKnobFw190)radioPanelKnobObject;
+
+                    switch (radioPanelKnob.RadioPanelPZ69Knob)
                     {
-                        var radioPanelKnob = (RadioPanelKnobFw190)radioPanelKnobObject;
+                        case RadioPanelPZ69KnobsFw190.UPPER_FUG16ZY:
+                            {
+                                if (radioPanelKnob.IsOn)
+                                {
+                                    SetUpperRadioMode(CurrentFw190RadioMode.FUG16ZY);
+                                }
+                                break;
+                            }
 
-                        switch (radioPanelKnob.RadioPanelPZ69Knob)
-                        {
-                            case RadioPanelPZ69KnobsFw190.UPPER_FUG16ZY:
+                        case RadioPanelPZ69KnobsFw190.UPPER_IFF:
+                            {
+                                if (radioPanelKnob.IsOn)
+                                {
+                                    SetUpperRadioMode(CurrentFw190RadioMode.IFF);
+                                }
+                                break;
+                            }
+
+                        case RadioPanelPZ69KnobsFw190.UPPER_HOMING:
+                            {
+                                if (radioPanelKnob.IsOn)
+                                {
+                                    SetUpperRadioMode(CurrentFw190RadioMode.HOMING);
+                                }
+                                break;
+                            }
+
+                        case RadioPanelPZ69KnobsFw190.UPPER_NO_USE1:
+                        case RadioPanelPZ69KnobsFw190.UPPER_NO_USE2:
+                        case RadioPanelPZ69KnobsFw190.UPPER_NO_USE3:
+                        case RadioPanelPZ69KnobsFw190.UPPER_NO_USE4:
+                            {
+                                if (radioPanelKnob.IsOn)
+                                {
+                                    SetUpperRadioMode(CurrentFw190RadioMode.NO_USE);
+                                }
+                                break;
+                            }
+
+                        case RadioPanelPZ69KnobsFw190.LOWER_FUG16ZY:
+                            {
+                                if (radioPanelKnob.IsOn)
+                                {
+                                    SetLowerRadioMode(CurrentFw190RadioMode.FUG16ZY);
+                                }
+                                break;
+                            }
+
+                        case RadioPanelPZ69KnobsFw190.LOWER_IFF:
+                            {
+                                if (radioPanelKnob.IsOn)
+                                {
+                                    SetLowerRadioMode(CurrentFw190RadioMode.IFF);
+                                }
+                                break;
+                            }
+
+                        case RadioPanelPZ69KnobsFw190.LOWER_HOMING:
+                            {
+                                if (radioPanelKnob.IsOn)
+                                {
+                                    SetLowerRadioMode(CurrentFw190RadioMode.HOMING);
+                                }
+                                break;
+                            }
+
+                        case RadioPanelPZ69KnobsFw190.LOWER_NO_USE1:
+                        case RadioPanelPZ69KnobsFw190.LOWER_NO_USE2:
+                        case RadioPanelPZ69KnobsFw190.LOWER_NO_USE3:
+                        case RadioPanelPZ69KnobsFw190.LOWER_NO_USE4:
+                            {
+                                if (radioPanelKnob.IsOn)
+                                {
+                                    SetLowerRadioMode(CurrentFw190RadioMode.NO_USE);
+                                }
+                                break;
+                            }
+
+                        case RadioPanelPZ69KnobsFw190.UPPER_LARGE_FREQ_WHEEL_INC:
+                        case RadioPanelPZ69KnobsFw190.UPPER_LARGE_FREQ_WHEEL_DEC:
+                        case RadioPanelPZ69KnobsFw190.UPPER_SMALL_FREQ_WHEEL_INC:
+                        case RadioPanelPZ69KnobsFw190.UPPER_SMALL_FREQ_WHEEL_DEC:
+                        case RadioPanelPZ69KnobsFw190.LOWER_LARGE_FREQ_WHEEL_INC:
+                        case RadioPanelPZ69KnobsFw190.LOWER_LARGE_FREQ_WHEEL_DEC:
+                        case RadioPanelPZ69KnobsFw190.LOWER_SMALL_FREQ_WHEEL_INC:
+                        case RadioPanelPZ69KnobsFw190.LOWER_SMALL_FREQ_WHEEL_DEC:
+                            {
+                                // Ignore
+                                break;
+                            }
+
+                        case RadioPanelPZ69KnobsFw190.UPPER_FREQ_SWITCH:
+                            {
+                                if (_currentLowerRadioMode == CurrentFw190RadioMode.IFF)
+                                {
+                                    await DCSBIOS.SendAsync(radioPanelKnob.IsOn ? FU_G25_A_TEST_COMMAND_INC : FU_G25_A_TEST_COMMAND_DEC);
+                                }
+
+                                if (_currentUpperRadioMode == CurrentFw190RadioMode.HOMING)
                                 {
                                     if (radioPanelKnob.IsOn)
                                     {
-                                        SetUpperRadioMode(CurrentFw190RadioMode.FUG16ZY);
-                                    }
-                                    break;
-                                }
+                                        string command;
 
-                            case RadioPanelPZ69KnobsFw190.UPPER_IFF:
-                                {
-                                    if (radioPanelKnob.IsOn)
-                                    {
-                                        SetUpperRadioMode(CurrentFw190RadioMode.IFF);
-                                    }
-                                    break;
-                                }
-
-                            case RadioPanelPZ69KnobsFw190.UPPER_HOMING:
-                                {
-                                    if (radioPanelKnob.IsOn)
-                                    {
-                                        SetUpperRadioMode(CurrentFw190RadioMode.HOMING);
-                                    }
-                                    break;
-                                }
-
-                            case RadioPanelPZ69KnobsFw190.UPPER_NO_USE1:
-                            case RadioPanelPZ69KnobsFw190.UPPER_NO_USE2:
-                            case RadioPanelPZ69KnobsFw190.UPPER_NO_USE3:
-                            case RadioPanelPZ69KnobsFw190.UPPER_NO_USE4:
-                                {
-                                    if (radioPanelKnob.IsOn)
-                                    {
-                                        SetUpperRadioMode(CurrentFw190RadioMode.NO_USE);
-                                    }
-                                    break;
-                                }
-
-                            case RadioPanelPZ69KnobsFw190.LOWER_FUG16ZY:
-                                {
-                                    if (radioPanelKnob.IsOn)
-                                    {
-                                        SetLowerRadioMode(CurrentFw190RadioMode.FUG16ZY);
-                                    }
-                                    break;
-                                }
-
-                            case RadioPanelPZ69KnobsFw190.LOWER_IFF:
-                                {
-                                    if (radioPanelKnob.IsOn)
-                                    {
-                                        SetLowerRadioMode(CurrentFw190RadioMode.IFF);
-                                    }
-                                    break;
-                                }
-
-                            case RadioPanelPZ69KnobsFw190.LOWER_HOMING:
-                                {
-                                    if (radioPanelKnob.IsOn)
-                                    {
-                                        SetLowerRadioMode(CurrentFw190RadioMode.HOMING);
-                                    }
-                                    break;
-                                }
-
-                            case RadioPanelPZ69KnobsFw190.LOWER_NO_USE1:
-                            case RadioPanelPZ69KnobsFw190.LOWER_NO_USE2:
-                            case RadioPanelPZ69KnobsFw190.LOWER_NO_USE3:
-                            case RadioPanelPZ69KnobsFw190.LOWER_NO_USE4:
-                                {
-                                    if (radioPanelKnob.IsOn)
-                                    {
-                                        SetLowerRadioMode(CurrentFw190RadioMode.NO_USE);
-                                    }
-                                    break;
-                                }
-
-                            case RadioPanelPZ69KnobsFw190.UPPER_LARGE_FREQ_WHEEL_INC:
-                            case RadioPanelPZ69KnobsFw190.UPPER_LARGE_FREQ_WHEEL_DEC:
-                            case RadioPanelPZ69KnobsFw190.UPPER_SMALL_FREQ_WHEEL_INC:
-                            case RadioPanelPZ69KnobsFw190.UPPER_SMALL_FREQ_WHEEL_DEC:
-                            case RadioPanelPZ69KnobsFw190.LOWER_LARGE_FREQ_WHEEL_INC:
-                            case RadioPanelPZ69KnobsFw190.LOWER_LARGE_FREQ_WHEEL_DEC:
-                            case RadioPanelPZ69KnobsFw190.LOWER_SMALL_FREQ_WHEEL_INC:
-                            case RadioPanelPZ69KnobsFw190.LOWER_SMALL_FREQ_WHEEL_DEC:
-                                {
-                                    // Ignore
-                                    break;
-                                }
-
-                            case RadioPanelPZ69KnobsFw190.UPPER_FREQ_SWITCH:
-                                {
-                                    if (_currentLowerRadioMode == CurrentFw190RadioMode.IFF)
-                                    {
-                                        await DCSBIOS.SendAsync(radioPanelKnob.IsOn ? FU_G25_A_TEST_COMMAND_INC : FU_G25_A_TEST_COMMAND_DEC);
-                                    }
-
-                                    if (_currentUpperRadioMode == CurrentFw190RadioMode.HOMING)
-                                    {
-                                        if (radioPanelKnob.IsOn)
+                                        lock (_lockHomingDialObject1)
                                         {
-                                            lock (_lockHomingDialObject1)
-                                            {
-                                                await DCSBIOS.SendAsync(_homingCockpitDialPos == 1 ? HOMING_COMMAND_DEC : HOMING_COMMAND_INC);
-                                            }
+                                            command = _homingCockpitDialPos == 1 ? HOMING_COMMAND_DEC : HOMING_COMMAND_INC;
                                         }
-                                    }
-                                    break;
-                                }
 
-                            case RadioPanelPZ69KnobsFw190.LOWER_FREQ_SWITCH:
+                                        await DCSBIOS.SendAsync(command);
+                                    }
+                                }
+                                break;
+                            }
+
+                        case RadioPanelPZ69KnobsFw190.LOWER_FREQ_SWITCH:
+                            {
+                                if (_currentLowerRadioMode == CurrentFw190RadioMode.IFF)
                                 {
-                                    if (_currentLowerRadioMode == CurrentFw190RadioMode.IFF)
-                                    {
-                                        await DCSBIOS.SendAsync(radioPanelKnob.IsOn ? FU_G25_A_TEST_COMMAND_INC : FU_G25_A_TEST_COMMAND_DEC);
-                                    }
-
-                                    if (_currentLowerRadioMode == CurrentFw190RadioMode.HOMING)
-                                    {
-                                        if (radioPanelKnob.IsOn)
-                                        {
-                                            lock (_lockHomingDialObject1)
-                                            {
-                                                await DCSBIOS.SendAsync(_homingCockpitDialPos == 1 ? HOMING_COMMAND_DEC : HOMING_COMMAND_INC);
-                                            }
-                                        }
-                                    }
-                                    break;
+                                    await DCSBIOS.SendAsync(radioPanelKnob.IsOn ? FU_G25_A_TEST_COMMAND_INC : FU_G25_A_TEST_COMMAND_DEC);
                                 }
-                        }
 
-                        if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
-                        {
-                            PluginManager.DoEvent(DCSAircraft.SelectedAircraft.Description, HIDInstance, PluginGamingPanelEnum.PZ69RadioPanel_PreProg_FW190, (int)radioPanelKnob.RadioPanelPZ69Knob, radioPanelKnob.IsOn, null);
-                        }
+                                if (_currentLowerRadioMode == CurrentFw190RadioMode.HOMING)
+                                {
+                                    if (radioPanelKnob.IsOn)
+                                    {
+                                        string command;
+
+                                        lock (_lockHomingDialObject1)
+                                        {
+                                            command = _homingCockpitDialPos == 1 ? HOMING_COMMAND_DEC : HOMING_COMMAND_INC;
+                                        }
+
+                                        await DCSBIOS.SendAsync(command);
+                                    }
+                                }
+                                break;
+                            }
                     }
 
-                    AdjustFrequency(hashSet);
+                    if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
+                    {
+                        PluginManager.DoEvent(DCSAircraft.SelectedAircraft.Description, HIDInstance, PluginGamingPanelEnum.PZ69RadioPanel_PreProg_FW190, (int)radioPanelKnob.RadioPanelPZ69Knob, radioPanelKnob.IsOn, null);
+                    }
+
+                    AdjustFrequencyAsync(hashSet);
                 }
             }
             catch (Exception ex)
