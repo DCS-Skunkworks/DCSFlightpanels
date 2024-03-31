@@ -1,4 +1,5 @@
-﻿using NonVisuals.BindingClasses.BIP;
+﻿using System.Threading.Tasks;
+using NonVisuals.BindingClasses.BIP;
 using NonVisuals.Radios.RadioSettings;
 
 namespace NonVisuals.Radios
@@ -150,7 +151,7 @@ namespace NonVisuals.Radios
             }
         }
 
-        private void SendFrequencyToDCSBIOS(RadioPanelKnobsJF17 knob)
+        private async Task SendFrequencyToDCSBIOSAsync(RadioPanelKnobsJF17 knob)
         {
             if (IgnoreSwitchButtonOnce() && (knob == RadioPanelKnobsJF17.UPPER_FREQ_SWITCH || knob == RadioPanelKnobsJF17.LOWER_FREQ_SWITCH))
             {
@@ -174,12 +175,12 @@ namespace NonVisuals.Radios
                         {
                             case CurrentJF17RadioMode.COM1:
                                 {
-                                    SendCOM1ToDCSBIOS();
+                                    await SendCOM1ToDCSBIOSAsync();
                                     break;
                                 }
                             case CurrentJF17RadioMode.COM2:
                                 {
-                                    SendCOM2ToDCSBIOS();
+                                    await SendCOM2ToDCSBIOSAsync();
                                     break;
                                 }
                         }
@@ -193,12 +194,12 @@ namespace NonVisuals.Radios
 
                             case CurrentJF17RadioMode.COM1:
                                 {
-                                    SendCOM1ToDCSBIOS();
+                                    await SendCOM1ToDCSBIOSAsync();
                                     break;
                                 }
                             case CurrentJF17RadioMode.COM2:
                                 {
-                                    SendCOM2ToDCSBIOS();
+                                    await SendCOM2ToDCSBIOSAsync();
                                     break;
                                 }
                         }
@@ -207,7 +208,7 @@ namespace NonVisuals.Radios
             }
         }
 
-        private void SendCOM1ToDCSBIOS()
+        private async Task SendCOM1ToDCSBIOSAsync()
         {
             try
             {
@@ -220,7 +221,7 @@ namespace NonVisuals.Radios
             }
         }
 
-        private void SendCOM2ToDCSBIOS()
+        private async Task SendCOM2ToDCSBIOSAsync()
         {
             try
             {
@@ -567,160 +568,158 @@ namespace NonVisuals.Radios
             ShowFrequenciesOnPanel();
         }
 
-        protected override void PZ69KnobChangedAsync(IEnumerable<object> hashSet)
+        protected override async Task PZ69KnobChangedAsync(IEnumerable<object> hashSet)
         {
             Interlocked.Increment(ref _doUpdatePanelLCD);
-            lock (LockLCDUpdateObject)
+
+            foreach (var radioPanelKnobObject in hashSet)
             {
-                foreach (var radioPanelKnobObject in hashSet)
+                var radioPanelKnob = (RadioPanelKnobJF17)radioPanelKnobObject;
+
+                switch (radioPanelKnob.RadioPanelPZ69Knob)
                 {
-                    var radioPanelKnob = (RadioPanelKnobJF17)radioPanelKnobObject;
-
-                    switch (radioPanelKnob.RadioPanelPZ69Knob)
-                    {
-                        case RadioPanelKnobsJF17.UPPER_COM1:
+                    case RadioPanelKnobsJF17.UPPER_COM1:
+                        {
+                            if (radioPanelKnob.IsOn)
                             {
-                                if (radioPanelKnob.IsOn)
-                                {
-                                    _currentUpperRadioMode = CurrentJF17RadioMode.COM1;
-                                }
-                                break;
+                                _currentUpperRadioMode = CurrentJF17RadioMode.COM1;
                             }
-                        case RadioPanelKnobsJF17.UPPER_COM2:
+                            break;
+                        }
+                    case RadioPanelKnobsJF17.UPPER_COM2:
+                        {
+                            if (radioPanelKnob.IsOn)
                             {
-                                if (radioPanelKnob.IsOn)
-                                {
-                                    _currentUpperRadioMode = CurrentJF17RadioMode.COM2;
-                                }
-                                break;
+                                _currentUpperRadioMode = CurrentJF17RadioMode.COM2;
                             }
-                        case RadioPanelKnobsJF17.UPPER_NAV1:
-                        case RadioPanelKnobsJF17.UPPER_NAV2:
-                        case RadioPanelKnobsJF17.UPPER_ADF:
-                        case RadioPanelKnobsJF17.UPPER_DME:
-                        case RadioPanelKnobsJF17.UPPER_XPDR:
+                            break;
+                        }
+                    case RadioPanelKnobsJF17.UPPER_NAV1:
+                    case RadioPanelKnobsJF17.UPPER_NAV2:
+                    case RadioPanelKnobsJF17.UPPER_ADF:
+                    case RadioPanelKnobsJF17.UPPER_DME:
+                    case RadioPanelKnobsJF17.UPPER_XPDR:
+                        {
+                            if (radioPanelKnob.IsOn)
                             {
-                                if (radioPanelKnob.IsOn)
-                                {
-                                    _currentUpperRadioMode = CurrentJF17RadioMode.NO_USE;
-                                }
-                                break;
+                                _currentUpperRadioMode = CurrentJF17RadioMode.NO_USE;
                             }
-                        case RadioPanelKnobsJF17.LOWER_COM1:
+                            break;
+                        }
+                    case RadioPanelKnobsJF17.LOWER_COM1:
+                        {
+                            if (radioPanelKnob.IsOn)
                             {
-                                if (radioPanelKnob.IsOn)
-                                {
-                                    _currentLowerRadioMode = CurrentJF17RadioMode.COM1;
-                                }
-                                break;
+                                _currentLowerRadioMode = CurrentJF17RadioMode.COM1;
                             }
-                        case RadioPanelKnobsJF17.LOWER_COM2:
+                            break;
+                        }
+                    case RadioPanelKnobsJF17.LOWER_COM2:
+                        {
+                            if (radioPanelKnob.IsOn)
                             {
-                                if (radioPanelKnob.IsOn)
-                                {
-                                    _currentLowerRadioMode = CurrentJF17RadioMode.COM2;
-                                }
-                                break;
+                                _currentLowerRadioMode = CurrentJF17RadioMode.COM2;
                             }
-                        case RadioPanelKnobsJF17.LOWER_NAV1:
-                        case RadioPanelKnobsJF17.LOWER_NAV2:
-                        case RadioPanelKnobsJF17.LOWER_ADF:
-                        case RadioPanelKnobsJF17.LOWER_DME:
-                        case RadioPanelKnobsJF17.LOWER_XPDR:
+                            break;
+                        }
+                    case RadioPanelKnobsJF17.LOWER_NAV1:
+                    case RadioPanelKnobsJF17.LOWER_NAV2:
+                    case RadioPanelKnobsJF17.LOWER_ADF:
+                    case RadioPanelKnobsJF17.LOWER_DME:
+                    case RadioPanelKnobsJF17.LOWER_XPDR:
+                        {
+                            if (radioPanelKnob.IsOn)
                             {
-                                if (radioPanelKnob.IsOn)
-                                {
-                                    _currentLowerRadioMode = CurrentJF17RadioMode.NO_USE;
-                                }
-                                break;
+                                _currentLowerRadioMode = CurrentJF17RadioMode.NO_USE;
                             }
-                        case RadioPanelKnobsJF17.UPPER_FREQ_SWITCH:
+                            break;
+                        }
+                    case RadioPanelKnobsJF17.UPPER_FREQ_SWITCH:
+                        {
+                            _upperButtonPressed = radioPanelKnob.IsOn;
+                            if (!radioPanelKnob.IsOn)
                             {
-                                _upperButtonPressed = radioPanelKnob.IsOn;
-                                if (!radioPanelKnob.IsOn)
+                                if (!_upperButtonPressedAndDialRotated)
                                 {
-                                    if (!_upperButtonPressedAndDialRotated)
+                                    // Do not sync if user has pressed the button to configure the radio
+                                    // Sync when user releases button
+                                    await SendFrequencyToDCSBIOSAsync(RadioPanelKnobsJF17.UPPER_FREQ_SWITCH);
+                                }
+                                else
+                                {
+                                    /* We must say that the user now has stopped rotating */
+                                    switch (_currentUpperRadioMode)
                                     {
-                                        // Do not sync if user has pressed the button to configure the radio
-                                        // Sync when user releases button
-                                        SendFrequencyToDCSBIOS(RadioPanelKnobsJF17.UPPER_FREQ_SWITCH);
+                                        case CurrentJF17RadioMode.COM1:
+                                            {
+
+                                                _com1Radio.SwitchFrequencyBand();
+                                                Interlocked.Increment(ref _doUpdatePanelLCD);
+                                                break;
+                                            }
+                                        case CurrentJF17RadioMode.COM2:
+                                            {
+
+                                                _com2Radio.SwitchFrequencyBand();
+                                                Interlocked.Increment(ref _doUpdatePanelLCD);
+                                                break;
+                                            }
                                     }
-                                    else
-                                    {
-                                        /* We must say that the user now has stopped rotating */
-                                        switch (_currentUpperRadioMode)
-                                        {
-                                            case CurrentJF17RadioMode.COM1:
-                                                {
-
-                                                    _com1Radio.SwitchFrequencyBand();
-                                                    Interlocked.Increment(ref _doUpdatePanelLCD);
-                                                    break;
-                                                }
-                                            case CurrentJF17RadioMode.COM2:
-                                                {
-
-                                                    _com2Radio.SwitchFrequencyBand();
-                                                    Interlocked.Increment(ref _doUpdatePanelLCD);
-                                                    break;
-                                                }
-                                        }
-                                    }
-
-                                    _upperButtonPressedAndDialRotated = false;
                                 }
-                                break;
+
+                                _upperButtonPressedAndDialRotated = false;
                             }
-                        case RadioPanelKnobsJF17.LOWER_FREQ_SWITCH:
+                            break;
+                        }
+                    case RadioPanelKnobsJF17.LOWER_FREQ_SWITCH:
+                        {
+                            _lowerButtonPressed = radioPanelKnob.IsOn;
+                            if (!radioPanelKnob.IsOn)
                             {
-                                _lowerButtonPressed = radioPanelKnob.IsOn;
-                                if (!radioPanelKnob.IsOn)
+                                if (!_lowerButtonPressedAndDialRotated)
                                 {
-                                    if (!_lowerButtonPressedAndDialRotated)
-                                    {
-                                        // Do not sync if user has pressed the button to configure the radio
-                                        // Sync when user releases button
-                                        SendFrequencyToDCSBIOS(RadioPanelKnobsJF17.LOWER_FREQ_SWITCH);
-                                    }
-                                    else
-                                    {
-                                        /* We must say that the user now has stopped rotating */
-                                        switch (_currentLowerRadioMode)
-                                        {
-                                            case CurrentJF17RadioMode.COM1:
-                                                {
-
-                                                    _com1Radio.SwitchFrequencyBand();
-                                                    break;
-                                                }
-                                            case CurrentJF17RadioMode.COM2:
-                                                {
-
-                                                    _com2Radio.SwitchFrequencyBand();
-                                                    break;
-                                                }
-                                        }
-                                    }
-
-                                    _lowerButtonPressedAndDialRotated = false;
+                                    // Do not sync if user has pressed the button to configure the radio
+                                    // Sync when user releases button
+                                    await SendFrequencyToDCSBIOSAsync(RadioPanelKnobsJF17.LOWER_FREQ_SWITCH);
                                 }
-                                break;
-                            }
-                    }
+                                else
+                                {
+                                    /* We must say that the user now has stopped rotating */
+                                    switch (_currentLowerRadioMode)
+                                    {
+                                        case CurrentJF17RadioMode.COM1:
+                                            {
 
-                    if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
-                    {
-                        PluginManager.DoEvent(
-                            DCSAircraft.SelectedAircraft.Description,
-                            HIDInstance,
-                            PluginGamingPanelEnum.PZ69RadioPanel_PreProg_AH64D,
-                            (int)radioPanelKnob.RadioPanelPZ69Knob,
-                            radioPanelKnob.IsOn,
-                            null);
-                    }
+                                                _com1Radio.SwitchFrequencyBand();
+                                                break;
+                                            }
+                                        case CurrentJF17RadioMode.COM2:
+                                            {
+
+                                                _com2Radio.SwitchFrequencyBand();
+                                                break;
+                                            }
+                                    }
+                                }
+
+                                _lowerButtonPressedAndDialRotated = false;
+                            }
+                            break;
+                        }
                 }
-                AdjustFrequency(hashSet);
+
+                if (PluginManager.PlugSupportActivated && PluginManager.HasPlugin())
+                {
+                    PluginManager.DoEvent(
+                        DCSAircraft.SelectedAircraft.Description,
+                        HIDInstance,
+                        PluginGamingPanelEnum.PZ69RadioPanel_PreProg_AH64D,
+                        (int)radioPanelKnob.RadioPanelPZ69Knob,
+                        radioPanelKnob.IsOn,
+                        null);
+                }
             }
+            AdjustFrequency(hashSet);
         }
 
         public override void ClearSettings(bool setIsDirty = false)
