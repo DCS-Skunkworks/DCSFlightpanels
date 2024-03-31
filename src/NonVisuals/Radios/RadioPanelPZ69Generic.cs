@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using System.Threading.Tasks;
 using NonVisuals.BindingClasses.BIP;
 using NonVisuals.BindingClasses.DCSBIOSBindings;
 using NonVisuals.BindingClasses.Key;
@@ -303,7 +304,7 @@ namespace NonVisuals.Radios
 
         public HashSet<RadioPanelPZ69DisplayValue> DisplayValueHashSet => _displayValues;
 
-        protected override void PZ69KnobChangedAsync(IEnumerable<object> hashSet)
+        protected override async Task PZ69KnobChangedAsync(IEnumerable<object> hashSet)
         {
             if (ForwardPanelEvent)
             {
@@ -457,7 +458,7 @@ namespace NonVisuals.Radios
                         {
                             if (dcsBiosBinding.DCSBIOSInputs.Count > 0 && dcsBiosBinding.RadioPanelPZ69Knob == radioPanelKey.RadioPanelPZ69Knob && dcsBiosBinding.WhenTurnedOn == radioPanelKey.IsOn)
                             {
-                                dcsBiosBinding.SendDCSBIOSCommandsAsync(new CancellationToken());
+                                await dcsBiosBinding.SendDCSBIOSCommandsAsync(new CancellationToken());
                                 break;
                             }
                         }
@@ -487,23 +488,22 @@ namespace NonVisuals.Radios
                     {
                         if (displayValue.RadioPanelPZ69Knob == radioPanelKey.RadioPanelPZ69Knob)
                         {
-                            double parsedValue = double.Parse(displayValue.Value, NumberFormatInfoFullDisplay);
+                            var parsedValue = double.Parse(displayValue.Value, NumberFormatInfoFullDisplay);
 
-                            if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.UpperActive)
+                            switch (displayValue.RadioPanelDisplay)
                             {
-                                _upperActive = parsedValue;
-                            }
-                            else if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.UpperStandby)
-                            {
-                                _upperStandby = parsedValue;
-                            }
-                            else if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.LowerActive)
-                            {
-                                _lowerActive = parsedValue;
-                            }
-                            else if (displayValue.RadioPanelDisplay == RadioPanelPZ69Display.LowerStandby)
-                            {
-                                _lowerStandby = parsedValue;
+                                case RadioPanelPZ69Display.UpperActive:
+                                    _upperActive = parsedValue;
+                                    break;
+                                case RadioPanelPZ69Display.UpperStandby:
+                                    _upperStandby = parsedValue;
+                                    break;
+                                case RadioPanelPZ69Display.LowerActive:
+                                    _lowerActive = parsedValue;
+                                    break;
+                                case RadioPanelPZ69Display.LowerStandby:
+                                    _lowerStandby = parsedValue;
+                                    break;
                             }
                         }
                     }
