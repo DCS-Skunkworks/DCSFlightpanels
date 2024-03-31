@@ -1,4 +1,6 @@
-﻿namespace NonVisuals.Radios
+﻿using System.Threading.Tasks;
+
+namespace NonVisuals.Radios
 {
     using System;
     using System.Collections.Generic;
@@ -124,7 +126,7 @@
             }
         }
 
-        protected override void PZ69KnobChangedAsync(IEnumerable<object> hashSet)
+        protected override Task PZ69KnobChangedAsync(IEnumerable<object> hashSet)
         {
             try
             {
@@ -346,6 +348,8 @@
             {
                 Logger.Error(ex);
             }
+
+            return Task.CompletedTask;
         }
 
         private void AdjustFrequency(IEnumerable<object> hashSet)
