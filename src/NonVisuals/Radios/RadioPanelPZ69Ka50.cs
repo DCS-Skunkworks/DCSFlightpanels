@@ -90,7 +90,7 @@ namespace NonVisuals.Radios
         private const string R800_L1_FREQ_3DIAL_COMMAND = "R800_FREQ3 ";
         private const string R800_L1_FREQ_4DIAL_COMMAND = "R800_FREQ4 ";
         private Thread _r800L1SyncThread;
-        private long _r800L1ThreadNowSynching;
+        private long _r800L1ThreadNowSyncing;
         private long _r800L1Dial1WaitingForFeedback;
         private long _r800L1Dial2WaitingForFeedback;
         private long _r800L1Dial3WaitingForFeedback;
@@ -468,7 +468,7 @@ namespace NonVisuals.Radios
                         /*
                         * Ka-50 R-800L1 VHF 2
                         */
-                        Interlocked.Exchange(ref _r800L1ThreadNowSynching, 1);
+                        Interlocked.Exchange(ref _r800L1ThreadNowSyncing, 1);
                         long dial1Timeout = DateTime.Now.Ticks;
                         long dial2Timeout = DateTime.Now.Ticks;
                         long dial3Timeout = DateTime.Now.Ticks;
@@ -663,7 +663,7 @@ namespace NonVisuals.Radios
                 }
                 finally
                 {
-                    Interlocked.Exchange(ref _r800L1ThreadNowSynching, 0);
+                    Interlocked.Exchange(ref _r800L1ThreadNowSyncing, 0);
                 }
             }
             catch (Exception ex)
@@ -1759,7 +1759,7 @@ namespace NonVisuals.Radios
 
         private bool R800L1NowSyncing()
         {
-            return Interlocked.Read(ref _r800L1ThreadNowSynching) > 0;
+            return Interlocked.Read(ref _r800L1ThreadNowSyncing) > 0;
         }
 
         private void SaveCockpitFrequencyR800L1()

@@ -75,7 +75,7 @@ namespace NonVisuals.Radios
         private const string R863_MANUAL_FREQ_3DIAL_COMMAND = "R863_FREQ3 ";
         private const string R863_MANUAL_FREQ_4DIAL_COMMAND = "R863_FREQ4 ";
         private Thread _r863ManualSyncThread;
-        private long _r863ManualThreadNowSynching;
+        private long _r863ManualThreadNowSyncing;
         private long _r863ManualDial1WaitingForFeedback;
         private long _r863ManualDial2WaitingForFeedback;
         private long _r863ManualDial3WaitingForFeedback;
@@ -126,7 +126,7 @@ namespace NonVisuals.Radios
         private const string YADRO1_A_FREQ_3DIAL_COMMAND = "YADRO1A_FREQ3 ";
         private const string YADRO1_A_FREQ_4DIAL_COMMAND = "YADRO1A_FREQ4 ";
         private Thread _yadro1ASyncThread;
-        private long _yadro1AThreadNowSynching;
+        private long _yadro1AThreadNowSyncing;
         private long _yadro1ADial1WaitingForFeedback;
         private long _yadro1ADial2WaitingForFeedback;
         private long _yadro1ADial3WaitingForFeedback;
@@ -740,7 +740,7 @@ namespace NonVisuals.Radios
                         /*
                         * Mi-8 R-863 COM1
                         */
-                        Interlocked.Exchange(ref _r863ManualThreadNowSynching, 1);
+                        Interlocked.Exchange(ref _r863ManualThreadNowSyncing, 1);
                         long dial1Timeout = DateTime.Now.Ticks;
                         long dial2Timeout = DateTime.Now.Ticks;
                         long dial3Timeout = DateTime.Now.Ticks;
@@ -945,7 +945,7 @@ namespace NonVisuals.Radios
                 }
                 finally
                 {
-                    Interlocked.Exchange(ref _r863ManualThreadNowSynching, 0);
+                    Interlocked.Exchange(ref _r863ManualThreadNowSyncing, 0);
                 }
             }
             catch (Exception ex)
@@ -1006,7 +1006,7 @@ namespace NonVisuals.Radios
                         /*
                                           * Mi-8 YaDRO-1A
                                           */
-                        Interlocked.Exchange(ref _yadro1AThreadNowSynching, 1);
+                        Interlocked.Exchange(ref _yadro1AThreadNowSyncing, 1);
                         long dial1Timeout = DateTime.Now.Ticks;
                         long dial2Timeout = DateTime.Now.Ticks;
                         long dial3Timeout = DateTime.Now.Ticks;
@@ -1171,7 +1171,7 @@ namespace NonVisuals.Radios
                 }
                 finally
                 {
-                    Interlocked.Exchange(ref _yadro1AThreadNowSynching, 0);
+                    Interlocked.Exchange(ref _yadro1AThreadNowSyncing, 0);
                 }
             }
             catch (Exception ex)
@@ -2620,12 +2620,12 @@ namespace NonVisuals.Radios
 
         private bool R863ManualNowSyncing()
         {
-            return Interlocked.Read(ref _r863ManualThreadNowSynching) > 0;
+            return Interlocked.Read(ref _r863ManualThreadNowSyncing) > 0;
         }
 
         private bool YaDRO1ANowSyncing()
         {
-            return Interlocked.Read(ref _yadro1AThreadNowSynching) > 0;
+            return Interlocked.Read(ref _yadro1AThreadNowSyncing) > 0;
         }
 
         private void SaveCockpitFrequencyR863Manual()

@@ -71,7 +71,7 @@ namespace NonVisuals.CockpitMaster.PreProgrammed
             {
                 foreach (CDUMappedCommandKey key in hashSet)
                 {
-                    _ = DCSBIOS.Send(key.MappedCommand());
+                    DCSBIOS.Send(key.MappedCommand());
                 }
 
             }

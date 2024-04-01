@@ -72,7 +72,7 @@ namespace NonVisuals.Radios
         private const string ARC210_VHF_FREQ_4DIAL_COMMAND = "ARC210_100KHZ_SEL ";
         private const string ARC210_VHF_FREQ_5DIAL_COMMAND = "ARC210_25KHZ_SEL ";
         private Thread _arc210VhfSyncThread;
-        private long _arc210VhfThreadNowSynching;
+        private long _arc210VhfThreadNowSyncing;
         private long _arc210VhfDial1WaitingForFeedback;
         private long _arc210VhfDial2WaitingForFeedback;
         private long _arc210VhfDial3WaitingForFeedback;
@@ -126,7 +126,7 @@ namespace NonVisuals.Radios
         private const string UHF_FREQ_4DIAL_COMMAND = "UHF_POINT1MHZ_SEL ";    // 0 1 2 3 4 5 6 7 8 9
         private const string UHF_FREQ_5DIAL_COMMAND = "UHF_POINT25_SEL ";		// "00" "25" "50" "75"
         private Thread _uhfSyncThread;
-        private long _uhfThreadNowSynching;
+        private long _uhfThreadNowSyncing;
         private long _uhfDial1WaitingForFeedback;
         private long _uhfDial2WaitingForFeedback;
         private long _uhfDial3WaitingForFeedback;
@@ -173,7 +173,7 @@ namespace NonVisuals.Radios
         private const string VHF_FM_FREQ_3DIAL_COMMAND = "VHFFM_FREQ3 ";
         private const string VHF_FM_FREQ_4DIAL_COMMAND = "VHFFM_FREQ4 ";
         private Thread _vhfFmSyncThread;
-        private long _vhfFmThreadNowSynching;
+        private long _vhfFmThreadNowSyncing;
         private long _vhfFmDial1WaitingForFeedback;
         private long _vhfFmDial2WaitingForFeedback;
         private long _vhfFmDial3WaitingForFeedback;
@@ -211,7 +211,7 @@ namespace NonVisuals.Radios
         private const string ILS_FREQ1_DIAL_COMMAND = "ILS_MHZ ";
         private const string ILS_FREQ2_DIAL_COMMAND = "ILS_KHZ ";
         private Thread _ilsSyncThread;
-        private long _ilsThreadNowSynching;
+        private long _ilsThreadNowSyncing;
         private long _ilsDial1WaitingForFeedback;
         private long _ilsDial2WaitingForFeedback;
 
@@ -237,7 +237,7 @@ namespace NonVisuals.Radios
         private const string TACAN_FREQ2_DIAL_COMMAND = "TACAN_1 ";
         private const string TACAN_FREQ3_DIAL_COMMAND = "TACAN_XY ";
         private Thread _tacanSyncThread;
-        private long _tacanThreadNowSynching;
+        private long _tacanThreadNowSyncing;
         private long _tacanDial1WaitingForFeedback;
         private long _tacanDial2WaitingForFeedback;
         private long _tacanDial3WaitingForFeedback;
@@ -882,7 +882,7 @@ namespace NonVisuals.Radios
                      * Small dial 0.000-0.975 [step of 0.05]
                      */
                     
-                    Interlocked.Exchange(ref _arc210VhfThreadNowSynching, 1);
+                    Interlocked.Exchange(ref _arc210VhfThreadNowSyncing, 1);
                     var dial1Timeout = DateTime.Now.Ticks;
                     var dial2Timeout = DateTime.Now.Ticks;
                     var dial3Timeout = DateTime.Now.Ticks;
@@ -1067,7 +1067,7 @@ namespace NonVisuals.Radios
             }
             finally
             {
-                Interlocked.Exchange(ref _arc210VhfThreadNowSynching, 0);
+                Interlocked.Exchange(ref _arc210VhfThreadNowSyncing, 0);
             }
 
             Interlocked.Increment(ref _doUpdatePanelLCD);
@@ -1232,7 +1232,7 @@ namespace NonVisuals.Radios
             {
                 try
                 {
-                    Interlocked.Exchange(ref _uhfThreadNowSynching, 1);
+                    Interlocked.Exchange(ref _uhfThreadNowSyncing, 1);
                     long dial1Timeout = DateTime.Now.Ticks;
                     long dial2Timeout = DateTime.Now.Ticks;
                     long dial3Timeout = DateTime.Now.Ticks;
@@ -1463,7 +1463,7 @@ namespace NonVisuals.Radios
             }
             finally
             {
-                Interlocked.Exchange(ref _uhfThreadNowSynching, 0);
+                Interlocked.Exchange(ref _uhfThreadNowSyncing, 0);
             }
 
             Interlocked.Increment(ref _doUpdatePanelLCD);
@@ -1543,7 +1543,7 @@ namespace NonVisuals.Radios
             {
                 try
                 {
-                    Interlocked.Exchange(ref _vhfFmThreadNowSynching, 1);
+                    Interlocked.Exchange(ref _vhfFmThreadNowSyncing, 1);
                     var dial1Timeout = DateTime.Now.Ticks;
                     var dial2Timeout = DateTime.Now.Ticks;
                     var dial3Timeout = DateTime.Now.Ticks;
@@ -1701,7 +1701,7 @@ namespace NonVisuals.Radios
             }
             finally
             {
-                Interlocked.Exchange(ref _vhfFmThreadNowSynching, 0);
+                Interlocked.Exchange(ref _vhfFmThreadNowSyncing, 0);
             }
 
             Interlocked.Increment(ref _doUpdatePanelLCD);
@@ -1749,7 +1749,7 @@ namespace NonVisuals.Radios
             {
                 try
                 {
-                    Interlocked.Exchange(ref _ilsThreadNowSynching, 1);
+                    Interlocked.Exchange(ref _ilsThreadNowSyncing, 1);
 
                     long dial1Timeout = DateTime.Now.Ticks;
                     long dial2Timeout = DateTime.Now.Ticks;
@@ -1852,7 +1852,7 @@ namespace NonVisuals.Radios
             }
             finally
             {
-                Interlocked.Exchange(ref _ilsThreadNowSynching, 0);
+                Interlocked.Exchange(ref _ilsThreadNowSyncing, 0);
             }
 
             Interlocked.Increment(ref _doUpdatePanelLCD);
@@ -1895,7 +1895,7 @@ namespace NonVisuals.Radios
             {
                 try
                 {
-                    Interlocked.Exchange(ref _tacanThreadNowSynching, 1);
+                    Interlocked.Exchange(ref _tacanThreadNowSyncing, 1);
 
                     long dial1Timeout = DateTime.Now.Ticks;
                     long dial2Timeout = DateTime.Now.Ticks;
@@ -2020,7 +2020,7 @@ namespace NonVisuals.Radios
             }
             finally
             {
-                Interlocked.Exchange(ref _tacanThreadNowSynching, 0);
+                Interlocked.Exchange(ref _tacanThreadNowSyncing, 0);
             }
 
             Interlocked.Increment(ref _doUpdatePanelLCD);
@@ -4333,27 +4333,27 @@ namespace NonVisuals.Radios
 
         private bool ARC210VhfNowSyncing()
         {
-            return Interlocked.Read(ref _arc210VhfThreadNowSynching) > 0;
+            return Interlocked.Read(ref _arc210VhfThreadNowSyncing) > 0;
         }
 
         private bool UhfNowSyncing()
         {
-            return Interlocked.Read(ref _uhfThreadNowSynching) > 0;
+            return Interlocked.Read(ref _uhfThreadNowSyncing) > 0;
         }
 
         private bool VhfFmNowSyncing()
         {
-            return Interlocked.Read(ref _vhfFmThreadNowSynching) > 0;
+            return Interlocked.Read(ref _vhfFmThreadNowSyncing) > 0;
         }
 
         private bool IlsNowSyncing()
         {
-            return Interlocked.Read(ref _ilsThreadNowSynching) > 0;
+            return Interlocked.Read(ref _ilsThreadNowSyncing) > 0;
         }
 
         private bool TacanNowSyncing()
         {
-            return Interlocked.Read(ref _tacanThreadNowSynching) > 0;
+            return Interlocked.Read(ref _tacanThreadNowSyncing) > 0;
         }
 
         public override void RemoveSwitchFromList(object controlList, PanelSwitchOnOff panelSwitchOnOff)

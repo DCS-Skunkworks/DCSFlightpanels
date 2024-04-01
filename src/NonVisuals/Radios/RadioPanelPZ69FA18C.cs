@@ -86,7 +86,7 @@ namespace NonVisuals.Radios
         private volatile uint _ilsCockpitChannel = 1;
         private const string ILS_CHANNEL_COMMAND = "COM_ILS_CHANNEL_SW ";
         private Thread _ilsSyncThread;
-        private long _ilsThreadNowSynching;
+        private long _ilsThreadNowSyncing;
         private long _ilsDialWaitingForFeedback;
         private readonly object _lockShowFrequenciesOnPanelObject = new();
         private long _doUpdatePanelLCD;
@@ -327,7 +327,7 @@ namespace NonVisuals.Radios
             {
                 try
                 {
-                    Interlocked.Exchange(ref _ilsThreadNowSynching, 1);
+                    Interlocked.Exchange(ref _ilsThreadNowSyncing, 1);
 
                     long dialTimeout = DateTime.Now.Ticks;
                     long dialOkTime = 0;
@@ -394,7 +394,7 @@ namespace NonVisuals.Radios
             }
             finally
             {
-                Interlocked.Exchange(ref _ilsThreadNowSynching, 0);
+                Interlocked.Exchange(ref _ilsThreadNowSyncing, 0);
             }
 
             Interlocked.Increment(ref _doUpdatePanelLCD);
@@ -1225,7 +1225,7 @@ namespace NonVisuals.Radios
 
         private bool IlsNowSyncing()
         {
-            return Interlocked.Read(ref _ilsThreadNowSynching) > 0;
+            return Interlocked.Read(ref _ilsThreadNowSyncing) > 0;
         }
 
         public override void RemoveSwitchFromList(object controlList, PanelSwitchOnOff panelSwitchOnOff)

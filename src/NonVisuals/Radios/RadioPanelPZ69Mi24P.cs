@@ -79,7 +79,7 @@ namespace NonVisuals.Radios
         private const string YADRO1_A_FREQ_3DIAL_COMMAND = "PLT_JADRO_10K ";
         private const string YADRO1_A_FREQ_4DIAL_COMMAND = "PLT_JADRO_1K ";
         private Thread _yadro1ASyncThread;
-        private long _yadro1AThreadNowSynching;
+        private long _yadro1AThreadNowSyncing;
         private long _yadro1ADial1WaitingForFeedback;
         private long _yadro1ADial2WaitingForFeedback;
         private long _yadro1ADial3WaitingForFeedback;
@@ -555,7 +555,7 @@ namespace NonVisuals.Radios
                     try
                     {
                         // Mi-24P YaDRO-1A
-                        Interlocked.Exchange(ref _yadro1AThreadNowSynching, 1);
+                        Interlocked.Exchange(ref _yadro1AThreadNowSyncing, 1);
                         long dial1Timeout = DateTime.Now.Ticks;
                         long dial2Timeout = DateTime.Now.Ticks;
                         long dial3Timeout = DateTime.Now.Ticks;
@@ -712,7 +712,7 @@ namespace NonVisuals.Radios
                 }
                 finally
                 {
-                    Interlocked.Exchange(ref _yadro1AThreadNowSynching, 0);
+                    Interlocked.Exchange(ref _yadro1AThreadNowSyncing, 0);
                 }
             }
             catch (Exception ex)
@@ -1694,7 +1694,7 @@ namespace NonVisuals.Radios
 
         private bool YaDRO1ANowSyncing()
         {
-            return Interlocked.Read(ref _yadro1AThreadNowSynching) > 0;
+            return Interlocked.Read(ref _yadro1AThreadNowSyncing) > 0;
         }
 
         private void SaveCockpitFrequencyYaDRO1A()
