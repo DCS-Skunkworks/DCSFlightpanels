@@ -3077,7 +3077,7 @@ namespace NonVisuals.Radios
                                 {
                                     if (!_upperButtonPressedAndDialRotated)
                                     {
-                                        // Do not synch if user has pressed the button to configure the radio
+                                        // Do not sync if user has pressed the button to configure the radio
                                         // Do when user releases button
                                         SendFrequencyToDCSBIOS(RadioPanelPZ69KnobsF14B.UPPER_FREQ_SWITCH);
                                     }
@@ -3094,7 +3094,7 @@ namespace NonVisuals.Radios
                                 {
                                     if (!_lowerButtonPressedAndDialRotated)
                                     {
-                                        // Do not synch if user has pressed the button to configure the radio
+                                        // Do not sync if user has pressed the button to configure the radio
                                         // Do when user releases button
                                         SendFrequencyToDCSBIOS(RadioPanelPZ69KnobsF14B.LOWER_FREQ_SWITCH);
                                     }

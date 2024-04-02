@@ -656,7 +656,7 @@ namespace NonVisuals.Radios
                                 {
                                     if (!_upperButtonPressedAndDialRotated)
                                     {
-                                        // Do not synch if user has pressed the button to configure the radio
+                                        // Do not sync if user has pressed the button to configure the radio
                                         // Sync when user releases button
                                         SendFrequencyToDCSBIOS(RadioPanelKnobsF15E.UPPER_FREQ_SWITCH);
                                     }
@@ -689,7 +689,7 @@ namespace NonVisuals.Radios
                                 {
                                     if (!_lowerButtonPressedAndDialRotated)
                                     {
-                                        // Do not synch if user has pressed the button to configure the radio
+                                        // Do not sync if user has pressed the button to configure the radio
                                         // Sync when user releases button
                                         SendFrequencyToDCSBIOS(RadioPanelKnobsF15E.LOWER_FREQ_SWITCH);
                                     }

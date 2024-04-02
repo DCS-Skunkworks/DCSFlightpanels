@@ -303,7 +303,7 @@ namespace NonVisuals.Radios
                         _vhfCommCockpitDial2Frequency = uint.Parse(e.StringData.Substring(4, 2));
 
                         // 975
-                        // Do not round this. Rounding means that the synch process thinks the frequency is OK which it isn't
+                        // Do not round this. Rounding means that the sync process thinks the frequency is OK which it isn't
                         if (tmp != _vhfCommCockpitDial2Frequency)
                         {
                             Interlocked.Increment(ref _doUpdatePanelLCD);
