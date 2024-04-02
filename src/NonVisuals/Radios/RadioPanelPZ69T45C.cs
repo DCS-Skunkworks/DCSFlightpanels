@@ -526,12 +526,12 @@ namespace NonVisuals.Radios
             _shutdownVUHF1Thread = true;
             Thread.Sleep(Constants.ThreadShutDownWaitTime);
             _shutdownVUHF1Thread = false;
-            _vuhf1SyncThread = new Thread(() => VUHF1SynchThreadMethod(desiredDial1Value, desiredDial2Value, desiredDial3Value, desiredDial4Value));
+            _vuhf1SyncThread = new Thread(() => VUHF1SyncThreadMethod(desiredDial1Value, desiredDial2Value, desiredDial3Value, desiredDial4Value));
             _vuhf1SyncThread.Start();
         }
 
         private volatile bool _shutdownVUHF1Thread;
-        private void VUHF1SynchThreadMethod(int desiredValueDial1, int desiredValueDial2, int desiredValueDial3, int desiredValueDial4)
+        private void VUHF1SyncThreadMethod(int desiredValueDial1, int desiredValueDial2, int desiredValueDial3, int desiredValueDial4)
         {
             try
             {
@@ -662,7 +662,7 @@ namespace NonVisuals.Radios
                             dial4SendCount = 0;
                             Thread.Sleep(5000);
                         }
-                        Thread.Sleep(SynchSleepTime); // Should be enough to get an update cycle from DCS-BIOS
+                        Thread.Sleep(SyncSleepTime); // Should be enough to get an update cycle from DCS-BIOS
                     }
                     while ((IsTooShort(dial1OkTime) || IsTooShort(dial2OkTime) || IsTooShort(dial3OkTime) || IsTooShort(dial4OkTime)) && !_shutdownVUHF1Thread);
                     SwapCockpitStandbyFrequencyVuhf1();
@@ -719,12 +719,12 @@ namespace NonVisuals.Radios
             _shutdownVUHF2Thread = true;
             Thread.Sleep(Constants.ThreadShutDownWaitTime);
             _shutdownVUHF2Thread = false;
-            _vuhf2SyncThread = new Thread(() => VUHF2SynchThreadMethod(desiredDial1Value, desiredDial2Value, desiredDial3Value, desiredDial4Value));
+            _vuhf2SyncThread = new Thread(() => VUHF2SyncThreadMethod(desiredDial1Value, desiredDial2Value, desiredDial3Value, desiredDial4Value));
             _vuhf2SyncThread.Start();
         }
 
         private volatile bool _shutdownVUHF2Thread;
-        private void VUHF2SynchThreadMethod(int desiredValueDial1, int desiredValueDial2, int desiredValueDial3, int desiredValueDial4)
+        private void VUHF2SyncThreadMethod(int desiredValueDial1, int desiredValueDial2, int desiredValueDial3, int desiredValueDial4)
         {
             try
             {
@@ -855,7 +855,7 @@ namespace NonVisuals.Radios
                             dial4SendCount = 0;
                             Thread.Sleep(5000);
                         }
-                        Thread.Sleep(SynchSleepTime); // Should be enough to get an update cycle from DCS-BIOS
+                        Thread.Sleep(SyncSleepTime); // Should be enough to get an update cycle from DCS-BIOS
                     }
                     while ((IsTooShort(dial1OkTime) || IsTooShort(dial2OkTime) || IsTooShort(dial3OkTime) || IsTooShort(dial4OkTime)) && !_shutdownVUHF2Thread);
                     SwapCockpitStandbyFrequencyVuhf2();
@@ -897,12 +897,12 @@ namespace NonVisuals.Radios
             _shutdownTACANThread = true;
             Thread.Sleep(Constants.ThreadShutDownWaitTime);
             _shutdownTACANThread = false;
-            _tacanSyncThread = new Thread(() => TacanSynchThreadMethod(_tacanTensFrequencyStandby, _tacanOnesFrequencyStandby));
+            _tacanSyncThread = new Thread(() => TacanSyncThreadMethod(_tacanTensFrequencyStandby, _tacanOnesFrequencyStandby));
             _tacanSyncThread.Start();
         }
 
         private volatile bool _shutdownTACANThread;
-        private void TacanSynchThreadMethod(int desiredPositionDial1, int desiredPositionDial2)
+        private void TacanSyncThreadMethod(int desiredPositionDial1, int desiredPositionDial2)
         {
             try
             {
@@ -977,7 +977,7 @@ namespace NonVisuals.Radios
                             dial2SendCount = 0;
                             Thread.Sleep(5000);
                         }
-                        Thread.Sleep(SynchSleepTime); // Should be enough to get an update cycle from DCS-BIOS
+                        Thread.Sleep(SyncSleepTime); // Should be enough to get an update cycle from DCS-BIOS
                     }
                     while ((IsTooShort(dial1OkTime) || IsTooShort(dial2OkTime)) && !_shutdownTACANThread);
                     SwapCockpitStandbyFrequencyTacan();
@@ -1009,12 +1009,12 @@ namespace NonVisuals.Radios
             _shutdownVORThread = true;
             Thread.Sleep(Constants.ThreadShutDownWaitTime);
             _shutdownVORThread = false;
-            _vorSyncThread = new Thread(() => VorSynchThreadMethod(_vorMhzFrequencyStandby, _vorKhzFrequencyStandby));
+            _vorSyncThread = new Thread(() => VorSyncThreadMethod(_vorMhzFrequencyStandby, _vorKhzFrequencyStandby));
             _vorSyncThread.Start();
         }
 
         private volatile bool _shutdownVORThread;
-        private void VorSynchThreadMethod(int desiredPositionDial1, int desiredPositionDial2)
+        private void VorSyncThreadMethod(int desiredPositionDial1, int desiredPositionDial2)
         {
             try
             {
@@ -1091,7 +1091,7 @@ namespace NonVisuals.Radios
                             dial2SendCount = 0;
                             Thread.Sleep(5000);
                         }
-                        Thread.Sleep(SynchSleepTime); // Should be enough to get an update cycle from DCS-BIOS
+                        Thread.Sleep(SyncSleepTime); // Should be enough to get an update cycle from DCS-BIOS
                     }
                     while ((IsTooShort(dial1OkTime) || IsTooShort(dial2OkTime)) && !_shutdownVORThread);
                     SwapStandbyFrequencyVor();

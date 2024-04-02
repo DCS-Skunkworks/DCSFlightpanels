@@ -447,7 +447,7 @@ namespace NonVisuals.Radios
                 _shutdownR800L1Thread = true;
                 Thread.Sleep(Constants.ThreadShutDownWaitTime);
                 _shutdownR800L1Thread = false;
-                _r800L1SyncThread = new Thread(() => R800L1SynchThreadMethod());
+                _r800L1SyncThread = new Thread(() => R800L1SyncThreadMethod());
                 _r800L1SyncThread.Start();
             }
             catch (Exception ex)
@@ -457,7 +457,7 @@ namespace NonVisuals.Radios
         }
 
         private volatile bool _shutdownR800L1Thread;
-        private void R800L1SynchThreadMethod()
+        private void R800L1SyncThreadMethod()
         {
             try
             {
@@ -646,7 +646,7 @@ namespace NonVisuals.Radios
                                 Thread.Sleep(5000);
                             }
 
-                            Thread.Sleep(SynchSleepTime); // Should be enough to get an update cycle from DCS-BIOS
+                            Thread.Sleep(SyncSleepTime); // Should be enough to get an update cycle from DCS-BIOS
                         }
                         while ((IsTooShort(dial1OkTime) || IsTooShort(dial2OkTime) || IsTooShort(dial3OkTime) || IsTooShort(dial4OkTime)) && !_shutdownR800L1Thread);
 

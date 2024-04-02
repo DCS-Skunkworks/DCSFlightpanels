@@ -456,11 +456,11 @@ namespace NonVisuals.Radios
             _shutdownVHFAMThread = true;
             Thread.Sleep(Constants.ThreadShutDownWaitTime);
             _shutdownVHFAMThread = false;
-            _vhfAmSyncThread = new Thread(() => VhfAmSynchThreadMethod(desiredPositionDialWholeNumbers, desiredPositionDecimals));
+            _vhfAmSyncThread = new Thread(() => VhfAmSyncThreadMethod(desiredPositionDialWholeNumbers, desiredPositionDecimals));
             _vhfAmSyncThread.Start();
         }
 
-        private void VhfAmSynchThreadMethod(int desiredPositionDialWholeNumbers, int desiredPositionDialDecimals)
+        private void VhfAmSyncThreadMethod(int desiredPositionDialWholeNumbers, int desiredPositionDialDecimals)
         {
             try
             {
@@ -565,7 +565,7 @@ namespace NonVisuals.Radios
                             Thread.Sleep(5000);
                         }
 
-                        Thread.Sleep(SynchSleepTime); // Should be enough to get an update cycle from DCS-BIOS
+                        Thread.Sleep(SyncSleepTime); // Should be enough to get an update cycle from DCS-BIOS
                     }
                     while ((IsTooShort(dial1Time) || IsTooShort(dial2Time)) && !_shutdownVHFAMThread);
 

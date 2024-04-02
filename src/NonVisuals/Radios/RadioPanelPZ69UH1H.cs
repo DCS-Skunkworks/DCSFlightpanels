@@ -689,11 +689,11 @@ namespace NonVisuals.Radios
                 _intercommSyncThread.Aborttt();
             }
             
-            _intercommSyncThread = new Thread(IntercommSynchThreadMethod);
+            _intercommSyncThread = new Thread(IntercommSyncThreadMethod);
             _intercommSyncThread.Start();
         }
 
-        private void IntercommSynchThreadMethod()
+        private void IntercommSyncThreadMethod()
         {
             try
             {
@@ -782,12 +782,12 @@ namespace NonVisuals.Radios
             _shutdownVHFCommThread = true;
             Thread.Sleep(Constants.ThreadShutDownWaitTime);
             _shutdownVHFCommThread = false;
-            _vhfCommSyncThread = new Thread(VhfCommSynchThreadMethod);
+            _vhfCommSyncThread = new Thread(VhfCommSyncThreadMethod);
             _vhfCommSyncThread.Start();
         }
 
         private volatile bool _shutdownVHFCommThread;
-        private void VhfCommSynchThreadMethod()
+        private void VhfCommSyncThreadMethod()
         {
             try
             {
@@ -868,7 +868,7 @@ namespace NonVisuals.Radios
                             Thread.Sleep(5000);
                         }
 
-                        Thread.Sleep(SynchSleepTime); // Should be enough to get an update cycle from DCS-BIOS
+                        Thread.Sleep(SyncSleepTime); // Should be enough to get an update cycle from DCS-BIOS
                     }
                     while ((IsTooShort(dial1OkTime) || IsTooShort(dial2OkTime)) && !_shutdownVHFCommThread);
 
@@ -913,12 +913,12 @@ namespace NonVisuals.Radios
             _shutdownUHFThread = true;
             Thread.Sleep(Constants.ThreadShutDownWaitTime);
             _shutdownUHFThread = false;
-            _uhfSyncThread = new Thread(UhfSynchThreadMethod);
+            _uhfSyncThread = new Thread(UhfSyncThreadMethod);
             _uhfSyncThread.Start();
         }
 
         private volatile bool _shutdownUHFThread;
-        private void UhfSynchThreadMethod()
+        private void UhfSyncThreadMethod()
         {
             try
             {
@@ -1037,7 +1037,7 @@ namespace NonVisuals.Radios
                             Thread.Sleep(5000);
                         }
 
-                        Thread.Sleep(SynchSleepTime); // Should be enough to get an update cycle from DCS-BIOS
+                        Thread.Sleep(SyncSleepTime); // Should be enough to get an update cycle from DCS-BIOS
                     }
                     while ((IsTooShort(dial1OkTime) || IsTooShort(dial2OkTime) || IsTooShort(dial3OkTime)) && !_shutdownUHFThread);
 
@@ -1070,12 +1070,12 @@ namespace NonVisuals.Radios
             _shutdownVHFNavThread = true;
             Thread.Sleep(Constants.ThreadShutDownWaitTime);
             _shutdownVHFNavThread = false;
-            _vhfNavSyncThread = new Thread(VhfNavSynchThreadMethod);
+            _vhfNavSyncThread = new Thread(VhfNavSyncThreadMethod);
             _vhfNavSyncThread.Start();
         }
 
         private volatile bool _shutdownVHFNavThread;
-        private void VhfNavSynchThreadMethod()
+        private void VhfNavSyncThreadMethod()
         {
             try
             {
@@ -1166,7 +1166,7 @@ namespace NonVisuals.Radios
                             Thread.Sleep(5000);
                         }
 
-                        Thread.Sleep(SynchSleepTime); // Should be enough to get an update cycle from DCS-BIOS
+                        Thread.Sleep(SyncSleepTime); // Should be enough to get an update cycle from DCS-BIOS
                     }
                     while ((IsTooShort(dial1OkTime) || IsTooShort(dial2OkTime)) && !_shutdownVHFNavThread);
 
@@ -1199,11 +1199,11 @@ namespace NonVisuals.Radios
             _shutdownVHFFMThread = true;
             Thread.Sleep(Constants.ThreadShutDownWaitTime);
             _shutdownVHFFMThread = false;
-            _vhfFmSyncThread = new Thread(VhfFmSynchThreadMethod);
+            _vhfFmSyncThread = new Thread(VhfFmSyncThreadMethod);
             _vhfFmSyncThread.Start();
         }
 
-        private void VhfFmSynchThreadMethod()
+        private void VhfFmSyncThreadMethod()
         {
             try
             {
@@ -1414,7 +1414,7 @@ namespace NonVisuals.Radios
                             dial4SendCount = 0;
                             Thread.Sleep(5000);
                         }
-                        Thread.Sleep(SynchSleepTime); // Should be enough to get an update cycle from DCS-BIOS
+                        Thread.Sleep(SyncSleepTime); // Should be enough to get an update cycle from DCS-BIOS
                     }
                     while ((IsTooShort(dial1OkTime) || IsTooShort(dial2OkTime) || IsTooShort(dial3OkTime) || IsTooShort(dial4OkTime)) && !_shutdownVHFFMThread);
 
@@ -1441,12 +1441,12 @@ namespace NonVisuals.Radios
             _shutdownADFThread = true;
             Thread.Sleep(Constants.ThreadShutDownWaitTime);
             _shutdownADFThread = false;
-            _adfSyncThread = new Thread(AdfBandChangeSynchThreadMethod);
+            _adfSyncThread = new Thread(AdfBandChangeSyncThreadMethod);
             _adfSyncThread.Start();
         }
 
         private volatile bool _shutdownADFThread;
-        private void AdfBandChangeSynchThreadMethod()
+        private void AdfBandChangeSyncThreadMethod()
         {
             try
             {
@@ -1532,7 +1532,7 @@ namespace NonVisuals.Radios
                             Thread.Sleep(5000);
                         }
 
-                        Thread.Sleep(SynchSleepTime); // Should be enough to get an update cycle from DCS-BIOS
+                        Thread.Sleep(SyncSleepTime); // Should be enough to get an update cycle from DCS-BIOS
 
                         if (once)
                         {

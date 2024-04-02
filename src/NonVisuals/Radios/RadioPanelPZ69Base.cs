@@ -37,10 +37,10 @@ namespace NonVisuals.Radios
         protected bool DataHasBeenReceivedFromDCSBIOS;
 
         /// <summary>
-        /// IMPORTANT WHEN SYNCHING DIALS
+        /// IMPORTANT WHEN SYNCING DIALS
         /// MSDN (DateTime.Now.Ticks : There are 10,000 ticks in a millisecond
         /// </summary>
-        public int SynchSleepTime { get; set; } = 300;
+        public int SyncSleepTime { get; set; } = 300;
         public long ResetSyncTimeout { get; set; } = 35000000;
 
         private long _syncOKDelayTimeout = 50000000; // 5s
