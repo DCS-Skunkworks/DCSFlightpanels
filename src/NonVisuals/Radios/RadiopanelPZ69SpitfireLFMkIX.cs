@@ -18,6 +18,7 @@ namespace NonVisuals.Radios
     using Helpers;
     using DCS_BIOS.Serialized;
     using DCS_BIOS.ControlLocator;
+    using DCS_BIOS.misc;
 
 
 
@@ -56,13 +57,17 @@ namespace NonVisuals.Radios
         *  Freq. Selector Light Switch        
         */
         private readonly object _lockHFRadioPresetDialObject1 = new();
-        private DCSBIOSOutput _hfRadioOffDcsbiosOutput;
+        private DCSBIOSOutput _hfOffDcsbiosOutput;
+        private DCSBIOSCommand _hfOffCommand;
         private DCSBIOSOutput _hfChannelAPresetOutput;
+        private DCSBIOSCommand _hfChannelACommand;
         private DCSBIOSOutput _hfChannelBPresetOutput;
+        private DCSBIOSCommand _hfChannelBCommand;
         private DCSBIOSOutput _hfChannelCPresetOutput;
+        private DCSBIOSCommand _hfChannelCCommand;
         private DCSBIOSOutput _hfChannelDPresetOutput;
-        private DCSBIOSOutput _hfOffOutput;
-        private volatile uint _hfRadioOffCockpitButton = 1;
+        private DCSBIOSCommand _hfChannelDCommand;
+        private volatile uint _hfOffCockpitButton = 1;
         private volatile uint _hfChannelACockpitButton;
         private volatile uint _hfChannelBCockpitButton;
         private volatile uint _hfChannelCCockpitButton;
@@ -70,18 +75,21 @@ namespace NonVisuals.Radios
         private readonly ClickSkipper _hfChannelPresetDialSkipper = new(2);
         private const string HF_RADIO_LIGHT_SWITCH_COMMAND = "RCTRL_DIM TOGGLE\n";
         private readonly object _lockHFRadioModeDialObject1 = new();
-        private volatile uint _hfRadioModeCockpitDialPosition = 1;
-        private DCSBIOSOutput _hfRadioModeDialPresetOutput;
-        private readonly ClickSkipper _hfRadioModePresetDialSkipper = new(2);
+        private volatile uint _hfModeCockpitDialPosition = 1;
+        private DCSBIOSOutput _hfModeDialPresetOutput;
+        private DCSBIOSCommand _hfModeCommand;
+        private readonly ClickSkipper _hfModePresetDialSkipper = new(2);
 
         /* 
-                *  COM2 Large IFF Circuit D
-                *  COM2 Small IFF Circuit B
-                *  COM2 ACT/STBY IFF Destruction
-                */
+        *  COM2 Large IFF Circuit D
+        *  COM2 Small IFF Circuit B
+        *  COM2 ACT/STBY IFF Destruction
+        */
         private readonly object _lockIFFDialObject1 = new();
         private DCSBIOSOutput _iffBiffDcsbiosOutputDial;
+        private DCSBIOSCommand _iffBDialCommand;
         private DCSBIOSOutput _iffDiffDcsbiosOutputDial;
+        private DCSBIOSCommand _iffDDialCommand;
         private volatile uint _iffBiffCockpitDialPos = 1;
         private volatile uint _iffDiffCockpitDialPos;
         private readonly ClickSkipper _iffBiffDialSkipper = new(2);
@@ -121,16 +129,15 @@ namespace NonVisuals.Radios
             CreateRadioKnobs();
 
             // COM1
-            _hfRadioOffDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RCTRL_OFF");
-            _hfChannelAPresetOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RCTRL_A");
-            _hfChannelBPresetOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RCTRL_B");
-            _hfChannelCPresetOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RCTRL_C");
-            _hfChannelDPresetOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RCTRL_D");
-            _hfRadioModeDialPresetOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RCTRL_T_MODE");
-            _hfOffOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RCTRL_OFF");
+            (_hfOffCommand ,_hfOffDcsbiosOutput) = DCSBIOSControlLocator.GetUIntCommandAndOutput("RCTRL_OFF");
+            (_hfChannelACommand, _hfChannelAPresetOutput) = DCSBIOSControlLocator.GetUIntCommandAndOutput("RCTRL_A");
+            (_hfChannelBCommand, _hfChannelBPresetOutput) = DCSBIOSControlLocator.GetUIntCommandAndOutput("RCTRL_B");
+            (_hfChannelCCommand, _hfChannelCPresetOutput) = DCSBIOSControlLocator.GetUIntCommandAndOutput("RCTRL_C");
+            (_hfChannelDCommand, _hfChannelDPresetOutput) = DCSBIOSControlLocator.GetUIntCommandAndOutput("RCTRL_D");
+            (_hfModeCommand, _hfModeDialPresetOutput) = DCSBIOSControlLocator.GetUIntCommandAndOutput("RCTRL_T_MODE");
             // COM2
-            _iffBiffDcsbiosOutputDial = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("IFF_B");
-            _iffDiffDcsbiosOutputDial = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("IFF_D");
+            (_iffBDialCommand, _iffBiffDcsbiosOutputDial) = DCSBIOSControlLocator.GetUIntCommandAndOutput("IFF_B");
+            (_iffDDialCommand, _iffDiffDcsbiosOutputDial) = DCSBIOSControlLocator.GetUIntCommandAndOutput("IFF_D");
 
             BIOSEventHandler.AttachDataListener(this);
             StartListeningForHidPanelChanges();
@@ -150,11 +157,11 @@ namespace NonVisuals.Radios
                  */
 
                 // HF Radio Off Button
-                if (_hfRadioOffDcsbiosOutput.UIntValueHasChanged(e.Address, e.Data))
+                if (_hfOffDcsbiosOutput.UIntValueHasChanged(e.Address, e.Data))
                 {
                     lock (_lockHFRadioPresetDialObject1)
                     {
-                        _hfRadioOffCockpitButton = _hfRadioOffDcsbiosOutput.LastUIntValue;
+                        _hfOffCockpitButton = _hfOffDcsbiosOutput.LastUIntValue;
                         Interlocked.Increment(ref _doUpdatePanelLCD);
                     }
                 }
@@ -200,11 +207,11 @@ namespace NonVisuals.Radios
                 }
 
                 // HF Radio Mode
-                if (_hfRadioModeDialPresetOutput.UIntValueHasChanged(e.Address, e.Data))
+                if (_hfModeDialPresetOutput.UIntValueHasChanged(e.Address, e.Data))
                 {
                     lock (_lockHFRadioModeDialObject1)
                     {
-                        _hfRadioModeCockpitDialPosition = _hfRadioModeDialPresetOutput.LastUIntValue;
+                        _hfModeCockpitDialPosition = _hfModeDialPresetOutput.LastUIntValue;
                         Interlocked.Increment(ref _doUpdatePanelLCD);
                     }
                 }
@@ -395,7 +402,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentSpitfireLFMkIXRadioMode.HFRADIO:
                                             {
-                                                _hfRadioModePresetDialSkipper.Click(GetHFRadioModeStringCommand(true));
+                                                _hfModePresetDialSkipper.Click(GetHFRadioModeStringCommand(true));
                                                 break;
                                             }
 
@@ -420,7 +427,7 @@ namespace NonVisuals.Radios
                                         case CurrentSpitfireLFMkIXRadioMode.HFRADIO:
                                             {
                                                 // MODE
-                                                _hfRadioModePresetDialSkipper.Click(GetHFRadioModeStringCommand(false));
+                                                _hfModePresetDialSkipper.Click(GetHFRadioModeStringCommand(false));
                                                 break;
                                             }
 
@@ -478,7 +485,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentSpitfireLFMkIXRadioMode.HFRADIO:
                                             {
-                                                _hfRadioModePresetDialSkipper.Click(GetHFRadioModeStringCommand(true));
+                                                _hfModePresetDialSkipper.Click(GetHFRadioModeStringCommand(true));
                                                 break;
                                             }
 
@@ -497,7 +504,7 @@ namespace NonVisuals.Radios
                                     {
                                         case CurrentSpitfireLFMkIXRadioMode.HFRADIO:
                                             {
-                                                _hfRadioModePresetDialSkipper.Click(GetHFRadioModeStringCommand(false));
+                                                _hfModePresetDialSkipper.Click(GetHFRadioModeStringCommand(false));
                                                 break;
                                             }
 
@@ -586,7 +593,7 @@ namespace NonVisuals.Radios
                                 uint channel = 0;
                                 lock (_lockHFRadioPresetDialObject1)
                                 {
-                                    if (_hfRadioOffCockpitButton == 1)
+                                    if (_hfOffCockpitButton == 1)
                                     {
                                         channel = 0;
                                     }
@@ -608,7 +615,7 @@ namespace NonVisuals.Radios
                                     }
                                 }
 
-                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, _hfRadioModeCockpitDialPosition, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, _hfModeCockpitDialPosition, PZ69LCDPosition.UPPER_ACTIVE_LEFT);
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, channel, PZ69LCDPosition.UPPER_STBY_RIGHT);
                                 break;
                             }
@@ -646,7 +653,7 @@ namespace NonVisuals.Radios
                                 uint channel = 0;
                                 lock (_lockHFRadioPresetDialObject1)
                                 {
-                                    if (_hfRadioOffCockpitButton == 1)
+                                    if (_hfOffCockpitButton == 1)
                                     {
                                         channel = 0;
                                     }
@@ -668,7 +675,7 @@ namespace NonVisuals.Radios
                                     }
                                 }
 
-                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, _hfRadioModeCockpitDialPosition, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
+                                SetPZ69DisplayBytesUnsignedInteger(ref bytes, _hfModeCockpitDialPosition, PZ69LCDPosition.LOWER_ACTIVE_LEFT);
                                 SetPZ69DisplayBytesUnsignedInteger(ref bytes, channel, PZ69LCDPosition.LOWER_STBY_RIGHT);
                                 break;
                             }
@@ -754,47 +761,47 @@ namespace NonVisuals.Radios
             {
                 if (moveUp)
                 {
-                    if ((_hfRadioOffCockpitButton == 1 || _hfRadioOffCockpitButton == 0) && _hfChannelACockpitButton == 0 && _hfChannelBCockpitButton == 0
+                    if ((_hfOffCockpitButton == 1 || _hfOffCockpitButton == 0) && _hfChannelACockpitButton == 0 && _hfChannelBCockpitButton == 0
                         && _hfChannelCCockpitButton == 0 && _hfChannelDCockpitButton == 0)
                     {
-                        return _hfChannelAPresetOutput.GetIncCommand();
+                        return _hfChannelACommand.GetIncCommand();
                     }
 
                     if (_hfChannelACockpitButton == 1)
                     {
-                        return _hfChannelBPresetOutput.GetIncCommand();
+                        return _hfChannelBCommand.GetIncCommand();
                     }
 
                     if (_hfChannelBCockpitButton == 1)
                     {
-                        return _hfChannelCPresetOutput.GetIncCommand();
+                        return _hfChannelCCommand.GetIncCommand();
                     }
 
                     if (_hfChannelCCockpitButton == 1)
                     {
-                        return _hfChannelDPresetOutput.GetIncCommand();
+                        return _hfChannelDCommand.GetIncCommand();
                     }
                 }
                 else
                 {
                     if (_hfChannelDCockpitButton == 1)
                     {
-                        return _hfChannelCPresetOutput.GetIncCommand();
+                        return _hfChannelCCommand.GetIncCommand();
                     }
 
                     if (_hfChannelCCockpitButton == 1)
                     {
-                        return _hfChannelBPresetOutput.GetIncCommand();
+                        return _hfChannelBCommand.GetIncCommand();
                     }
 
                     if (_hfChannelBCockpitButton == 1)
                     {
-                        return _hfChannelAPresetOutput.GetIncCommand();
+                        return _hfChannelACommand.GetIncCommand();
                     }
 
                     if (_hfChannelACockpitButton == 1)
                     {
-                        return _hfOffOutput.GetIncCommand();
+                        return _hfOffCommand.GetIncCommand();
                     }
                 }
             }
@@ -805,7 +812,7 @@ namespace NonVisuals.Radios
         {
             lock (_lockHFRadioModeDialObject1)
             {
-                return _hfRadioModeDialPresetOutput.GetSetStateCommand(moveUp ? _hfRadioModeCockpitDialPosition + 1 : _hfRadioModeCockpitDialPosition - 1);
+                return _hfModeCommand.GetSetStateCommand(moveUp ? _hfModeCockpitDialPosition + 1 : _hfModeCockpitDialPosition - 1);
             }
         }
 

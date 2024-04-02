@@ -51,11 +51,16 @@ namespace NonVisuals.Radios
         */
         private readonly object _lockVHFPresetDialObject1 = new();
         private DCSBIOSOutput _vhfOffOutput;
+        private DCSBIOSCommand _vhfOffCommand;
         private DCSBIOSOutput _vhfChannelAPresetOutput;
+        private DCSBIOSCommand _vhfChannelACommand;
         private DCSBIOSOutput _vhfChannelBPresetOutput;
+        private DCSBIOSCommand _vhfChannelBCommand;
         private DCSBIOSOutput _vhfChannelCPresetOutput;
+        private DCSBIOSCommand _vhfChannelCCommand;
         private DCSBIOSOutput _vhfChannelDPresetOutput;
-        private DCSBIOSOutput _vhfVolumeOutput;
+        private DCSBIOSCommand _vhfChannelDCommand;
+        private DCSBIOSCommand _vhfVolumeCommand;
         private volatile uint _vhfOffCockpitButton = 1;
         private volatile uint _vhfChannelACockpitButton;
         private volatile uint _vhfChannelBCockpitButton;
@@ -66,6 +71,7 @@ namespace NonVisuals.Radios
         private readonly object _lockVHFRadioModeDialObject1 = new();
         private volatile uint _vhfModeCockpitDialPosition = 1;
         private DCSBIOSOutput _vhfModeDialPresetOutput;
+        private DCSBIOSCommand _vhfModeDialCommand;
         private readonly ClickSkipper _vhfModePresetDialSkipper = new(2);
 
         /*
@@ -76,7 +82,9 @@ namespace NonVisuals.Radios
         private readonly object _lockLFRadioFrequencyDialObject1 = new();
         private readonly object _lockLFRadioVolumeDialObject1 = new();
         private DCSBIOSOutput _lfRadioFrequencyDcsbiosOutput;
+        private DCSBIOSCommand _lfFrequencyCommand;
         private DCSBIOSOutput _lfRadioVolumeDcsbiosOutput;
+        private DCSBIOSCommand _lfVolumeCommand;
         private volatile uint _lfRadioFrequencyDCSBIOSValue = 1;
         private volatile uint _lfRadioVolumeDCSBIOSValue;
         private volatile uint _lfRadioFrequencyCockpitValue = 1;
@@ -117,17 +125,17 @@ namespace NonVisuals.Radios
             CreateRadioKnobs();
 
             // VHF
-            _vhfOffOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RCTRL_OFF");
-            _vhfChannelAPresetOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RCTRL_A");
-            _vhfChannelBPresetOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RCTRL_B");
-            _vhfChannelCPresetOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RCTRL_C");
-            _vhfChannelDPresetOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RCTRL_D");
-            _vhfModeDialPresetOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RCTRL_T_MODE");
-            _vhfVolumeOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("RCTRL_VOL");
+            (_vhfOffCommand, _vhfOffOutput) = DCSBIOSControlLocator.GetUIntCommandAndOutput("RCTRL_OFF");
+            (_vhfChannelACommand, _vhfChannelAPresetOutput) = DCSBIOSControlLocator.GetUIntCommandAndOutput("RCTRL_A");
+            (_vhfChannelBCommand, _vhfChannelBPresetOutput) = DCSBIOSControlLocator.GetUIntCommandAndOutput("RCTRL_B");
+            (_vhfChannelCCommand, _vhfChannelCPresetOutput) = DCSBIOSControlLocator.GetUIntCommandAndOutput("RCTRL_C");
+            (_vhfChannelDCommand, _vhfChannelDPresetOutput) = DCSBIOSControlLocator.GetUIntCommandAndOutput("RCTRL_D");
+            (_vhfModeDialCommand, _vhfModeDialPresetOutput) = DCSBIOSControlLocator.GetUIntCommandAndOutput("RCTRL_T_MODE");
+            _vhfVolumeCommand = DCSBIOSControlLocator.GetCommand("RCTRL_VOL");
 
             // LF DETROLA
-            _lfRadioFrequencyDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("DETROLA_FREQU_SEL");
-            _lfRadioVolumeDcsbiosOutput = DCSBIOSControlLocator.GetUIntDCSBIOSOutput("DETROLA_VOL");
+            (_lfFrequencyCommand, _lfRadioFrequencyDcsbiosOutput) = DCSBIOSControlLocator.GetUIntCommandAndOutput("DETROLA_FREQU_SEL");
+            (_lfVolumeCommand, _lfRadioVolumeDcsbiosOutput) = DCSBIOSControlLocator.GetUIntCommandAndOutput("DETROLA_VOL");
 
             BIOSEventHandler.AttachDataListener(this);
             StartListeningForHidPanelChanges();
@@ -455,7 +463,7 @@ namespace NonVisuals.Radios
                                                 if (_upperButtonPressed)
                                                 {
                                                     _upperButtonPressedAndDialRotated = true;
-                                                    DCSBIOS.Send(_vhfVolumeOutput.GetVariableDefaultCommand(true));
+                                                    DCSBIOS.Send(_vhfVolumeCommand.GetVariableDefaultCommand(true));
                                                 }
                                                 else
                                                 {
@@ -481,7 +489,7 @@ namespace NonVisuals.Radios
                                                 if (_upperButtonPressed)
                                                 {
                                                     _upperButtonPressedAndDialRotated = true;
-                                                    DCSBIOS.Send(_vhfVolumeOutput.GetVariableDefaultCommand(false));
+                                                    DCSBIOS.Send(_vhfVolumeCommand.GetVariableDefaultCommand(false));
                                                 }
                                                 else
                                                 {
@@ -543,7 +551,7 @@ namespace NonVisuals.Radios
                                                 if (_lowerButtonPressed)
                                                 {
                                                     _lowerButtonPressedAndDialRotated = true;
-                                                    DCSBIOS.Send(_vhfVolumeOutput.GetVariableDefaultCommand(true));
+                                                    DCSBIOS.Send(_vhfVolumeCommand.GetVariableDefaultCommand(true));
                                                 }
                                                 else 
                                                 {
@@ -569,7 +577,7 @@ namespace NonVisuals.Radios
                                                 if (_lowerButtonPressed)
                                                 {
                                                     _lowerButtonPressedAndDialRotated = true;
-                                                    DCSBIOS.Send(_vhfVolumeOutput.GetVariableDefaultCommand(false));
+                                                    DCSBIOS.Send(_vhfVolumeCommand.GetVariableDefaultCommand(false));
                                                 }
                                                 else
                                                 {
@@ -801,44 +809,44 @@ namespace NonVisuals.Radios
                     if ((_vhfOffCockpitButton == 1 || _vhfOffCockpitButton == 0) && _vhfChannelACockpitButton == 0 && _vhfChannelBCockpitButton == 0
                         && _vhfChannelCCockpitButton == 0 && _vhfChannelDCockpitButton == 0)
                     {
-                        return _vhfChannelAPresetOutput.GetIncCommand();
+                        return _vhfChannelACommand.GetIncCommand();
                     }
 
                     if (_vhfChannelACockpitButton == 1)
                     {
-                        return _vhfChannelBPresetOutput.GetIncCommand();
+                        return _vhfChannelBCommand.GetIncCommand();
                     }
 
                     if (_vhfChannelBCockpitButton == 1)
                     {
-                        return _vhfChannelCPresetOutput.GetIncCommand();
+                        return _vhfChannelCCommand.GetIncCommand();
                     }
 
                     if (_vhfChannelCCockpitButton == 1)
                     {
-                        return _vhfChannelDPresetOutput.GetIncCommand();
+                        return _vhfChannelDCommand.GetIncCommand();
                     }
                 }
                 else
                 {
                     if (_vhfChannelDCockpitButton == 1)
                     {
-                        return _vhfChannelCPresetOutput.GetIncCommand();
+                        return _vhfChannelCCommand.GetIncCommand();
                     }
 
                     if (_vhfChannelCCockpitButton == 1)
                     {
-                        return _vhfChannelBPresetOutput.GetIncCommand();
+                        return _vhfChannelBCommand.GetIncCommand();
                     }
 
                     if (_vhfChannelBCockpitButton == 1)
                     {
-                        return _vhfChannelAPresetOutput.GetIncCommand();
+                        return _vhfChannelACommand.GetIncCommand();
                     }
 
                     if (_vhfChannelACockpitButton == 1)
                     {
-                        return _vhfOffOutput.GetIncCommand();
+                        return _vhfOffCommand.GetIncCommand();
                     }
                 }
             }
@@ -851,9 +859,9 @@ namespace NonVisuals.Radios
             {
                 if (moveUp)
                 {
-                    return _vhfModeDialPresetOutput.GetSetStateCommand(_vhfModeCockpitDialPosition + 1);
+                    return _vhfModeDialCommand.GetSetStateCommand(_vhfModeCockpitDialPosition + 1);
                 }
-                return _vhfModeDialPresetOutput.GetSetStateCommand(_vhfModeCockpitDialPosition - 1);
+                return _vhfModeDialCommand.GetSetStateCommand(_vhfModeCockpitDialPosition - 1);
             }
         }
 
@@ -866,11 +874,11 @@ namespace NonVisuals.Radios
                 {
                     
                     newValue = _lfRadioFrequencyDCSBIOSValue + changeValue > 0xFFFF ? 0xFFFF : _lfRadioFrequencyDCSBIOSValue + changeValue;
-                    return _lfRadioFrequencyDcsbiosOutput.GetSetStateCommand(newValue);
+                    return _lfFrequencyCommand.GetSetStateCommand(newValue);
                 }
 
                 newValue = _lfRadioFrequencyDCSBIOSValue < changeValue ? 0 : _lfRadioFrequencyDCSBIOSValue - changeValue;
-                return _lfRadioFrequencyDcsbiosOutput.GetSetStateCommand(newValue);
+                return _lfFrequencyCommand.GetSetStateCommand(newValue);
             }
         }
 
@@ -882,11 +890,11 @@ namespace NonVisuals.Radios
                 if (moveUp)
                 {
                     newValue = _lfRadioVolumeDCSBIOSValue + changeValue > 0xFFFF ? 0xFFFF : _lfRadioVolumeDCSBIOSValue + changeValue;
-                    return _lfRadioVolumeDcsbiosOutput.GetSetStateCommand(newValue);
+                    return _lfVolumeCommand.GetSetStateCommand(newValue);
                 }
 
                 newValue = _lfRadioVolumeDCSBIOSValue < changeValue ? 0 : _lfRadioVolumeDCSBIOSValue - changeValue;
-                return _lfRadioVolumeDcsbiosOutput.GetSetStateCommand(newValue);
+                return _lfVolumeCommand.GetSetStateCommand(newValue);
             }
         }
 
