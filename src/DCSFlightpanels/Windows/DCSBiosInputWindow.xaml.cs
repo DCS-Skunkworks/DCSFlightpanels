@@ -24,17 +24,6 @@ namespace DCSFlightpanels.Windows
         private Popup _popupSearch;
         private DataGrid _dataGridValues;
 
-        /*public DCSBiosInputWindow()
-        {
-            InitializeComponent();
-            DCSBIOSControlLocator.LoadControls();
-            _dcsbiosControls = DCSBIOSControlLocator.GetInputControls();
-            foreach (var dcsbiosControl in _dcsbiosControls)
-            {
-                Debug.Print(dcsbiosControl.identifier);
-            }
-        }*/
-
         public DCSBiosInputWindow(string description)
         {
             InitializeComponent();
