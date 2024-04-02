@@ -1,5 +1,4 @@
-﻿using System;
-using Tests.Common;
+﻿using Tests.Common;
 
 namespace DCS_BIOS.Tests.Serialization.Common {
     internal class RepositorySerialized : RepositorySerializedBase
