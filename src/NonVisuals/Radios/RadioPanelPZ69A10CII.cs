@@ -1,4 +1,5 @@
-﻿using NonVisuals.BindingClasses.BIP;
+﻿using DCS_BIOS.misc;
+using NonVisuals.BindingClasses.BIP;
 
 namespace NonVisuals.Radios
 {
@@ -1018,7 +1019,7 @@ namespace NonVisuals.Radios
                                 if (_arc210VhfCockpitFreq5DialPos < desiredPositionDial5)
                                 {
                                     dial5OkTime = DateTime.Now.Ticks;
-                                    str = ARC210_VHF_FREQ_5DIAL_COMMAND + DCSBIOS_INCREASE_COMMAND;
+                                    str = ARC210_VHF_FREQ_5DIAL_COMMAND + DCSBIOSCommand.DCSBIOS_INCREMENT;
                                     DCSBIOS.Send(str);
                                     dial5SendCount++;
                                     Interlocked.Exchange(ref _arc210VhfDial5WaitingForFeedback, 1);
@@ -1026,7 +1027,7 @@ namespace NonVisuals.Radios
                                 else if (_arc210VhfCockpitFreq5DialPos > desiredPositionDial5)
                                 {
                                     dial5OkTime = DateTime.Now.Ticks;
-                                    str = ARC210_VHF_FREQ_5DIAL_COMMAND + DCSBIOS_DECREASE_COMMAND;
+                                    str = ARC210_VHF_FREQ_5DIAL_COMMAND + DCSBIOSCommand.DCSBIOS_DECREMENT;
                                     DCSBIOS.Send(str);
                                     dial5SendCount++;
                                     Interlocked.Exchange(ref _arc210VhfDial5WaitingForFeedback, 1);
@@ -1289,14 +1290,14 @@ namespace NonVisuals.Radios
 
                                 if (_uhfCockpitFreq1DialPos < desiredPosition1)
                                 {
-                                    const string str = UHF_FREQ_1DIAL_COMMAND + DCSBIOS_INCREASE_COMMAND;
+                                    const string str = UHF_FREQ_1DIAL_COMMAND + DCSBIOSCommand.DCSBIOS_INCREMENT;
                                     DCSBIOS.Send(str);
                                     dial1SendCount++;
                                     Interlocked.Exchange(ref _uhfDial1WaitingForFeedback, 1);
                                 }
                                 else if (_uhfCockpitFreq1DialPos > desiredPosition1)
                                 {
-                                    const string str = UHF_FREQ_1DIAL_COMMAND + DCSBIOS_DECREASE_COMMAND;
+                                    const string str = UHF_FREQ_1DIAL_COMMAND + DCSBIOSCommand.DCSBIOS_DECREMENT;
                                     DCSBIOS.Send(str);
                                     dial1SendCount++;
                                     Interlocked.Exchange(ref _uhfDial1WaitingForFeedback, 1);
@@ -1321,14 +1322,14 @@ namespace NonVisuals.Radios
 
                                 if (_uhfCockpitFreq2DialPos < desiredPosition2)
                                 {
-                                    const string str = UHF_FREQ_2DIAL_COMMAND + DCSBIOS_INCREASE_COMMAND;
+                                    const string str = UHF_FREQ_2DIAL_COMMAND + DCSBIOSCommand.DCSBIOS_INCREMENT;
                                     DCSBIOS.Send(str);
                                     dial2SendCount++;
                                     Interlocked.Exchange(ref _uhfDial2WaitingForFeedback, 1);
                                 }
                                 else if (_uhfCockpitFreq2DialPos > desiredPosition2)
                                 {
-                                    const string str = UHF_FREQ_2DIAL_COMMAND + DCSBIOS_DECREASE_COMMAND;
+                                    const string str = UHF_FREQ_2DIAL_COMMAND + DCSBIOSCommand.DCSBIOS_DECREMENT;
                                     DCSBIOS.Send(str);
                                     dial2SendCount++;
                                     Interlocked.Exchange(ref _uhfDial2WaitingForFeedback, 1);
@@ -1353,14 +1354,14 @@ namespace NonVisuals.Radios
 
                                 if (_uhfCockpitFreq3DialPos < desiredPosition3)
                                 {
-                                    const string str = UHF_FREQ_3DIAL_COMMAND + DCSBIOS_INCREASE_COMMAND;
+                                    const string str = UHF_FREQ_3DIAL_COMMAND + DCSBIOSCommand.DCSBIOS_INCREMENT;
                                     DCSBIOS.Send(str);
                                     dial3SendCount++;
                                     Interlocked.Exchange(ref _uhfDial3WaitingForFeedback, 1);
                                 }
                                 else if (_uhfCockpitFreq3DialPos > desiredPosition3)
                                 {
-                                    const string str = UHF_FREQ_3DIAL_COMMAND + DCSBIOS_DECREASE_COMMAND;
+                                    const string str = UHF_FREQ_3DIAL_COMMAND + DCSBIOSCommand.DCSBIOS_DECREMENT;
                                     DCSBIOS.Send(str);
                                     dial3SendCount++;
                                     Interlocked.Exchange(ref _uhfDial3WaitingForFeedback, 1);
@@ -1385,14 +1386,14 @@ namespace NonVisuals.Radios
 
                                 if (_uhfCockpitFreq4DialPos < desiredPosition4)
                                 {
-                                    const string str = UHF_FREQ_4DIAL_COMMAND + DCSBIOS_INCREASE_COMMAND;
+                                    const string str = UHF_FREQ_4DIAL_COMMAND + DCSBIOSCommand.DCSBIOS_INCREMENT;
                                     DCSBIOS.Send(str);
                                     dial4SendCount++;
                                     Interlocked.Exchange(ref _uhfDial4WaitingForFeedback, 1);
                                 }
                                 else if (_uhfCockpitFreq4DialPos > desiredPosition4)
                                 {
-                                    const string str = UHF_FREQ_4DIAL_COMMAND + DCSBIOS_DECREASE_COMMAND;
+                                    const string str = UHF_FREQ_4DIAL_COMMAND + DCSBIOSCommand.DCSBIOS_DECREMENT;
                                     DCSBIOS.Send(str);
                                     dial4SendCount++;
                                     Interlocked.Exchange(ref _uhfDial4WaitingForFeedback, 1);
@@ -1417,14 +1418,14 @@ namespace NonVisuals.Radios
 
                                 if (_uhfCockpitFreq5DialPos < desiredPosition5)
                                 {
-                                    const string str = UHF_FREQ_5DIAL_COMMAND + DCSBIOS_INCREASE_COMMAND;
+                                    const string str = UHF_FREQ_5DIAL_COMMAND + DCSBIOSCommand.DCSBIOS_INCREMENT;
                                     DCSBIOS.Send(str);
                                     dial5SendCount++;
                                     Interlocked.Exchange(ref _uhfDial5WaitingForFeedback, 1);
                                 }
                                 else if (_uhfCockpitFreq5DialPos > desiredPosition5)
                                 {
-                                    const string str = UHF_FREQ_5DIAL_COMMAND + DCSBIOS_DECREASE_COMMAND;
+                                    const string str = UHF_FREQ_5DIAL_COMMAND + DCSBIOSCommand.DCSBIOS_DECREMENT;
                                     DCSBIOS.Send(str);
                                     dial5SendCount++;
                                     Interlocked.Exchange(ref _uhfDial5WaitingForFeedback, 1);
@@ -1653,7 +1654,7 @@ namespace NonVisuals.Radios
                                 if (_vhfFmCockpitFreq4DialPos < frequencyDial4)
                                 {
                                     dial4OkTime = DateTime.Now.Ticks;
-                                    const string str = VHF_FM_FREQ_4DIAL_COMMAND + DCSBIOS_INCREASE_COMMAND;
+                                    const string str = VHF_FM_FREQ_4DIAL_COMMAND + DCSBIOSCommand.DCSBIOS_INCREMENT;
                                     DCSBIOS.Send(str);
                                     dial4SendCount++;
                                     Interlocked.Exchange(ref _vhfFmDial4WaitingForFeedback, 1);
@@ -1661,7 +1662,7 @@ namespace NonVisuals.Radios
                                 else if (_vhfFmCockpitFreq4DialPos > frequencyDial4)
                                 {
                                     dial4OkTime = DateTime.Now.Ticks;
-                                    const string str = VHF_FM_FREQ_4DIAL_COMMAND + DCSBIOS_DECREASE_COMMAND;
+                                    const string str = VHF_FM_FREQ_4DIAL_COMMAND + DCSBIOSCommand.DCSBIOS_DECREMENT;
                                     DCSBIOS.Send(str);
                                     dial4SendCount++;
                                     Interlocked.Exchange(ref _vhfFmDial4WaitingForFeedback, 1);
@@ -1777,7 +1778,7 @@ namespace NonVisuals.Radios
                                 if (_ilsCockpitFreq1DialPos < position1)
                                 {
                                     dial1OkTime = DateTime.Now.Ticks;
-                                    const string str = ILS_FREQ1_DIAL_COMMAND + DCSBIOS_INCREASE_COMMAND;
+                                    const string str = ILS_FREQ1_DIAL_COMMAND + DCSBIOSCommand.DCSBIOS_INCREMENT;
                                     DCSBIOS.Send(str);
                                     dial1SendCount++;
                                     Interlocked.Exchange(ref _ilsDial1WaitingForFeedback, 1);
@@ -1785,7 +1786,7 @@ namespace NonVisuals.Radios
                                 else if (_ilsCockpitFreq1DialPos > position1)
                                 {
                                     dial1OkTime = DateTime.Now.Ticks;
-                                    const string str = ILS_FREQ1_DIAL_COMMAND + DCSBIOS_DECREASE_COMMAND;
+                                    const string str = ILS_FREQ1_DIAL_COMMAND + DCSBIOSCommand.DCSBIOS_DECREMENT;
                                     DCSBIOS.Send(str);
                                     dial1SendCount++;
                                     Interlocked.Exchange(ref _ilsDial1WaitingForFeedback, 1);
@@ -1807,7 +1808,7 @@ namespace NonVisuals.Radios
                                 if (_ilsCockpitFreq2DialPos < position2)
                                 {
                                     dial2OkTime = DateTime.Now.Ticks;
-                                    const string str = ILS_FREQ2_DIAL_COMMAND + DCSBIOS_INCREASE_COMMAND;
+                                    const string str = ILS_FREQ2_DIAL_COMMAND + DCSBIOSCommand.DCSBIOS_INCREMENT;
                                     DCSBIOS.Send(str);
                                     dial2SendCount++;
                                     Interlocked.Exchange(ref _ilsDial2WaitingForFeedback, 1);
@@ -1815,7 +1816,7 @@ namespace NonVisuals.Radios
                                 else if (_ilsCockpitFreq2DialPos > position2)
                                 {
                                     dial2OkTime = DateTime.Now.Ticks;
-                                    const string str = ILS_FREQ2_DIAL_COMMAND + DCSBIOS_DECREASE_COMMAND;
+                                    const string str = ILS_FREQ2_DIAL_COMMAND + DCSBIOSCommand.DCSBIOS_DECREMENT;
                                     DCSBIOS.Send(str);
                                     dial2SendCount++;
                                     Interlocked.Exchange(ref _ilsDial2WaitingForFeedback, 1);
@@ -1934,7 +1935,7 @@ namespace NonVisuals.Radios
                                 if (_tacanCockpitFreq1DialPos != desiredPositionDial1)
                                 {
                                     dial1OkTime = DateTime.Now.Ticks;
-                                    var str = TACAN_FREQ1_DIAL_COMMAND + (_tacanCockpitFreq1DialPos < desiredPositionDial1 ? DCSBIOS_INCREASE_COMMAND : DCSBIOS_DECREASE_COMMAND);
+                                    var str = TACAN_FREQ1_DIAL_COMMAND + (_tacanCockpitFreq1DialPos < desiredPositionDial1 ? DCSBIOSCommand.DCSBIOS_INCREMENT : DCSBIOSCommand.DCSBIOS_DECREMENT);
                                     DCSBIOS.Send(str);
                                     dial1SendCount++;
                                     Interlocked.Exchange(ref _tacanDial1WaitingForFeedback, 1);
@@ -1957,7 +1958,7 @@ namespace NonVisuals.Radios
                                 {
                                     dial2OkTime = DateTime.Now.Ticks;
 
-                                    var str = TACAN_FREQ2_DIAL_COMMAND + (_tacanCockpitFreq2DialPos < desiredPositionDial2 ? DCSBIOS_INCREASE_COMMAND : DCSBIOS_DECREASE_COMMAND);
+                                    var str = TACAN_FREQ2_DIAL_COMMAND + (_tacanCockpitFreq2DialPos < desiredPositionDial2 ? DCSBIOSCommand.DCSBIOS_INCREMENT : DCSBIOSCommand.DCSBIOS_DECREMENT);
                                     DCSBIOS.Send(str);
                                     dial2SendCount++;
                                     Interlocked.Exchange(ref _tacanDial2WaitingForFeedback, 1);
@@ -1980,7 +1981,7 @@ namespace NonVisuals.Radios
                                 {
                                     dial3OkTime = DateTime.Now.Ticks;
 
-                                    var str = TACAN_FREQ3_DIAL_COMMAND + (_tacanCockpitFreq3DialPos < desiredPositionDial3 ? DCSBIOS_INCREASE_COMMAND : DCSBIOS_DECREASE_COMMAND);
+                                    var str = TACAN_FREQ3_DIAL_COMMAND + (_tacanCockpitFreq3DialPos < desiredPositionDial3 ? DCSBIOSCommand.DCSBIOS_INCREMENT : DCSBIOSCommand.DCSBIOS_DECREMENT);
                                     DCSBIOS.Send(str);
                                     dial3SendCount++;
                                     Interlocked.Exchange(ref _tacanDial3WaitingForFeedback, 1);
@@ -4009,7 +4010,7 @@ namespace NonVisuals.Radios
             if (desiredDialPosition < 0 || desiredDialPosition > 3 || actualDialPosition > 3)
                 throw new Exception($"Unexpected value for GetCommandDirectionForARC210VhfDial1. Desired: {actualDialPosition} Actual: {actualDialPosition}");
 
-            return actualDialPosition < desiredDialPosition ? DCSBIOS_INCREASE_COMMAND : DCSBIOS_DECREASE_COMMAND;
+            return actualDialPosition < desiredDialPosition ? DCSBIOSCommand.DCSBIOS_INCREMENT : DCSBIOSCommand.DCSBIOS_DECREMENT;
         }
 
         /// <summary>
@@ -4023,7 +4024,7 @@ namespace NonVisuals.Radios
             if (desiredDialPosition < 0 || desiredDialPosition > 9 || actualDialPosition > 9)
                 throw new Exception($"Unexpected value for GetCommandDirectionForARC210VhfDial23. Desired: {actualDialPosition} Actual: {actualDialPosition}");
 
-            return actualDialPosition < desiredDialPosition ? DCSBIOS_INCREASE_COMMAND : DCSBIOS_DECREASE_COMMAND;
+            return actualDialPosition < desiredDialPosition ? DCSBIOSCommand.DCSBIOS_INCREMENT : DCSBIOSCommand.DCSBIOS_DECREMENT;
         }
 
 
@@ -4041,9 +4042,9 @@ namespace NonVisuals.Radios
             int shift = desiredDialPosition - (int)actualDialPosition;
 
             if (shift > 0)
-                return shift <= 6 ? DCSBIOS_INCREASE_COMMAND : DCSBIOS_DECREASE_COMMAND;
+                return shift <= 6 ? DCSBIOSCommand.DCSBIOS_INCREMENT : DCSBIOSCommand.DCSBIOS_DECREMENT;
             else
-                return shift < -6 ? DCSBIOS_INCREASE_COMMAND : DCSBIOS_DECREASE_COMMAND;
+                return shift < -6 ? DCSBIOSCommand.DCSBIOS_INCREMENT : DCSBIOSCommand.DCSBIOS_DECREMENT;
         }
 
         /// <summary>
@@ -4060,9 +4061,9 @@ namespace NonVisuals.Radios
             int shift = desiredDialPosition - (int)actualDialPosition;
 
             if (shift > 0)
-                return shift <= 5 ? DCSBIOS_INCREASE_COMMAND : DCSBIOS_DECREASE_COMMAND;
+                return shift <= 5 ? DCSBIOSCommand.DCSBIOS_INCREMENT : DCSBIOSCommand.DCSBIOS_DECREMENT;
             else
-                return shift <= -5 ? DCSBIOS_INCREASE_COMMAND : DCSBIOS_DECREASE_COMMAND;
+                return shift <= -5 ? DCSBIOSCommand.DCSBIOS_INCREMENT : DCSBIOSCommand.DCSBIOS_DECREMENT;
         }
 
 

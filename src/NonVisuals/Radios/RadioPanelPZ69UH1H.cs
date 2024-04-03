@@ -1292,14 +1292,14 @@ namespace NonVisuals.Radios
 
                                 if (_vhfFmCockpitFreq1DialPos < desiredFreqDial1Pos)
                                 {
-                                    const string str = VHF_FM_FREQ_1DIAL_COMMAND + DCSBIOS_INCREASE_COMMAND;
+                                    const string str = VHF_FM_FREQ_1DIAL_COMMAND + DCSBIOSCommand.DCSBIOS_INCREMENT;
                                     DCSBIOS.Send(str);
                                     dial1SendCount++;
                                     Interlocked.Exchange(ref _vhfFmDial1WaitingForFeedback, 1);
                                 }
                                 else if (_vhfFmCockpitFreq1DialPos > desiredFreqDial1Pos)
                                 {
-                                    const string str = VHF_FM_FREQ_1DIAL_COMMAND + DCSBIOS_DECREASE_COMMAND;
+                                    const string str = VHF_FM_FREQ_1DIAL_COMMAND + DCSBIOSCommand.DCSBIOS_DECREMENT;
                                     DCSBIOS.Send(str);
                                     dial1SendCount++;
                                     Interlocked.Exchange(ref _vhfFmDial1WaitingForFeedback, 1);
@@ -1323,14 +1323,14 @@ namespace NonVisuals.Radios
 
                                 if (_vhfFmCockpitFreq2DialPos < desiredFreqDial2Pos)
                                 {
-                                    const string str = VHF_FM_FREQ_2DIAL_COMMAND + DCSBIOS_INCREASE_COMMAND;
+                                    const string str = VHF_FM_FREQ_2DIAL_COMMAND + DCSBIOSCommand.DCSBIOS_INCREMENT;
                                     DCSBIOS.Send(str);
                                     dial2SendCount++;
                                     Interlocked.Exchange(ref _vhfFmDial2WaitingForFeedback, 1);
                                 }
                                 else if (_vhfFmCockpitFreq2DialPos > desiredFreqDial2Pos)
                                 {
-                                    const string str = VHF_FM_FREQ_2DIAL_COMMAND + DCSBIOS_DECREASE_COMMAND;
+                                    const string str = VHF_FM_FREQ_2DIAL_COMMAND + DCSBIOSCommand.DCSBIOS_DECREMENT;
                                     DCSBIOS.Send(str);
                                     dial2SendCount++;
                                     Interlocked.Exchange(ref _vhfFmDial2WaitingForFeedback, 1);
@@ -1354,14 +1354,14 @@ namespace NonVisuals.Radios
 
                                 if (_vhfFmCockpitFreq3DialPos < desiredFreqDial3Pos)
                                 {
-                                    const string str = VHF_FM_FREQ_3DIAL_COMMAND + DCSBIOS_INCREASE_COMMAND;
+                                    const string str = VHF_FM_FREQ_3DIAL_COMMAND + DCSBIOSCommand.DCSBIOS_INCREMENT;
                                     DCSBIOS.Send(str);
                                     dial3SendCount++;
                                     Interlocked.Exchange(ref _vhfFmDial3WaitingForFeedback, 1);
                                 }
                                 else if (_vhfFmCockpitFreq3DialPos > desiredFreqDial3Pos)
                                 {
-                                    const string str = VHF_FM_FREQ_3DIAL_COMMAND + DCSBIOS_DECREASE_COMMAND;
+                                    const string str = VHF_FM_FREQ_3DIAL_COMMAND + DCSBIOSCommand.DCSBIOS_DECREMENT;
                                     DCSBIOS.Send(str);
                                     dial3SendCount++;
                                     Interlocked.Exchange(ref _vhfFmDial3WaitingForFeedback, 1);
@@ -1385,14 +1385,14 @@ namespace NonVisuals.Radios
 
                                 if (_vhfFmCockpitFreq4DialPos < desiredFreqDial4Pos)
                                 {
-                                    const string str = VHF_FM_FREQ_4DIAL_COMMAND + DCSBIOS_INCREASE_COMMAND;
+                                    const string str = VHF_FM_FREQ_4DIAL_COMMAND + DCSBIOSCommand.DCSBIOS_INCREMENT;
                                     DCSBIOS.Send(str);
                                     dial4SendCount++;
                                     Interlocked.Exchange(ref _vhfFmDial4WaitingForFeedback, 1);
                                 }
                                 else if (_vhfFmCockpitFreq4DialPos > desiredFreqDial4Pos)
                                 {
-                                    const string str = VHF_FM_FREQ_4DIAL_COMMAND + DCSBIOS_DECREASE_COMMAND;
+                                    const string str = VHF_FM_FREQ_4DIAL_COMMAND + DCSBIOSCommand.DCSBIOS_DECREMENT;
                                     DCSBIOS.Send(str);
                                     dial4SendCount++;
                                     Interlocked.Exchange(ref _vhfFmDial4WaitingForFeedback, 1);
@@ -1504,14 +1504,14 @@ namespace NonVisuals.Radios
 
                                 if (_adfCockpitFrequencyBand < desiredFreqBandDialPos)
                                 {
-                                    const string str = ADF_FREQUENCY_BAND_COMMAND + DCSBIOS_INCREASE_COMMAND;
+                                    const string str = ADF_FREQUENCY_BAND_COMMAND + DCSBIOSCommand.DCSBIOS_INCREMENT;
                                     DCSBIOS.Send(str);
                                     freqBandDialSendCount++;
                                     Interlocked.Exchange(ref _adfFrequencyBandWaitingForFeedback, 1);
                                 }
                                 else if (_adfCockpitFrequencyBand > desiredFreqBandDialPos)
                                 {
-                                    const string str = ADF_FREQUENCY_BAND_COMMAND + DCSBIOS_DECREASE_COMMAND;
+                                    const string str = ADF_FREQUENCY_BAND_COMMAND + DCSBIOSCommand.DCSBIOS_DECREMENT;
                                     DCSBIOS.Send(str);
                                     freqBandDialSendCount++;
                                     Interlocked.Exchange(ref _adfFrequencyBandWaitingForFeedback, 1);
@@ -2822,25 +2822,25 @@ namespace NonVisuals.Radios
             if (desiredFreq > actualFreq && desiredFreq - actualFreq >= 16)
             {
                 Debug.Print($"A Returning DEC {desiredFreq}, actual = {actualFreq}");
-                return DCSBIOS_DECREASE_COMMAND;
+                return DCSBIOSCommand.DCSBIOS_DECREMENT;
             }
 
             if (desiredFreq > actualFreq && desiredFreq - actualFreq < 16)
             {
                 Debug.Print($"B Returning INC {desiredFreq}, actual = {actualFreq}");
-                return DCSBIOS_INCREASE_COMMAND;
+                return DCSBIOSCommand.DCSBIOS_INCREMENT;
             }
 
             if (desiredFreq < actualFreq && actualFreq - desiredFreq >= 16)
             {
                 Debug.Print($"C Returning INC {desiredFreq}, actual = {actualFreq}");
-                return DCSBIOS_INCREASE_COMMAND;
+                return DCSBIOSCommand.DCSBIOS_INCREMENT;
             }
 
             if (desiredFreq < actualFreq && actualFreq - desiredFreq < 16)
             {
                 Debug.Print($"D Returning DEC {desiredFreq}, actual = {actualFreq}");
-                return DCSBIOS_DECREASE_COMMAND;
+                return DCSBIOSCommand.DCSBIOS_DECREMENT;
             }
 
             throw new Exception("Should not reach this code. GetCommandDirectionForVhfCommDial1(int desiredFreq, uint actualFreq)) -> " + desiredFreq + "   " + actualFreq);
@@ -2859,22 +2859,22 @@ namespace NonVisuals.Radios
             const int breakValue = 50;
             if (desiredFreq > actualFreq && desiredFreq - actualFreq >= breakValue)
             {
-                return DCSBIOS_DECREASE_COMMAND;
+                return DCSBIOSCommand.DCSBIOS_DECREMENT;
             }
 
             if (desiredFreq > actualFreq && desiredFreq - actualFreq < breakValue)
             {
-                return DCSBIOS_INCREASE_COMMAND;
+                return DCSBIOSCommand.DCSBIOS_INCREMENT;
             }
 
             if (desiredFreq < actualFreq && actualFreq - desiredFreq >= breakValue)
             {
-                return DCSBIOS_INCREASE_COMMAND;
+                return DCSBIOSCommand.DCSBIOS_INCREMENT;
             }
 
             if (desiredFreq < actualFreq && actualFreq - desiredFreq < breakValue)
             {
-                return DCSBIOS_DECREASE_COMMAND;
+                return DCSBIOSCommand.DCSBIOS_DECREMENT;
             }
 
             throw new Exception("Should not reach this code. GetCommandDirectionForVhfCommDial2(int desiredFreq, uint actualFreq)) -> " + desiredFreq + "   " + actualFreq);
@@ -2886,22 +2886,22 @@ namespace NonVisuals.Radios
             // d19 +/-10
             if (desiredFreq > actualFreq && desiredFreq - actualFreq >= 10)
             {
-                return DCSBIOS_DECREASE_COMMAND;
+                return DCSBIOSCommand.DCSBIOS_DECREMENT;
             }
 
             if (desiredFreq > actualFreq && desiredFreq - actualFreq < 10)
             {
-                return DCSBIOS_INCREASE_COMMAND;
+                return DCSBIOSCommand.DCSBIOS_INCREMENT;
             }
 
             if (desiredFreq < actualFreq && actualFreq - desiredFreq >= 10)
             {
-                return DCSBIOS_INCREASE_COMMAND;
+                return DCSBIOSCommand.DCSBIOS_INCREMENT;
             }
 
             if (desiredFreq < actualFreq && actualFreq - desiredFreq < 10)
             {
-                return DCSBIOS_DECREASE_COMMAND;
+                return DCSBIOSCommand.DCSBIOS_DECREMENT;
             }
 
             throw new Exception("Should not reach this code. GetCommandDirectionForUhfDial1(int desiredFreq, uint actualFreq)) -> " + desiredFreq + "   " + actualFreq);
@@ -2913,22 +2913,22 @@ namespace NonVisuals.Radios
             // +/-9
             if (desiredFreq > actualFreq && desiredFreq - actualFreq >= 5)
             {
-                return DCSBIOS_DECREASE_COMMAND;
+                return DCSBIOSCommand.DCSBIOS_DECREMENT;
             }
 
             if (desiredFreq > actualFreq && desiredFreq - actualFreq < 5)
             {
-                return DCSBIOS_INCREASE_COMMAND;
+                return DCSBIOSCommand.DCSBIOS_INCREMENT;
             }
 
             if (desiredFreq < actualFreq && actualFreq - desiredFreq >= 5)
             {
-                return DCSBIOS_INCREASE_COMMAND;
+                return DCSBIOSCommand.DCSBIOS_INCREMENT;
             }
 
             if (desiredFreq < actualFreq && actualFreq - desiredFreq < 5)
             {
-                return DCSBIOS_DECREASE_COMMAND;
+                return DCSBIOSCommand.DCSBIOS_DECREMENT;
             }
 
             throw new Exception("Should not reach this code. GetCommandDirectionForUhfDial2(int desiredFreq, uint actualFreq)) -> " + desiredFreq + "   " + actualFreq);
@@ -2941,22 +2941,22 @@ namespace NonVisuals.Radios
             var breakValue = 50;
             if (desiredFreq > actualFreq && desiredFreq - actualFreq >= breakValue)
             {
-                return DCSBIOS_DECREASE_COMMAND;
+                return DCSBIOSCommand.DCSBIOS_DECREMENT;
             }
 
             if (desiredFreq > actualFreq && desiredFreq - actualFreq < breakValue)
             {
-                return DCSBIOS_INCREASE_COMMAND;
+                return DCSBIOSCommand.DCSBIOS_INCREMENT;
             }
 
             if (desiredFreq < actualFreq && actualFreq - desiredFreq >= breakValue)
             {
-                return DCSBIOS_INCREASE_COMMAND;
+                return DCSBIOSCommand.DCSBIOS_INCREMENT;
             }
 
             if (desiredFreq < actualFreq && actualFreq - desiredFreq < breakValue)
             {
-                return DCSBIOS_DECREASE_COMMAND;
+                return DCSBIOSCommand.DCSBIOS_DECREMENT;
             }
 
             throw new Exception("Should not reach this code. GetCommandDirectionForUhfDial3(int desiredFreq, uint actualFreq)) -> " + desiredFreq + "   " + actualFreq);
@@ -2968,22 +2968,22 @@ namespace NonVisuals.Radios
             // Large dial 107-126  [step of 1]
             if (desiredFreq > actualFreq && desiredFreq - actualFreq >= 10)
             {
-                return DCSBIOS_DECREASE_COMMAND;
+                return DCSBIOSCommand.DCSBIOS_DECREMENT;
             }
 
             if (desiredFreq > actualFreq && desiredFreq - actualFreq < 10)
             {
-                return DCSBIOS_INCREASE_COMMAND;
+                return DCSBIOSCommand.DCSBIOS_INCREMENT;
             }
 
             if (desiredFreq < actualFreq && actualFreq - desiredFreq >= 10)
             {
-                return DCSBIOS_INCREASE_COMMAND;
+                return DCSBIOSCommand.DCSBIOS_INCREMENT;
             }
 
             if (desiredFreq < actualFreq && actualFreq - desiredFreq < 10)
             {
-                return DCSBIOS_DECREASE_COMMAND;
+                return DCSBIOSCommand.DCSBIOS_DECREMENT;
             }
 
             throw new Exception("Should not reach this code. GetCommandDirectionForVhfNavDial1(int desiredFreq, uint actualFreq)) -> " + desiredFreq + "   " + actualFreq);
