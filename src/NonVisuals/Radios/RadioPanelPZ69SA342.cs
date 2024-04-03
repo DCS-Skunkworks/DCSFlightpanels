@@ -146,7 +146,7 @@ namespace NonVisuals.Radios
         private readonly ClickSkipper _uhfSmallFrequencySkipper = new(2);
 
         /*ADF SA342*/
-        /*Large dial Counter Clockwise 100s increase*/
+        /*Large dial Counterclockwise 100s increase*/
         /*Large dial Clockwise 10s increase*/
         /*Small dial 1s and decimals*/
         private readonly string _adfSwitchUnit = "ADF1_ADF2_SELECT";
