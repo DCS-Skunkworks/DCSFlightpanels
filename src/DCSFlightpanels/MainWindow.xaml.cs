@@ -39,7 +39,6 @@
     using NonVisuals.HID;
     using DCS_BIOS.Serialized;
     using DCS_BIOS.ControlLocator;
-    using System.Windows.Threading;
 
     public partial class MainWindow : IGamingPanelListener, IDcsBiosConnectionListener, ISettingsModifiedListener, IProfileHandlerListener, IDisposable, IHardwareConflictResolver, IPanelEventListener, IForwardPanelEventListener, IDCSBIOSStringListener
     {

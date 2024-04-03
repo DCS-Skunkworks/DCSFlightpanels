@@ -33,7 +33,7 @@
         private Exception _lastException;
         private string _randomBindingHash = string.Empty;
         private uint _count;
-        private bool _synchedOnce;
+        private bool _hasSyncOnce;
         protected bool Closed { get; set; }
         protected bool FirstReportHasBeenRead = false;
         protected readonly HIDSkeleton HIDSkeletonBase;
@@ -133,10 +133,10 @@
                 if (_updateCounterDCSBIOSOutput != null && _updateCounterDCSBIOSOutput.Address == address)
                 {
                     var newCount = _updateCounterDCSBIOSOutput.GetUIntValue(data);
-                    if (!_synchedOnce)
+                    if (!_hasSyncOnce)
                     {
                         _count = newCount;
-                        _synchedOnce = true;
+                        _hasSyncOnce = true;
                         return;
                     }
 

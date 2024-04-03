@@ -719,7 +719,7 @@ namespace NonVisuals.Radios
                 _shutdownR863Thread = true;
                 Thread.Sleep(Constants.ThreadShutDownWaitTime);
                 _shutdownR863Thread = false;
-                _r863ManualSyncThread = new Thread(R863ManualSynchThreadMethod);
+                _r863ManualSyncThread = new Thread(R863ManualSyncThreadMethod);
                 _r863ManualSyncThread.Start();
             }
             catch (Exception ex)
@@ -729,7 +729,7 @@ namespace NonVisuals.Radios
         }
 
         private volatile bool _shutdownR863Thread;
-        private void R863ManualSynchThreadMethod()
+        private void R863ManualSyncThreadMethod()
         {
             try
             {
@@ -930,7 +930,7 @@ namespace NonVisuals.Radios
                                 Thread.Sleep(5000);
                             }
 
-                            Thread.Sleep(SynchSleepTime); // Should be enough to get an update cycle from DCS-BIOS
+                            Thread.Sleep(SyncSleepTime); // Should be enough to get an update cycle from DCS-BIOS
                         }
                         while ((IsTooShort(dial1OkTime) || IsTooShort(dial2OkTime) || IsTooShort(dial3OkTime) || IsTooShort(dial4OkTime)) && !_shutdownR863Thread);
                     }
@@ -986,7 +986,7 @@ namespace NonVisuals.Radios
                 _shutdownYaDRO1AThread = true;
                 Thread.Sleep(Constants.ThreadShutDownWaitTime);
                 _shutdownYaDRO1AThread = false;
-                _yadro1ASyncThread = new Thread(YaDRO1ASynchThreadMethod);
+                _yadro1ASyncThread = new Thread(YaDRO1ASyncThreadMethod);
                 _yadro1ASyncThread.Start();
             }
             catch (Exception ex)
@@ -995,7 +995,7 @@ namespace NonVisuals.Radios
             }
         }
 
-        private void YaDRO1ASynchThreadMethod()
+        private void YaDRO1ASyncThreadMethod()
         {
             try
             {
@@ -1154,7 +1154,7 @@ namespace NonVisuals.Radios
                                 dial4OkTime = DateTime.Now.Ticks;
                             }
 
-                            Thread.Sleep(SynchSleepTime); // Should be enough to get an update cycle from DCS-BIOS
+                            Thread.Sleep(SyncSleepTime); // Should be enough to get an update cycle from DCS-BIOS
                         }
                         while ((IsTooShort(dial1OkTime) || IsTooShort(dial2OkTime) || IsTooShort(dial3OkTime) || IsTooShort(dial4OkTime)) && !_shutdownYaDRO1AThread);
 

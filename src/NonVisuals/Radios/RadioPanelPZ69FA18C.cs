@@ -316,12 +316,12 @@ namespace NonVisuals.Radios
             _shutdownILSThread = true;
             Thread.Sleep(Constants.ThreadShutDownWaitTime);
             _shutdownILSThread = false;
-            _ilsSyncThread = new Thread(() => ILSSynchThreadMethod(_ilsChannelStandby));
+            _ilsSyncThread = new Thread(() => ILSSyncThreadMethod(_ilsChannelStandby));
             _ilsSyncThread.Start();
         }
 
         private volatile bool _shutdownILSThread;
-        private void ILSSynchThreadMethod(uint standbyPosition)
+        private void ILSSyncThreadMethod(uint standbyPosition)
         {
             try
             {
@@ -377,7 +377,7 @@ namespace NonVisuals.Radios
                             Thread.Sleep(5000);
                         }
 
-                        Thread.Sleep(SynchSleepTime); // Should be enough to get an update cycle from DCS-BIOS
+                        Thread.Sleep(SyncSleepTime); // Should be enough to get an update cycle from DCS-BIOS
                     }
                     while (IsTooShort(dialOkTime) && !_shutdownILSThread);
 
@@ -1142,7 +1142,7 @@ namespace NonVisuals.Radios
                                 {
                                     if (!_upperButtonPressedAndDialRotated)
                                     {
-                                        // Do not synch if user has pressed the button to configure the radio
+                                        // Do not sync if user has pressed the button to configure the radio
                                         // Do when user releases button
                                         SendFrequencyToDCSBIOS(RadioPanelPZ69KnobsFA18C.UPPER_FREQ_SWITCH);
                                     }
@@ -1170,7 +1170,7 @@ namespace NonVisuals.Radios
                                 {
                                     if (!_lowerButtonPressedAndDialRotated)
                                     {
-                                        // Do not synch if user has pressed the button to configure the radio
+                                        // Do not sync if user has pressed the button to configure the radio
                                         // Do when user releases button
                                         SendFrequencyToDCSBIOS(RadioPanelPZ69KnobsFA18C.LOWER_FREQ_SWITCH);
                                     }
