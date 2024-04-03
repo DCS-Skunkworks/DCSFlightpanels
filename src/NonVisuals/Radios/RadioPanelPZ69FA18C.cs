@@ -2,6 +2,7 @@
 //  added by Capt Zeen
 //
 
+using DCS_BIOS.misc;
 using NonVisuals.BindingClasses.BIP;
 
 namespace NonVisuals.Radios
@@ -347,7 +348,7 @@ namespace NonVisuals.Radios
                                 if (_ilsCockpitChannel < standbyPosition)
                                 {
                                     dialOkTime = DateTime.Now.Ticks;
-                                    const string str = ILS_CHANNEL_COMMAND + DCSBIOS_INCREASE_COMMAND;
+                                    const string str = ILS_CHANNEL_COMMAND + DCSBIOSCommand.DCSBIOS_INCREMENT;
                                     DCSBIOS.Send(str);
                                     dialSendCount++;
                                     Interlocked.Exchange(ref _ilsDialWaitingForFeedback, 1);
@@ -355,7 +356,7 @@ namespace NonVisuals.Radios
                                 else if (_ilsCockpitChannel > standbyPosition)
                                 {
                                     dialOkTime = DateTime.Now.Ticks;
-                                    const string str = ILS_CHANNEL_COMMAND + DCSBIOS_DECREASE_COMMAND;
+                                    const string str = ILS_CHANNEL_COMMAND + DCSBIOSCommand.DCSBIOS_DECREMENT;
                                     DCSBIOS.Send(str);
                                     dialSendCount++;
                                     Interlocked.Exchange(ref _ilsDialWaitingForFeedback, 1);

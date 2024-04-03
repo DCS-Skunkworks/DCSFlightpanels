@@ -1,4 +1,5 @@
-﻿using NonVisuals.BindingClasses.BIP;
+﻿using DCS_BIOS.misc;
+using NonVisuals.BindingClasses.BIP;
 
 namespace NonVisuals.Radios
 {
@@ -538,14 +539,14 @@ namespace NonVisuals.Radios
 
                                 if (_uhfCockpitFreq1DialPos < desiredPosition1)
                                 {
-                                    const string str = UHF_FREQ_1DIAL_COMMAND + DCSBIOS_DECREASE_COMMAND;
+                                    const string str = UHF_FREQ_1DIAL_COMMAND + DCSBIOSCommand.DCSBIOS_DECREMENT;
                                     DCSBIOS.Send(str);
                                     dial1SendCount++;
                                     Interlocked.Exchange(ref _uhfDial1WaitingForFeedback, 1);
                                 }
                                 else if (_uhfCockpitFreq1DialPos > desiredPosition1)
                                 {
-                                    const string str = UHF_FREQ_1DIAL_COMMAND + DCSBIOS_INCREASE_COMMAND;
+                                    const string str = UHF_FREQ_1DIAL_COMMAND + DCSBIOSCommand.DCSBIOS_INCREMENT;
                                     DCSBIOS.Send(str);
                                     dial1SendCount++;
                                     Interlocked.Exchange(ref _uhfDial1WaitingForFeedback, 1);
@@ -570,14 +571,14 @@ namespace NonVisuals.Radios
 
                                 if (_uhfCockpitFreq2DialPos < desiredPosition2)
                                 {
-                                    const string str = UHF_FREQ_2DIAL_COMMAND + DCSBIOS_DECREASE_COMMAND;
+                                    const string str = UHF_FREQ_2DIAL_COMMAND + DCSBIOSCommand.DCSBIOS_DECREMENT;
                                     DCSBIOS.Send(str);
                                     dial2SendCount++;
                                     Interlocked.Exchange(ref _uhfDial2WaitingForFeedback, 1);
                                 }
                                 else if (_uhfCockpitFreq2DialPos > desiredPosition2)
                                 {
-                                    const string str = UHF_FREQ_2DIAL_COMMAND + DCSBIOS_INCREASE_COMMAND;
+                                    const string str = UHF_FREQ_2DIAL_COMMAND + DCSBIOSCommand.DCSBIOS_INCREMENT;
                                     DCSBIOS.Send(str);
                                     dial2SendCount++;
                                     Interlocked.Exchange(ref _uhfDial2WaitingForFeedback, 1);
@@ -602,14 +603,14 @@ namespace NonVisuals.Radios
 
                                 if (_uhfCockpitFreq3DialPos < desiredPosition3)
                                 {
-                                    const string str = UHF_FREQ_3DIAL_COMMAND + DCSBIOS_DECREASE_COMMAND;
+                                    const string str = UHF_FREQ_3DIAL_COMMAND + DCSBIOSCommand.DCSBIOS_DECREMENT;
                                     DCSBIOS.Send(str);
                                     dial3SendCount++;
                                     Interlocked.Exchange(ref _uhfDial3WaitingForFeedback, 1);
                                 }
                                 else if (_uhfCockpitFreq3DialPos > desiredPosition3)
                                 {
-                                    const string str = UHF_FREQ_3DIAL_COMMAND + DCSBIOS_INCREASE_COMMAND;
+                                    const string str = UHF_FREQ_3DIAL_COMMAND + DCSBIOSCommand.DCSBIOS_INCREMENT;
                                     DCSBIOS.Send(str);
                                     dial3SendCount++;
                                     Interlocked.Exchange(ref _uhfDial3WaitingForFeedback, 1);
@@ -634,14 +635,14 @@ namespace NonVisuals.Radios
 
                                 if (_uhfCockpitFreq4DialPos < desiredPosition4)
                                 {
-                                    const string str = UHF_FREQ_4DIAL_COMMAND + DCSBIOS_DECREASE_COMMAND;
+                                    const string str = UHF_FREQ_4DIAL_COMMAND + DCSBIOSCommand.DCSBIOS_DECREMENT;
                                     DCSBIOS.Send(str);
                                     dial4SendCount++;
                                     Interlocked.Exchange(ref _uhfDial4WaitingForFeedback, 1);
                                 }
                                 else if (_uhfCockpitFreq4DialPos > desiredPosition4)
                                 {
-                                    const string str = UHF_FREQ_4DIAL_COMMAND + DCSBIOS_INCREASE_COMMAND;
+                                    const string str = UHF_FREQ_4DIAL_COMMAND + DCSBIOSCommand.DCSBIOS_INCREMENT;
                                     DCSBIOS.Send(str);
                                     dial4SendCount++;
                                     Interlocked.Exchange(ref _uhfDial4WaitingForFeedback, 1);
@@ -666,14 +667,14 @@ namespace NonVisuals.Radios
 
                                 if (_uhfCockpitFreq5DialPos < desiredPosition5)
                                 {
-                                    const string str = UHF_FREQ_5DIAL_COMMAND + DCSBIOS_DECREASE_COMMAND;
+                                    const string str = UHF_FREQ_5DIAL_COMMAND + DCSBIOSCommand.DCSBIOS_DECREMENT;
                                     DCSBIOS.Send(str);
                                     dial5SendCount++;
                                     Interlocked.Exchange(ref _uhfDial5WaitingForFeedback, 1);
                                 }
                                 else if (_uhfCockpitFreq5DialPos > desiredPosition5)
                                 {
-                                    const string str = UHF_FREQ_5DIAL_COMMAND + DCSBIOS_INCREASE_COMMAND;
+                                    const string str = UHF_FREQ_5DIAL_COMMAND + DCSBIOSCommand.DCSBIOS_INCREMENT;
                                     DCSBIOS.Send(str);
                                     dial5SendCount++;
                                     Interlocked.Exchange(ref _uhfDial5WaitingForFeedback, 1);
@@ -793,7 +794,7 @@ namespace NonVisuals.Radios
                                 if (_tacanCockpitFreq1DialPos != desiredPositionDial1)
                                 {
                                     dial1OkTime = DateTime.Now.Ticks;
-                                    var str = TACAN_FREQ_1DIAL_COMMAND + (_tacanCockpitFreq1DialPos < desiredPositionDial1 ? DCSBIOS_INCREASE_COMMAND : DCSBIOS_DECREASE_COMMAND);
+                                    var str = TACAN_FREQ_1DIAL_COMMAND + (_tacanCockpitFreq1DialPos < desiredPositionDial1 ? DCSBIOSCommand.DCSBIOS_INCREMENT : DCSBIOSCommand.DCSBIOS_DECREMENT);
                                     DCSBIOS.Send(str);
                                     dial1SendCount++;
                                     Interlocked.Exchange(ref _tacanDial1WaitingForFeedback, 1);
@@ -816,7 +817,7 @@ namespace NonVisuals.Radios
                                 {
                                     dial2OkTime = DateTime.Now.Ticks;
 
-                                    var str = TACAN_FREQ_2DIAL_COMMAND + (_tacanCockpitFreq2DialPos < desiredPositionDial2 ? DCSBIOS_INCREASE_COMMAND : DCSBIOS_DECREASE_COMMAND);
+                                    var str = TACAN_FREQ_2DIAL_COMMAND + (_tacanCockpitFreq2DialPos < desiredPositionDial2 ? DCSBIOSCommand.DCSBIOS_INCREMENT : DCSBIOSCommand.DCSBIOS_DECREMENT);
                                     DCSBIOS.Send(str);
                                     dial2SendCount++;
                                     Interlocked.Exchange(ref _tacanDial2WaitingForFeedback, 1);
@@ -839,7 +840,7 @@ namespace NonVisuals.Radios
                                 {
                                     dial3OkTime = DateTime.Now.Ticks;
 
-                                    var str = TACAN_FREQ_3DIAL_COMMAND + (_tacanCockpitFreq3DialPos < desiredPositionDial3 ? DCSBIOS_INCREASE_COMMAND : DCSBIOS_DECREASE_COMMAND);
+                                    var str = TACAN_FREQ_3DIAL_COMMAND + (_tacanCockpitFreq3DialPos < desiredPositionDial3 ? DCSBIOSCommand.DCSBIOS_INCREMENT : DCSBIOSCommand.DCSBIOS_DECREMENT);
                                     DCSBIOS.Send(str);
                                     dial3SendCount++;
                                     Interlocked.Exchange(ref _tacanDial3WaitingForFeedback, 1);
