@@ -1,4 +1,5 @@
-﻿using NonVisuals.Interfaces;
+﻿using System.Diagnostics;
+using NonVisuals.Interfaces;
 
 namespace NonVisuals.Radios
 {
@@ -322,6 +323,7 @@ namespace NonVisuals.Radios
 
         protected void ResetWaitingForFeedBack(ref long syncVariable)
         {
+            Debug.WriteLine("Resetting sync variable.");
             Interlocked.Exchange(ref syncVariable, 0);
         }
 
