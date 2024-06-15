@@ -57,7 +57,6 @@ namespace NonVisuals.Radios
         private DCSBIOSOutput _vhfChannelDOutput;
         private DCSBIOSCommand _vhfChannelDCommand;
         private volatile uint _vhfCockpitPresetActiveButton;
-        private DCSBIOSOutput _vhfVolumeOutput;
         private DCSBIOSCommand _vhfVolumeCommand;
         private const int VHF_VOLUME_CHANGE_VALUE = 2000;
         private const string VHF_RADIO_LIGHT_SWITCH_COMMAND = "RADIO_L_DIM TOGGLE\n";
