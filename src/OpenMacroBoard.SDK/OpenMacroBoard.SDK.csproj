@@ -23,7 +23,7 @@
   
   <ItemGroup>
     <PackageReference Include="NLog" Version="5.2.8" />
-    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.5" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.11" />
   </ItemGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)' == 'net6.0-windows'">
