@@ -28,7 +28,7 @@
     </Authors>
     <PackageId>DCSFlightpanels (DCSFP)</PackageId>
     <Version>1.0.0</Version>
-    <AssemblyVersion>4.11.15</AssemblyVersion>
+    <AssemblyVersion>4.11.16</AssemblyVersion>
     <FileVersion>
     </FileVersion>
     <ApplicationIcon>Images\UI\flightpanels02_8Rc_icon.ico</ApplicationIcon>
